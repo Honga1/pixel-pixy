@@ -1,0 +1,9 @@
+.ColorPickerSwatch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(8);
+  grid-template-rows: repeat(8);
+  font-size: 0;
+}

@@ -1,0 +1,14 @@
+.CanvasContainer {
+  height: 100vw;
+}
+
+.CanvasContainer > canvas {
+  image-rendering: pixelated;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  background-image: url(../images/checker-board.png);
+  background-repeat: repeat;
+  background-size: 20%;
+  overscroll-behavior: none;
+}
