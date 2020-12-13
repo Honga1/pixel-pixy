@@ -12,7 +12,7 @@ import { ColorPickerSwatch } from "./ColorPickerSwatch";
 
 function App() {
   // Between 2 and 24
-  const pixelDimensions = 24;
+  const pixelDimensions = 8;
 
   const [color, setColor] = useState<string>("black");
   const [isGridShown, setGridShown] = useState(false);
