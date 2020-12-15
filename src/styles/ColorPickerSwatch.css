@@ -2,8 +2,39 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: grid;
-  grid-template-columns: repeat(8);
-  grid-template-rows: repeat(8);
-  font-size: 0;
+  display: flex;
+  width: 100vw;
+  height: 90vw;
+  flex-wrap: wrap;
+}
+
+.Saturation {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    rgb(255, 255, 255),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.Lightness {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));
+}
+
+.Hue {
+  height: 10vw;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    rgb(255, 0, 0) 0%,
+    rgb(255, 255, 0) 17%,
+    rgb(0, 255, 0) 33%,
+    rgb(0, 255, 255) 50%,
+    rgb(0, 0, 255) 67%,
+    rgb(255, 0, 255) 83%,
+    rgb(255, 0, 0) 100%
+  );
 }

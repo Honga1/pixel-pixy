@@ -1,93 +1,83 @@
+import { useState, TouchEvent, useEffect } from "react";
 import { ColorSquare } from "./ColorSquare";
 import "./styles/ColorPickerSwatch.css";
-
 export const ColorPickerSwatch = ({
+  selectedColor,
   onColorPicked,
 }: {
+  selectedColor: string;
   onColorPicked: (color: string) => void;
 }) => {
-  const colors = [
-    "#060608",
-    "#141013",
-    "#3b1725",
-    "#73172d",
-    "#b4202a",
-    "#df3e23",
-    "#fa6a0a",
-    "#f9a31b",
-    "#ffd541",
-    "#fffc40",
-    "#d6f264",
-    "#9cdb43",
-    "#59c135",
-    "#14a02e",
-    "#1a7a3e",
-    "#24523b",
-    "#122020",
-    "#143464",
-    "#285cc4",
-    "#249fde",
-    "#20d6c7",
-    "#a6fcdb",
-    "#ffffff",
-    "#fef3c0",
-    "#fad6b8",
-    "#f5a097",
-    "#e86a73",
-    "#bc4a9b",
-    "#793a80",
-    "#403353",
-    "#242234",
-    "#221c1a",
-    "#322b28",
-    "#71413b",
-    "#bb7547",
-    "#dba463",
-    "#f4d29c",
-    "#dae0ea",
-    "#b3b9d1",
-    "#8b93af",
-    "#6d758d",
-    "#4a5462",
-    "#333941",
-    "#422433",
-    "#5b3138",
-    "#8e5252",
-    "#ba756a",
-    "#e9b5a3",
-    "#e3e6ff",
-    "#b9bffb",
-    "#849be4",
-    "#588dbe",
-    "#477d85",
-    "#23674e",
-    "#328464",
-    "#5daf8d",
-    "#92dcba",
-    "#cdf7e2",
-    "#e4d2aa",
-    "#c7b08b",
-    "#a08662",
-    "#796755",
-    "#5a4e44",
-    "#423934",
-  ];
+  const [currentHue, setCurrentHue] = useState(() => {
+    const regexp = /hsl\(\s*(\d+)\s*,\s*(\d+(?:\.\d+)?%)\s*,\s*(\d+(?:\.\d+)?%)\)/g;
+    const hsl = regexp.exec(selectedColor)?.slice(1);
+
+    return hsl?.[0] || 0;
+  });
+  const [currentSaturation, setCurrentSaturation] = useState(100);
+  const [currentLightness, setCurrentLightness] = useState(50);
+
+  useEffect(() => {
+    // Extract HSl from string
+    const regexp = /hsl\(\s*(\d+)\s*,\s*(\d+(?:\.\d+)?%)\s*,\s*(\d+(?:\.\d+)?%)\)/g;
+    const hsl = regexp.exec(selectedColor)?.slice(1);
+    if (hsl) {
+      setCurrentHue(parseFloat(hsl[0]));
+    }
+  }, [selectedColor]);
+
   return (
-    <div className="ColorPickerSwatch">
-      {colors.map((color, index) => (
-        <div
-          style={{
-            gridRow: (index - (index % 8)) / 8 + 1,
-            gridColumn: (index % 8) + 1,
-          }}
-        >
-          <ColorSquare
-            onTouchEnd={() => onColorPicked(color)}
-            key={color}
-            color={color}
-          />
-        </div>
-      ))}
+    <div
+      style={{ backgroundColor: `hsl(${currentHue}, 100%, 50%)` }}
+      className="ColorPickerSwatch"
+    >
+      <div
+        className="Saturation"
+        onTouchEnd={(event) => {
+          const { scaledX, scaledY } = getRelativeClickPosition(event);
+          setCurrentSaturation(scaledX * 100);
+          setCurrentLightness((1 - scaledY) * 100);
+          onColorPicked(
+            `hsl(${currentHue}, ${currentSaturation}%, ${currentLightness}%)`
+          );
+        }}
+        onTouchMove={(event) => {
+          const { scaledX, scaledY } = getRelativeClickPosition(event);
+          setCurrentSaturation(scaledX * 100);
+          setCurrentLightness((1 - scaledY) * 100);
+        }}
+      >
+        <div className="Lightness" />
+      </div>
+
+      <div
+        className="Hue"
+        onTouchEnd={(event) => {
+          const { scaledX } = getRelativeClickPosition(event);
+          setCurrentHue(scaledX * 360);
+        }}
+        onTouchMove={(event) => {
+          const { scaledX } = getRelativeClickPosition(event);
+          setCurrentHue(scaledX * 360);
+        }}
+      ></div>
     </div>
   );
 };
+function getRelativeClickPosition(
+  event: TouchEvent<HTMLDivElement>
+): { scaledX: number; scaledY: number } {
+  const screenX = event.changedTouches[0].clientX;
+  const screenY = event.changedTouches[0].clientY;
+  const rect = (event.target as HTMLDivElement).getBoundingClientRect();
+
+  const clip = (value: number, min: number, max: number) =>
+    Math.min(max, Math.max(value, min));
+
+  const clippedX = clip(screenX, rect.left, rect.right);
+  const clippedY = clip(screenY, rect.top, rect.bottom);
+
+  const scaledX = clippedX / rect.width;
+  const scaledY = clippedY / rect.height;
+  return { scaledX, scaledY };
+}

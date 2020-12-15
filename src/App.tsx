@@ -22,9 +22,12 @@ function App() {
     HTMLImageElement | undefined
   >();
   const [clearCounter, setClearCounter] = useState(0);
+
   return (
     <div className="App">
-      {isPickerShown && <ColorPickerSwatch onColorPicked={setColor} />}
+      {isPickerShown && (
+        <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
+      )}
       <CanvasContainer
         onCanvasCreated={setCanvas}
         color={color}
@@ -50,7 +53,7 @@ function App() {
       />
       <ToggleButton
         onToggle={() => setPickerShown(!isPickerShown)}
-        text={isGridShown ? "Hide Color Picker" : "Show Color Picker"}
+        text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
       />
     </div>
   );
