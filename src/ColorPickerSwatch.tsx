@@ -24,48 +24,50 @@ export const ColorPickerSwatch = ({
   }, [selectedColor]);
 
   return (
-    <div
-      style={{ backgroundColor: `hsl(${currentHSL.h}, 100%, 50%)` }}
-      className="ColorPickerSwatch"
-    >
+    <div className="Wrapper">
       <div
-        className="Saturation"
-        onTouchEnd={(event) => {
-          const {
-            relativeX: scaledX,
-            relativeY: scaledY,
-          } = getRelativeClickPosition(event);
-          currentHSL.s = scaledX;
-          currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
-          setCurrentHSL(currentHSL.clone());
-          onColorPicked(currentHSL.toRGB());
-        }}
-        onTouchMove={(event) => {
-          const {
-            relativeX: scaledX,
-            relativeY: scaledY,
-          } = getRelativeClickPosition(event);
-          currentHSL.s = scaledX;
-          currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
-          setCurrentHSL(currentHSL.clone());
-        }}
+        style={{ backgroundColor: `hsl(${currentHSL.h}, 100%, 50%)` }}
+        className="ColorPickerSwatch"
       >
-        <div className="Lightness" />
-      </div>
+        <div
+          className="Saturation"
+          onTouchEnd={(event) => {
+            const {
+              relativeX: scaledX,
+              relativeY: scaledY,
+            } = getRelativeClickPosition(event);
+            currentHSL.s = scaledX;
+            currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
+            setCurrentHSL(currentHSL.clone());
+            onColorPicked(currentHSL.toRGB());
+          }}
+          onTouchMove={(event) => {
+            const {
+              relativeX: scaledX,
+              relativeY: scaledY,
+            } = getRelativeClickPosition(event);
+            currentHSL.s = scaledX;
+            currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
+            setCurrentHSL(currentHSL.clone());
+          }}
+        >
+          <div className="Lightness" />
+        </div>
 
-      <div
-        className="Hue"
-        onTouchEnd={(event) => {
-          const { relativeX: scaledX } = getRelativeClickPosition(event);
-          currentHSL.h = scaledX * 360;
-          setCurrentHSL(currentHSL.clone());
-        }}
-        onTouchMove={(event) => {
-          const { relativeX: scaledX } = getRelativeClickPosition(event);
-          currentHSL.h = scaledX * 360;
-          setCurrentHSL(currentHSL.clone());
-        }}
-      ></div>
+        <div
+          className="Hue"
+          onTouchEnd={(event) => {
+            const { relativeX: scaledX } = getRelativeClickPosition(event);
+            currentHSL.h = scaledX * 360;
+            setCurrentHSL(currentHSL.clone());
+          }}
+          onTouchMove={(event) => {
+            const { relativeX: scaledX } = getRelativeClickPosition(event);
+            currentHSL.h = scaledX * 360;
+            setCurrentHSL(currentHSL.clone());
+          }}
+        ></div>
+      </div>
     </div>
   );
 };
