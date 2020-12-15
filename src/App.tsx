@@ -9,10 +9,10 @@ import { ClearButton } from "./ClearButton";
 import { Grid } from "./Grid";
 import { ToggleButton } from "./ToggleButton";
 import { ColorPickerSwatch } from "./ColorPickerSwatch";
+import { DimensionPicker, ValidDimensions } from "./DimensionPicker";
 
 function App() {
-  // Between 2 and 24
-  const pixelDimensions = 8;
+  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
 
   const [color, setColor] = useState<string>("black");
   const [isGridShown, setGridShown] = useState(false);
@@ -54,6 +54,10 @@ function App() {
       <ToggleButton
         onToggle={() => setPickerShown(!isPickerShown)}
         text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
+      />
+      <DimensionPicker
+        onDimensionChange={setPixelDimensions}
+        dimension={pixelDimensions}
       />
     </div>
   );

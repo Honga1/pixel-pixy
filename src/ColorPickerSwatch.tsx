@@ -1,5 +1,4 @@
 import { useState, TouchEvent, useEffect } from "react";
-import { ColorSquare } from "./ColorSquare";
 import "./styles/ColorPickerSwatch.css";
 export const ColorPickerSwatch = ({
   selectedColor,
