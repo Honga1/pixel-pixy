@@ -1,49 +1,46 @@
 import { useState, TouchEvent, useEffect } from "react";
+import { RGBColor } from "./drivers/RGBColor";
 import "./styles/ColorPickerSwatch.css";
 export const ColorPickerSwatch = ({
   selectedColor,
   onColorPicked,
 }: {
-  selectedColor: string;
-  onColorPicked: (color: string) => void;
+  selectedColor: RGBColor;
+  onColorPicked: (color: RGBColor) => void;
 }) => {
-  const [currentHue, setCurrentHue] = useState(() => {
-    const regexp = /hsl\(\s*(\d+)\s*,\s*(\d+(?:\.\d+)?%)\s*,\s*(\d+(?:\.\d+)?%)\)/g;
-    const hsl = regexp.exec(selectedColor)?.slice(1);
+  const [currentHSL, setCurrentHSL] = useState(() => {
+    const hsl = selectedColor.toHSL();
 
-    return hsl?.[0] || 0;
+    return hsl;
   });
-  const [currentSaturation, setCurrentSaturation] = useState(100);
-  const [currentLightness, setCurrentLightness] = useState(50);
 
   useEffect(() => {
     // Extract HSl from string
-    const regexp = /hsl\(\s*(\d+)\s*,\s*(\d+(?:\.\d+)?%)\s*,\s*(\d+(?:\.\d+)?%)\)/g;
-    const hsl = regexp.exec(selectedColor)?.slice(1);
+    const hsl = selectedColor.toHSL();
     if (hsl) {
-      setCurrentHue(parseFloat(hsl[0]));
+      setCurrentHSL(hsl);
     }
   }, [selectedColor]);
 
   return (
     <div
-      style={{ backgroundColor: `hsl(${currentHue}, 100%, 50%)` }}
+      style={{ backgroundColor: `hsl(${currentHSL.h}, 100%, 50%)` }}
       className="ColorPickerSwatch"
     >
       <div
         className="Saturation"
         onTouchEnd={(event) => {
           const { scaledX, scaledY } = getRelativeClickPosition(event);
-          setCurrentSaturation(scaledX * 100);
-          setCurrentLightness((1 - scaledY) * 100);
-          onColorPicked(
-            `hsl(${currentHue}, ${currentSaturation}%, ${currentLightness}%)`
-          );
+          currentHSL.s = scaledX;
+          currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
+          setCurrentHSL(currentHSL.clone());
+          onColorPicked(currentHSL.toRGB());
         }}
         onTouchMove={(event) => {
           const { scaledX, scaledY } = getRelativeClickPosition(event);
-          setCurrentSaturation(scaledX * 100);
-          setCurrentLightness((1 - scaledY) * 100);
+          currentHSL.s = scaledX;
+          currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
+          setCurrentHSL(currentHSL.clone());
         }}
       >
         <div className="Lightness" />
@@ -53,11 +50,13 @@ export const ColorPickerSwatch = ({
         className="Hue"
         onTouchEnd={(event) => {
           const { scaledX } = getRelativeClickPosition(event);
-          setCurrentHue(scaledX * 360);
+          currentHSL.h = scaledX * 360;
+          setCurrentHSL(currentHSL.clone());
         }}
         onTouchMove={(event) => {
           const { scaledX } = getRelativeClickPosition(event);
-          setCurrentHue(scaledX * 360);
+          currentHSL.h = scaledX * 360;
+          setCurrentHSL(currentHSL.clone());
         }}
       ></div>
     </div>

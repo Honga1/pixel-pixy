@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { ColorSquare } from "./ColorSquare";
+import { RGBColor } from "./drivers/RGBColor";
 import "./styles/ColorPickerHistory.css";
 
 export const ColorPickerHistory = ({
   colorSelected,
   onColorPicked,
 }: {
-  colorSelected: string;
-  onColorPicked: (color: string) => void;
+  colorSelected: RGBColor;
+  onColorPicked: (color: RGBColor) => void;
 }) => {
-  const [colorHistory, setColorHistory] = useState<string[]>([]);
+  const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
 
   useEffect(() => {
     let newColorHistory = [...colorHistory];

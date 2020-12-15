@@ -1,4 +1,5 @@
 import { useEffect, useRef, TouchEvent } from "react";
+import { RGBColor } from "./drivers/RGBColor";
 import "./styles/CanvasContainer.css";
 
 export const CanvasContainer = ({
@@ -9,7 +10,7 @@ export const CanvasContainer = ({
   pixelDimensions,
 }: {
   pixelDimensions: number;
-  color: string;
+  color: RGBColor;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
   loadedImage: HTMLImageElement | undefined;
   changeToClear: number;
@@ -57,7 +58,7 @@ export const CanvasContainer = ({
     const quantX = Math.floor(scaledX);
     const quantY = Math.floor(scaledY);
 
-    context.fillStyle = color;
+    context.fillStyle = color.toHex();
     context.fillRect(quantX, quantY, 1, 1);
   };
 

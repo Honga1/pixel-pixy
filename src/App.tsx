@@ -10,11 +10,12 @@ import { Grid } from "./Grid";
 import { ToggleButton } from "./ToggleButton";
 import { ColorPickerSwatch } from "./ColorPickerSwatch";
 import { DimensionPicker, ValidDimensions } from "./DimensionPicker";
+import { RGBColor } from "./drivers/RGBColor";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
 
-  const [color, setColor] = useState<string>("black");
+  const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
