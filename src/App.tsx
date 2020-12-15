@@ -12,6 +12,7 @@ import { ToggleButton } from "./components/ToggleButton";
 import { RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import "./styles/App.css";
+import { ColorSwatchC64 } from "./ColorSwatchC64";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
@@ -44,6 +45,7 @@ function App() {
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
       )}
+      <ColorSwatchC64 selectedColor={"red"} />
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
       <LoadButton
