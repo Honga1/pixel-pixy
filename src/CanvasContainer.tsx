@@ -1,7 +1,9 @@
 import { useEffect, useRef, TouchEvent } from "react";
+import { getRelativeClickPosition } from "./drivers/getRelativeClickPosition";
 import { RGBColor } from "./drivers/RGBColor";
 import "./styles/CanvasContainer.css";
 
+const debug = false;
 export const CanvasContainer = ({
   color,
   onCanvasCreated,
@@ -16,6 +18,7 @@ export const CanvasContainer = ({
   changeToClear: number;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const debugCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,37 +46,60 @@ export const CanvasContainer = ({
   }, [changeToClear]);
 
   const onTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
-    const maybeTouch = event.changedTouches[0];
-    if (!maybeTouch) return;
+    const { relativeX, relativeY } = getRelativeClickPosition(event);
 
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!context || !canvas) return;
 
-    const touch = maybeTouch;
-
-    const scaledX = (touch.clientX / canvas.clientWidth) * pixelDimensions;
-    const scaledY = (touch.clientY / canvas.clientHeight) * pixelDimensions;
+    const scaledX = relativeX * pixelDimensions;
+    const scaledY = relativeY * pixelDimensions;
 
     const quantX = Math.floor(scaledX);
     const quantY = Math.floor(scaledY);
 
     context.fillStyle = color.toHex();
     context.fillRect(quantX, quantY, 1, 1);
+
+    if (debug) {
+      const maybeContext = debugCanvasRef.current?.getContext("2d");
+      if (!maybeContext) return;
+      maybeContext.fillStyle = "red";
+      maybeContext.fillRect(
+        relativeX * window.innerWidth,
+        relativeY * window.innerHeight,
+        10,
+        10
+      );
+    }
   };
 
   return (
     <div className="CanvasContainer">
-      <canvas
-        style={{
-          backgroundSize: `${100 / pixelDimensions / 2}%`,
-        }}
-        ref={canvasRef}
-        width={pixelDimensions}
-        height={pixelDimensions}
-        onTouchEnd={onTouchEvent}
-        onTouchMove={onTouchEvent}
-      ></canvas>
+      <div>
+        <canvas
+          style={{
+            backgroundSize: `${100 / pixelDimensions / 2}%`,
+          }}
+          ref={canvasRef}
+          width={pixelDimensions}
+          height={pixelDimensions}
+          onTouchEnd={onTouchEvent}
+          onTouchMove={onTouchEvent}
+        ></canvas>
+        {debug && (
+          <canvas
+            style={{
+              background: "none",
+              position: "absolute",
+              pointerEvents: "none",
+            }}
+            ref={debugCanvasRef}
+            width={window.innerWidth}
+            height={window.innerHeight}
+          ></canvas>
+        )}
+      </div>
     </div>
   );
 };

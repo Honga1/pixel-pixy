@@ -1,5 +1,6 @@
-import { useState, TouchEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RGBColor } from "./drivers/RGBColor";
+import { getRelativeClickPosition } from "./drivers/getRelativeClickPosition";
 import "./styles/ColorPickerSwatch.css";
 export const ColorPickerSwatch = ({
   selectedColor,
@@ -30,14 +31,20 @@ export const ColorPickerSwatch = ({
       <div
         className="Saturation"
         onTouchEnd={(event) => {
-          const { scaledX, scaledY } = getRelativeClickPosition(event);
+          const {
+            relativeX: scaledX,
+            relativeY: scaledY,
+          } = getRelativeClickPosition(event);
           currentHSL.s = scaledX;
           currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
           setCurrentHSL(currentHSL.clone());
           onColorPicked(currentHSL.toRGB());
         }}
         onTouchMove={(event) => {
-          const { scaledX, scaledY } = getRelativeClickPosition(event);
+          const {
+            relativeX: scaledX,
+            relativeY: scaledY,
+          } = getRelativeClickPosition(event);
           currentHSL.s = scaledX;
           currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
           setCurrentHSL(currentHSL.clone());
@@ -49,12 +56,12 @@ export const ColorPickerSwatch = ({
       <div
         className="Hue"
         onTouchEnd={(event) => {
-          const { scaledX } = getRelativeClickPosition(event);
+          const { relativeX: scaledX } = getRelativeClickPosition(event);
           currentHSL.h = scaledX * 360;
           setCurrentHSL(currentHSL.clone());
         }}
         onTouchMove={(event) => {
-          const { scaledX } = getRelativeClickPosition(event);
+          const { relativeX: scaledX } = getRelativeClickPosition(event);
           currentHSL.h = scaledX * 360;
           setCurrentHSL(currentHSL.clone());
         }}
@@ -62,20 +69,3 @@ export const ColorPickerSwatch = ({
     </div>
   );
 };
-function getRelativeClickPosition(
-  event: TouchEvent<HTMLDivElement>
-): { scaledX: number; scaledY: number } {
-  const screenX = event.changedTouches[0].clientX;
-  const screenY = event.changedTouches[0].clientY;
-  const rect = (event.target as HTMLDivElement).getBoundingClientRect();
-
-  const clip = (value: number, min: number, max: number) =>
-    Math.min(max, Math.max(value, min));
-
-  const clippedX = clip(screenX, rect.left, rect.right);
-  const clippedY = clip(screenY, rect.top, rect.bottom);
-
-  const scaledX = clippedX / rect.width;
-  const scaledY = clippedY / rect.height;
-  return { scaledX, scaledY };
-}
