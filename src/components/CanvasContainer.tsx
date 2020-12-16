@@ -1,5 +1,6 @@
-import { useEffect, useRef, TouchEvent } from "react";
+import { useEffect, useRef, TouchEvent, useMemo } from "react";
 import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
+import { PaintCanvas } from "../drivers/PaintCanvas";
 import { RGBColor } from "../drivers/RGBColor";
 import "../styles/CanvasContainer.css";
 
@@ -19,6 +20,10 @@ export const CanvasContainer = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
+    pixelDimensions,
+  ]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,20 +51,14 @@ export const CanvasContainer = ({
   }, [changeToClear]);
 
   const onTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
+    paint.touchEvent(event, color);
     const { relativeX, relativeY } = getRelativeClickPosition(event);
 
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!context || !canvas) return;
-
-    const scaledX = relativeX * pixelDimensions;
-    const scaledY = relativeY * pixelDimensions;
-
-    const quantX = Math.floor(scaledX);
-    const quantY = Math.floor(scaledY);
-
-    context.fillStyle = color.toHex();
-    context.fillRect(quantX, quantY, 1, 1);
+    paint.setCanvas(canvas);
+    paint.drawToCanvas();
 
     if (debug) {
       const maybeContext = debugCanvasRef.current?.getContext("2d");
