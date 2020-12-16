@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "./styles/App.css";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
@@ -11,10 +11,10 @@ import { ToggleButton } from "./components/ToggleButton";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { RGBColor } from "./drivers/RGBColor";
+import { PaintCanvas } from "./drivers/PaintCanvas";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
-
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
@@ -24,6 +24,10 @@ function App() {
   >();
   const [clearCounter, setClearCounter] = useState(0);
 
+  const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
+    pixelDimensions,
+  ]);
+
   return (
     <div className="App">
       {isPickerShown && (
@@ -31,10 +35,14 @@ function App() {
       )}
       <CanvasContainer
         onCanvasCreated={setCanvas}
-        color={color}
         loadedImage={loadedImage}
         changeToClear={clearCounter}
         pixelDimensions={pixelDimensions}
+        onTouchEvent={(canvas, event) => {
+          paint.setCanvas(canvas);
+          paint.touchEvent(event, color);
+          paint.drawToCanvas();
+        }}
       />
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />

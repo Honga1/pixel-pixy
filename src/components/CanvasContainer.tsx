@@ -1,29 +1,26 @@
-import { useEffect, useRef, TouchEvent, useMemo } from "react";
+import { TouchEvent, useEffect, useRef } from "react";
 import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
-import { PaintCanvas } from "../drivers/PaintCanvas";
-import { RGBColor } from "../drivers/RGBColor";
 import "../styles/CanvasContainer.css";
 
 const debug = false;
 export const CanvasContainer = ({
-  color,
   onCanvasCreated,
+  onTouchEvent,
   loadedImage,
   changeToClear,
   pixelDimensions,
 }: {
   pixelDimensions: number;
-  color: RGBColor;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
+  onTouchEvent: (
+    canvas: HTMLCanvasElement,
+    touchEvent: TouchEvent<HTMLCanvasElement>
+  ) => void;
   loadedImage: HTMLImageElement | undefined;
   changeToClear: number;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
-
-  const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
-    pixelDimensions,
-  ]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,15 +47,12 @@ export const CanvasContainer = ({
     context.clearRect(0, 0, canvas.width, canvas.height);
   }, [changeToClear]);
 
-  const onTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
-    paint.touchEvent(event, color);
+  const onInnerTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
     const { relativeX, relativeY } = getRelativeClickPosition(event);
 
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-    if (!context || !canvas) return;
-    paint.setCanvas(canvas);
-    paint.drawToCanvas();
+    if (!canvas) return;
+    onTouchEvent(canvas, event);
 
     if (debug) {
       const maybeContext = debugCanvasRef.current?.getContext("2d");
@@ -83,8 +77,8 @@ export const CanvasContainer = ({
           ref={canvasRef}
           width={pixelDimensions}
           height={pixelDimensions}
-          onTouchEnd={onTouchEvent}
-          onTouchMove={onTouchEvent}
+          onTouchEnd={onInnerTouchEvent}
+          onTouchMove={onInnerTouchEvent}
         ></canvas>
         {debug && (
           <canvas

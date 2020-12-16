@@ -61,6 +61,10 @@ export class PaintCanvas {
 
   private pixelMap = new KeyPairMap<number, number, RGBColor | NoColor>();
 
+  getPixelMap() {
+    return this.pixelMap;
+  }
+
   clear() {
     this.mutableMap(() => RGBColor.NO_COLOR);
   }
