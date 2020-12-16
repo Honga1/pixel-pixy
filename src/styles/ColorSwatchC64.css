@@ -5,7 +5,11 @@
   left: 0;
   width: 100%;
   height: calc(100vw - 6.5vw);
+  display: flex;
+  flex-wrap: wrap;
+
 }
 .colorRow {
-  height: 6.25%;
+  width: 25%;
+  height: 25%;
 }

@@ -19,6 +19,7 @@ function App() {
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
+  const [isC64PaletteShown, setC64PaletteShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -45,7 +46,7 @@ function App() {
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
       )}
-      <ColorSwatchC64 selectedColor={"red"} />
+      {isC64PaletteShown && <ColorSwatchC64 onColorPicked={setColor} />}
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
       <LoadButton
@@ -89,6 +90,10 @@ function App() {
       <ToggleButton
         onToggle={() => setPickerShown(!isPickerShown)}
         text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
+      />
+      <ToggleButton
+        onToggle={() => setC64PaletteShown(!isC64PaletteShown)}
+        text={isC64PaletteShown ? "Hide C64 Palette" : "Show C64 Palette"}
       />
       <DimensionPicker
         onDimensionChange={setPixelDimensions}
