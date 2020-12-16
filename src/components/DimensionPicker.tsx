@@ -3,6 +3,7 @@ import { Select } from "./Select";
 import "../styles/DimensionPicker.css";
 
 const validDimensions = [
+  { value: 1, label: "1x1" },
   { value: 8, label: "8x8" },
   { value: 10, label: "10x10" },
   { value: 12, label: "12x12" },

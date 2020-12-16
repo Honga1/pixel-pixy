@@ -9,20 +9,20 @@ import { Grid } from "./components/Grid";
 import { LoadButton } from "./components/LoadButton";
 import { SaveButton } from "./components/SaveButton";
 import { ToggleButton } from "./components/ToggleButton";
-import { PaintCanvas } from "./drivers/PaintCanvas";
 import { RGBColor } from "./drivers/RGBColor";
+import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import "./styles/App.css";
 
 function App() {
-  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
+  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
-  const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
-    pixelDimensions,
-  ]);
+  const paint = useMemo(() => {
+    return new UndoablePaintCanvas(pixelDimensions);
+  }, [pixelDimensions]);
 
   return (
     <div className="App">
@@ -63,6 +63,23 @@ function App() {
           }
         }}
       />
+
+      <button
+        onTouchEnd={() => {
+          paint.undo();
+          paint.drawToCanvas();
+        }}
+      >
+        Undo
+      </button>
+      <button
+        onTouchEnd={() => {
+          paint.redo();
+          paint.drawToCanvas();
+        }}
+      >
+        Redo
+      </button>
       <ToggleButton
         onToggle={() => setGridShown(!isGridShown)}
         text={isGridShown ? "Hide Grid" : "Show Grid"}

@@ -1,4 +1,12 @@
 export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {
+  constructor(keyPairMap?: KeyPairMap<KeyA, KeyB, Value>) {
+    if (!keyPairMap) return;
+
+    for (let [[keyA, keyB], value] of keyPairMap) {
+      this.set([keyA, keyB], value);
+    }
+  }
+
   private map = new Map<KeyA, Map<KeyB, Value>>();
 
   clear(): void {
@@ -9,6 +17,10 @@ export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {
     return this.map.get(keyA)?.delete(keyB) || false;
   }
 
+  clone(): KeyPairMap<KeyA, KeyB, Value> {
+    return new KeyPairMap(this);
+  }
+
   forEach(
     callbackfn: (
       value: Value,
@@ -17,12 +29,12 @@ export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {
     ) => void,
     thisArg?: any
   ): void {
-    const refMap = this.refMap();
+    const refMap = this.toRefMap();
 
     refMap.forEach(callbackfn, thisArg);
   }
 
-  private refMap() {
+  private toRefMap() {
     const tempMap = new Map<[KeyA, KeyB], Value>();
     this.map.forEach((innerMap, keyA, outerMap) => {
       innerMap.forEach((value, keyB, innerMap) => {
@@ -53,24 +65,33 @@ export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {
   }
 
   get size() {
-    return this.refMap().size;
+    return this.toRefMap().size;
   }
 
   [Symbol.iterator](): IterableIterator<[[KeyA, KeyB], Value]> {
-    return this.refMap()[Symbol.iterator]();
+    return this.toRefMap()[Symbol.iterator]();
   }
 
   entries(): IterableIterator<[[KeyA, KeyB], Value]> {
-    return this.refMap().entries();
+    return this.toRefMap().entries();
   }
 
   keys(): IterableIterator<[KeyA, KeyB]> {
-    return this.refMap().keys();
+    return this.toRefMap().keys();
   }
 
   values(): IterableIterator<Value> {
-    return this.refMap().values();
+    return this.toRefMap().values();
   }
 
+  toString(): string {
+    let lines = [];
+
+    for (let [key, value] of this) {
+      lines.push(`${key[0]}, ${key[1]}, ${value}`);
+    }
+
+    return lines.join("\n");
+  }
   [Symbol.toStringTag]: string;
 }

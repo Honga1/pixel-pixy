@@ -174,3 +174,24 @@ it("Map can clear", () => {
   map.clear();
   expect(map.size).toEqual(0);
 });
+
+it("Map can clone", () => {
+  const map = new KeyPairMap<number, number, string>();
+  const keyA = [0, 0] as [number, number];
+  const keyB = [0, 1] as [number, number];
+  const keyC = [1, 1] as [number, number];
+  const valueA = "red";
+  const valueB = "blue";
+  const valueC = "green";
+
+  expect(map.size).toEqual(0);
+  map.set(keyA, valueA);
+  map.set(keyB, valueB);
+  map.set(keyC, valueC);
+  expect(map.size).toEqual(3);
+
+  const clone = map.clone();
+
+  expect(clone === map).toBeFalsy();
+  expect(clone).toStrictEqual(map);
+});

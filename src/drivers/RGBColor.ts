@@ -143,6 +143,13 @@ export class RGBColor {
     this.rgb[2] = b;
   }
 
+  static Equals(a: RGBColor, b: RGBColor) {
+    const [r1, g1, b1] = a.rgb;
+    const [r2, g2, b2] = b.rgb;
+
+    return r1 === r2 && g1 === g2 && b1 === b2;
+  }
+
   toHex() {
     const [r, g, b] = this.rgb;
     let rString = r.toString(16);

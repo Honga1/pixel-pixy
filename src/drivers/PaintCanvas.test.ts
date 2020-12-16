@@ -1,10 +1,28 @@
-import { TouchEvent } from "react";
-import { RGBColor } from "./RGBColor";
+import { createCanvas, loadImage } from "canvas";
 import { PaintCanvas } from "./PaintCanvas";
-import { createCanvas, Image, loadImage } from "canvas";
+import { RGBColor } from "./RGBColor";
 
 it("Paint can create", () => {
   expect(() => new PaintCanvas(5)).not.toThrow();
+});
+
+it("Can get pixel map", () => {
+  expect(new PaintCanvas(5).getPixelMap().size).toEqual(5 ** 2);
+});
+
+it("Can't set pixel map with wrong sizes", () => {
+  const paintBase = new PaintCanvas(5);
+  const paintIncoming = new PaintCanvas(4);
+
+  expect(() => paintBase.setPixelMap(paintIncoming.getPixelMap())).toThrow();
+});
+it("Can set pixel map", () => {
+  const paintBase = new PaintCanvas(5);
+  const paintIncoming = new PaintCanvas(5);
+
+  paintBase.setPixelMap(paintIncoming.getPixelMap());
+
+  expect(paintBase.getPixelMap()).toEqual(paintIncoming.getPixelMap());
 });
 
 it("Paint is correct dimensions", () => {
