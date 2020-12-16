@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./styles/App.css";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
@@ -22,7 +22,6 @@ function App() {
   const [loadedImage, setLoadedImage] = useState<
     HTMLImageElement | undefined
   >();
-  const [clearCounter, setClearCounter] = useState(0);
 
   const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
     pixelDimensions,
@@ -34,9 +33,11 @@ function App() {
         <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
       )}
       <CanvasContainer
-        onCanvasCreated={setCanvas}
+        onCanvasCreated={(canvas) => {
+          setCanvas(canvas);
+          paint.setCanvas(canvas);
+        }}
         loadedImage={loadedImage}
-        changeToClear={clearCounter}
         pixelDimensions={pixelDimensions}
         onTouchEvent={(canvas, event) => {
           paint.setCanvas(canvas);
@@ -53,7 +54,12 @@ function App() {
       {canvas && <SaveButton canvas={canvas} />}
       <ClearButton
         onClearPressed={() => {
-          setClearCounter(clearCounter + 1);
+          paint.clear();
+          if (paint.hasCanvas()) {
+            paint.drawToCanvas();
+          } else {
+            console.warn("Tried to clear a canvas that doesn't exist");
+          }
         }}
       />
       <ToggleButton

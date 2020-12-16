@@ -7,7 +7,6 @@ export const CanvasContainer = ({
   onCanvasCreated,
   onTouchEvent,
   loadedImage,
-  changeToClear,
   pixelDimensions,
 }: {
   pixelDimensions: number;
@@ -17,7 +16,6 @@ export const CanvasContainer = ({
     touchEvent: TouchEvent<HTMLCanvasElement>
   ) => void;
   loadedImage: HTMLImageElement | undefined;
-  changeToClear: number;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -38,23 +36,13 @@ export const CanvasContainer = ({
     context.drawImage(loadedImage, 0, 0, canvas.width, canvas.height);
   }, [loadedImage]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-
-    if (!(context && canvas)) return;
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  }, [changeToClear]);
-
   const onInnerTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
-    const { relativeX, relativeY } = getRelativeClickPosition(event);
-
     const canvas = canvasRef.current;
     if (!canvas) return;
     onTouchEvent(canvas, event);
 
     if (debug) {
+      const { relativeX, relativeY } = getRelativeClickPosition(event);
       const maybeContext = debugCanvasRef.current?.getContext("2d");
       if (!maybeContext) return;
       maybeContext.fillStyle = "red";

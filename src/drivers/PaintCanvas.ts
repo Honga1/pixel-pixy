@@ -55,6 +55,10 @@ export class PaintCanvas {
     this.canvas = canvas;
   }
 
+  hasCanvas(): boolean {
+    return this.canvas !== undefined;
+  }
+
   getCanvas(): HTMLCanvasElement | undefined {
     return this.canvas;
   }
