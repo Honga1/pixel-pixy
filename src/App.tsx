@@ -12,14 +12,17 @@ import { ToggleButton } from "./components/ToggleButton";
 import { RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import "./styles/App.css";
-import { ColorSwatchC64 } from "./ColorSwatchC64";
+import { PaletteColourSwatch } from "./PaletteColorSwatch";
+import { PalettePicker } from "./PalettePicker";
+import { AvailablePalettes } from "./PaletteDictionary";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
-  const [isC64PaletteShown, setC64PaletteShown] = useState(false);
+  const [isPaletteShown, setPaletteShown] = useState(false);
+  const [palette, setPalette] = useState<AvailablePalettes>("c64");
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -46,7 +49,9 @@ function App() {
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
       )}
-      {isC64PaletteShown && <ColorSwatchC64 onColorPicked={setColor} />}
+      {isPaletteShown && (
+        <PaletteColourSwatch palette={palette} onColorPicked={setColor} />
+      )}
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
       <LoadButton
@@ -92,13 +97,14 @@ function App() {
         text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
       />
       <ToggleButton
-        onToggle={() => setC64PaletteShown(!isC64PaletteShown)}
-        text={isC64PaletteShown ? "Hide C64 Palette" : "Show C64 Palette"}
+        onToggle={() => setPaletteShown(!isPaletteShown)}
+        text={isPaletteShown ? "Hide Palette" : "Show Palette"}
       />
       <DimensionPicker
         onDimensionChange={setPixelDimensions}
         dimension={pixelDimensions}
       />
+      <PalettePicker palette={palette} onPaletteChange={setPalette} />
     </div>
   );
 }

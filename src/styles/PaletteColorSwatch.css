@@ -1,4 +1,4 @@
-.C64Swatch {
+.PaletteWrapper {
   position: absolute;
   z-index: 10;
   top: 0;
@@ -9,7 +9,7 @@
   flex-wrap: wrap;
 
 }
-.colorRow {
+.colorBlock {
   width: 25%;
   height: 25%;
 }
