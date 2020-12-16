@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import "./styles/App.css";
-import { CanvasContainer } from "./CanvasContainer";
-import { ColorPickerHistory } from "./ColorPickerHistory";
-import { CurrentColor } from "./CurrentColor";
-import { LoadButton } from "./LoadButton";
-import { SaveButton } from "./SaveButton";
-import { ClearButton } from "./ClearButton";
-import { Grid } from "./Grid";
-import { ToggleButton } from "./ToggleButton";
-import { ColorPickerSwatch } from "./ColorPickerSwatch";
-import { DimensionPicker, ValidDimensions } from "./DimensionPicker";
+import React, { useMemo, useState } from "react";
+import { CanvasContainer } from "./components/CanvasContainer";
+import { ClearButton } from "./components/ClearButton";
+import { ColorPickerHistory } from "./components/ColorPickerHistory";
+import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
+import { CurrentColor } from "./components/CurrentColor";
+import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
+import { Grid } from "./components/Grid";
+import { LoadButton } from "./components/LoadButton";
+import { SaveButton } from "./components/SaveButton";
+import { ToggleButton } from "./components/ToggleButton";
 import { RGBColor } from "./drivers/RGBColor";
+import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
+import "./styles/App.css";
 
 function App() {
-  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
-
+  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
-  const [loadedImage, setLoadedImage] = useState<
-    HTMLImageElement | undefined
-  >();
-  const [clearCounter, setClearCounter] = useState(0);
+
+  const paint = useMemo(() => {
+    return new UndoablePaintCanvas(pixelDimensions);
+  }, [pixelDimensions]);
 
   return (
     <div className="App">
@@ -30,24 +30,56 @@ function App() {
         <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
       )}
       <CanvasContainer
-        onCanvasCreated={setCanvas}
-        color={color}
-        loadedImage={loadedImage}
-        changeToClear={clearCounter}
+        onCanvasCreated={(canvas) => {
+          setCanvas(canvas);
+          paint.setCanvas(canvas);
+        }}
         pixelDimensions={pixelDimensions}
+        onTouchEvent={(canvas, event) => {
+          paint.setCanvas(canvas);
+          paint.touchEvent(event, color);
+          paint.drawToCanvas();
+        }}
       />
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
       )}
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
-      <LoadButton setLoadedImage={setLoadedImage} />
+      <LoadButton
+        setLoadedImage={(image) => {
+          paint.setPixelsFromImage(image);
+          paint.drawToCanvas();
+        }}
+      />
       {canvas && <SaveButton canvas={canvas} />}
       <ClearButton
         onClearPressed={() => {
-          setClearCounter(clearCounter + 1);
+          paint.clear();
+          if (paint.hasCanvas()) {
+            paint.drawToCanvas();
+          } else {
+            console.warn("Tried to clear a canvas that doesn't exist");
+          }
         }}
       />
+
+      <button
+        onTouchEnd={() => {
+          paint.undo();
+          paint.drawToCanvas();
+        }}
+      >
+        Undo
+      </button>
+      <button
+        onTouchEnd={() => {
+          paint.redo();
+          paint.drawToCanvas();
+        }}
+      >
+        Redo
+      </button>
       <ToggleButton
         onToggle={() => setGridShown(!isGridShown)}
         text={isGridShown ? "Hide Grid" : "Show Grid"}

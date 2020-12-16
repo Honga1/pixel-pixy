@@ -1,11 +1,14 @@
 import { HSLColor } from "./HSLColor";
 
+export type NoColor = "NO_COLOR";
 export class RGBColor {
+  static readonly NO_COLOR: NoColor = "NO_COLOR";
   /**
    * @param h Degrees
    * @param s Percent
    * @param l Percent
    */
+
   static fromHSL(h: number, s: number, l: number) {
     if (h < 0 || h > 359) {
       throw new RangeError("Hue should be between 0 and 359 inclusive");
@@ -138,6 +141,13 @@ export class RGBColor {
   }
   set b(b: number) {
     this.rgb[2] = b;
+  }
+
+  static Equals(a: RGBColor, b: RGBColor) {
+    const [r1, g1, b1] = a.rgb;
+    const [r2, g2, b2] = b.rgb;
+
+    return r1 === r2 && g1 === g2 && b1 === b2;
   }
 
   toHex() {

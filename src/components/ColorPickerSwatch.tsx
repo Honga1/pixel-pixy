@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { RGBColor } from "./drivers/RGBColor";
-import { getRelativeClickPosition } from "./drivers/getRelativeClickPosition";
-import "./styles/ColorPickerSwatch.css";
+import { RGBColor } from "../drivers/RGBColor";
+import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
+import "../styles/ColorPickerSwatch.css";
 export const ColorPickerSwatch = ({
   selectedColor,
   onColorPicked,

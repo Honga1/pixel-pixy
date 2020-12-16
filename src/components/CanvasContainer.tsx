@@ -1,21 +1,19 @@
-import { useEffect, useRef, TouchEvent } from "react";
-import { getRelativeClickPosition } from "./drivers/getRelativeClickPosition";
-import { RGBColor } from "./drivers/RGBColor";
-import "./styles/CanvasContainer.css";
+import { TouchEvent, useEffect, useRef } from "react";
+import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
+import "../styles/CanvasContainer.css";
 
 const debug = false;
 export const CanvasContainer = ({
-  color,
   onCanvasCreated,
-  loadedImage,
-  changeToClear,
+  onTouchEvent,
   pixelDimensions,
 }: {
   pixelDimensions: number;
-  color: RGBColor;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
-  loadedImage: HTMLImageElement | undefined;
-  changeToClear: number;
+  onTouchEvent: (
+    canvas: HTMLCanvasElement,
+    touchEvent: TouchEvent<HTMLCanvasElement>
+  ) => void;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,41 +25,13 @@ export const CanvasContainer = ({
     }
   }, [onCanvasCreated]);
 
-  useEffect(() => {
+  const onInnerTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-
-    if (!context || !canvas || !loadedImage) return;
-
-    context.drawImage(loadedImage, 0, 0, canvas.width, canvas.height);
-  }, [loadedImage]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-
-    if (!(context && canvas)) return;
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  }, [changeToClear]);
-
-  const onTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
-    const { relativeX, relativeY } = getRelativeClickPosition(event);
-
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-    if (!context || !canvas) return;
-
-    const scaledX = relativeX * pixelDimensions;
-    const scaledY = relativeY * pixelDimensions;
-
-    const quantX = Math.floor(scaledX);
-    const quantY = Math.floor(scaledY);
-
-    context.fillStyle = color.toHex();
-    context.fillRect(quantX, quantY, 1, 1);
+    if (!canvas) return;
+    onTouchEvent(canvas, event);
 
     if (debug) {
+      const { relativeX, relativeY } = getRelativeClickPosition(event);
       const maybeContext = debugCanvasRef.current?.getContext("2d");
       if (!maybeContext) return;
       maybeContext.fillStyle = "red";
@@ -84,8 +54,8 @@ export const CanvasContainer = ({
           ref={canvasRef}
           width={pixelDimensions}
           height={pixelDimensions}
-          onTouchEnd={onTouchEvent}
-          onTouchMove={onTouchEvent}
+          onTouchEnd={onInnerTouchEvent}
+          onTouchMove={onInnerTouchEvent}
         ></canvas>
         {debug && (
           <canvas

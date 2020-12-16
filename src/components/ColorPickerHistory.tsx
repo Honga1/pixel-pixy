@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ColorSquare } from "./ColorSquare";
-import { RGBColor } from "./drivers/RGBColor";
-import "./styles/ColorPickerHistory.css";
+import { RGBColor } from "../drivers/RGBColor";
+import "../styles/ColorPickerHistory.css";
 
 export const ColorPickerHistory = ({
   colorSelected,
