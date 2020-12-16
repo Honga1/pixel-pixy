@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Select } from "./Select";
-import "./styles/CanvasContainer.css";
+import "../styles/DimensionPicker.css";
 
 const validDimensions = [
   { value: 8, label: "8x8" },

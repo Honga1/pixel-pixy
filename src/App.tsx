@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import "./styles/App.css";
-import { CanvasContainer } from "./CanvasContainer";
-import { ColorPickerHistory } from "./ColorPickerHistory";
-import { CurrentColor } from "./CurrentColor";
-import { LoadButton } from "./LoadButton";
-import { SaveButton } from "./SaveButton";
-import { ClearButton } from "./ClearButton";
-import { Grid } from "./Grid";
-import { ToggleButton } from "./ToggleButton";
-import { ColorPickerSwatch } from "./ColorPickerSwatch";
-import { DimensionPicker, ValidDimensions } from "./DimensionPicker";
+import { CanvasContainer } from "./components/CanvasContainer";
+import { ColorPickerHistory } from "./components/ColorPickerHistory";
+import { CurrentColor } from "./components/CurrentColor";
+import { LoadButton } from "./components/LoadButton";
+import { SaveButton } from "./components/SaveButton";
+import { ClearButton } from "./components/ClearButton";
+import { Grid } from "./components/Grid";
+import { ToggleButton } from "./components/ToggleButton";
+import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
+import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { RGBColor } from "./drivers/RGBColor";
 
 function App() {

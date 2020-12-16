@@ -1,7 +1,7 @@
 import { useEffect, useRef, TouchEvent } from "react";
-import { getRelativeClickPosition } from "./drivers/getRelativeClickPosition";
-import { RGBColor } from "./drivers/RGBColor";
-import "./styles/CanvasContainer.css";
+import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
+import { RGBColor } from "../drivers/RGBColor";
+import "../styles/CanvasContainer.css";
 
 const debug = false;
 export const CanvasContainer = ({

@@ -1,6 +1,6 @@
-import "./styles/ColorSquare.css";
+import "../styles/ColorSquare.css";
 import { TouchEvent } from "react";
-import { RGBColor } from "./drivers/RGBColor";
+import { RGBColor } from "../drivers/RGBColor";
 
 export const ColorSquare = ({
   color,

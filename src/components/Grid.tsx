@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "./styles/Grid.css";
+import "../styles/Grid.css";
 
 export const Grid = ({
   pixelDimensions,
