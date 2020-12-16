@@ -3,8 +3,39 @@ import { KeyPairMap } from "./KeyPairMap";
 import { NoColor, RGBColor } from "./RGBColor";
 
 export class PaintCanvas {
-  static DrawToCanvas(paintCanvas: PaintCanvas, htmlCanvas: HTMLCanvasElement) {
-    const context = htmlCanvas.getContext("2d");
+  setPixelsFromImage(image: HTMLImageElement) {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Could not get context for canvas");
+
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    context.drawImage(image, 0, 0);
+
+    this.setPixelsFromCanvas(canvas);
+  }
+  setPixelsFromCanvas(canvas: HTMLCanvasElement) {
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Could not get context for canvas");
+
+    const xIntervals = canvas.width / this.dimension();
+    const yIntervals = canvas.height / this.dimension();
+    this.mutableMap(([x, y]) => {
+      const { data } = context.getImageData(
+        x * xIntervals,
+        y * yIntervals,
+        1,
+        1
+      );
+
+      const [r, g, b, a] = data;
+      const color = a === 0 ? RGBColor.NO_COLOR : new RGBColor(r, g, b);
+      return color;
+    });
+  }
+
+  static DrawToCanvas(paintCanvas: PaintCanvas, canvas: HTMLCanvasElement) {
+    const context = canvas.getContext("2d");
     if (!context) throw new Error("Could not get context for canvas");
     paintCanvas.forEach(([x, y], color) => {
       if (color === "NO_COLOR") {
@@ -19,9 +50,9 @@ export class PaintCanvas {
 
   static AreDimensionsCompatible(
     paintCanvas: PaintCanvas,
-    htmlCanvas: HTMLCanvasElement
+    canvas: HTMLCanvasElement
   ) {
-    const { width, height } = htmlCanvas;
+    const { width, height } = canvas;
     const dimension = paintCanvas.dimension();
 
     if (width !== height) {

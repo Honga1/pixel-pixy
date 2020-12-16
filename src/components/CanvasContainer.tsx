@@ -6,7 +6,6 @@ const debug = false;
 export const CanvasContainer = ({
   onCanvasCreated,
   onTouchEvent,
-  loadedImage,
   pixelDimensions,
 }: {
   pixelDimensions: number;
@@ -15,7 +14,6 @@ export const CanvasContainer = ({
     canvas: HTMLCanvasElement,
     touchEvent: TouchEvent<HTMLCanvasElement>
   ) => void;
-  loadedImage: HTMLImageElement | undefined;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -26,15 +24,6 @@ export const CanvasContainer = ({
       onCanvasCreated(canvas);
     }
   }, [onCanvasCreated]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-
-    if (!context || !canvas || !loadedImage) return;
-
-    context.drawImage(loadedImage, 0, 0, canvas.width, canvas.height);
-  }, [loadedImage]);
 
   const onInnerTouchEvent = (event: TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;

@@ -1,7 +1,7 @@
 import { TouchEvent } from "react";
 import { RGBColor } from "./RGBColor";
 import { PaintCanvas } from "./PaintCanvas";
-import { createCanvas } from "canvas";
+import { createCanvas, Image, loadImage } from "canvas";
 
 it("Paint can create", () => {
   expect(() => new PaintCanvas(5)).not.toThrow();
@@ -145,4 +145,39 @@ it("Can handle touch event", () => {
   );
 
   expect((paint.getColorAt(9, 0) as RGBColor).rgb).toStrictEqual([0, 255, 0]);
+});
+
+it("Can load from canvas", async () => {
+  const paint = new PaintCanvas(10);
+
+  const canvas = createCanvas(100, 100);
+  const context = canvas.getContext("2d");
+  context.fillStyle = "red";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "blue";
+  context.fillRect(0, 0, canvas.width / 2, canvas.height / 2);
+
+  paint.setPixelsFromCanvas((canvas as unknown) as HTMLCanvasElement);
+  expect((paint.getColorAt(9, 9) as RGBColor).rgb).toStrictEqual([255, 0, 0]);
+  expect((paint.getColorAt(0, 0) as RGBColor).rgb).toStrictEqual([0, 0, 255]);
+});
+
+it("Can load from image", async () => {
+  const paint = new PaintCanvas(10);
+
+  const canvas = createCanvas(100, 100);
+  const context = canvas.getContext("2d");
+  context.fillStyle = "red";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "blue";
+  context.fillRect(0, 0, canvas.width / 2, canvas.height / 2);
+
+  const image = await loadImage(canvas.toDataURL());
+
+  expect(image.naturalWidth).toEqual(canvas.width);
+  expect(image.naturalHeight).toEqual(canvas.height);
+
+  paint.setPixelsFromImage((image as unknown) as HTMLImageElement);
+  expect((paint.getColorAt(9, 9) as RGBColor).rgb).toStrictEqual([255, 0, 0]);
+  expect((paint.getColorAt(0, 0) as RGBColor).rgb).toStrictEqual([0, 0, 255]);
 });

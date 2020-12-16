@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
-import "./styles/App.css";
+import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
+import { ClearButton } from "./components/ClearButton";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
+import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { CurrentColor } from "./components/CurrentColor";
+import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
+import { Grid } from "./components/Grid";
 import { LoadButton } from "./components/LoadButton";
 import { SaveButton } from "./components/SaveButton";
-import { ClearButton } from "./components/ClearButton";
-import { Grid } from "./components/Grid";
 import { ToggleButton } from "./components/ToggleButton";
-import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
-import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
-import { RGBColor } from "./drivers/RGBColor";
 import { PaintCanvas } from "./drivers/PaintCanvas";
+import { RGBColor } from "./drivers/RGBColor";
+import "./styles/App.css";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
@@ -19,9 +19,6 @@ function App() {
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
-  const [loadedImage, setLoadedImage] = useState<
-    HTMLImageElement | undefined
-  >();
 
   const paint = useMemo(() => new PaintCanvas(pixelDimensions), [
     pixelDimensions,
@@ -37,7 +34,6 @@ function App() {
           setCanvas(canvas);
           paint.setCanvas(canvas);
         }}
-        loadedImage={loadedImage}
         pixelDimensions={pixelDimensions}
         onTouchEvent={(canvas, event) => {
           paint.setCanvas(canvas);
@@ -50,7 +46,12 @@ function App() {
       )}
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
-      <LoadButton setLoadedImage={setLoadedImage} />
+      <LoadButton
+        setLoadedImage={(image) => {
+          paint.setPixelsFromImage(image);
+          paint.drawToCanvas();
+        }}
+      />
       {canvas && <SaveButton canvas={canvas} />}
       <ClearButton
         onClearPressed={() => {
