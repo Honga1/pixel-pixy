@@ -1,6 +1,7 @@
 import "../styles/ColorSquare.css";
 import { TouchEvent } from "react";
 import { RGBColor } from "../drivers/RGBColor";
+import { Box } from "grommet";
 
 export const ColorSquare = ({
   color,
@@ -10,10 +11,11 @@ export const ColorSquare = ({
   onTouchEnd?: (event: TouchEvent<HTMLDivElement>) => void;
 }) => {
   return (
-    <div
+    <Box
+      round
       onTouchEnd={onTouchEnd}
       style={{ backgroundColor: color.toHex() }}
       className="ColorSquare"
-    ></div>
+    ></Box>
   );
 };

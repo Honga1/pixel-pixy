@@ -16,7 +16,6 @@ export const ColorPickerSwatch = ({
   });
 
   useEffect(() => {
-    // Extract HSl from string
     const hsl = selectedColor.toHSL();
     if (hsl) {
       setCurrentHSL(hsl);

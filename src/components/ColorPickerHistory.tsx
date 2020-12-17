@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ColorSquare } from "./ColorSquare";
 import { RGBColor } from "../drivers/RGBColor";
 import "../styles/ColorPickerHistory.css";
+import { Box, Text } from "grommet";
 
 export const ColorPickerHistory = ({
   colorSelected,
@@ -24,17 +25,19 @@ export const ColorPickerHistory = ({
   }, [colorSelected]);
 
   return (
-    <div className="ColorPickerHistory">
-      Color History
-      <div className="RowZero">
-        {colorHistory.map((color, index) => (
-          <ColorSquare
-            onTouchEnd={() => onColorPicked(color)}
-            key={index}
-            color={color}
-          />
-        ))}
-      </div>
-    </div>
+    <Box className="ColorPickerHistory" direction="row">
+      <Text>
+        Color
+        <br />
+        History
+      </Text>
+      {colorHistory.map((color, index) => (
+        <ColorSquare
+          onTouchEnd={() => onColorPicked(color)}
+          key={index}
+          color={color}
+        />
+      ))}
+    </Box>
   );
 };

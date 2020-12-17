@@ -1,6 +1,10 @@
+import { Anchor } from "grommet";
+import { Share } from "grommet-icons";
+
 export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
   return (
-    <a
+    <Anchor
+      icon={<Share />}
       onTouchEnd={(event) => {
         const fullScaleCanvas = document.createElement("canvas");
         fullScaleCanvas.width = window.innerWidth;
@@ -20,8 +24,6 @@ export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
       }}
       href="/"
       download="my-pixel-art.png"
-    >
-      Save
-    </a>
+    ></Anchor>
   );
 };

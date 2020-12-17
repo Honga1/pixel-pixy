@@ -1,3 +1,13 @@
+import {
+  Box,
+  Button,
+  CheckBox,
+  Grid,
+  grommet,
+  Grommet,
+  Layer,
+  Text,
+} from "grommet";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ClearButton } from "./components/ClearButton";
@@ -5,7 +15,7 @@ import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { CurrentColor } from "./components/CurrentColor";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
-import { Grid } from "./components/Grid";
+import { Grid as ComponentGrid } from "./components/Grid";
 import { LoadButton } from "./components/LoadButton";
 import { SaveButton } from "./components/SaveButton";
 import { ToggleButton } from "./components/ToggleButton";
@@ -15,14 +25,16 @@ import "./styles/App.css";
 import { PaletteColourSwatch } from "./PaletteColorSwatch";
 import { PalettePicker } from "./PalettePicker";
 import { AvailablePalettes } from "./PaletteDictionary";
+import { Undo, Redo, Add, Actions } from "grommet-icons";
 
 function App() {
-  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
+  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [isPaletteShown, setPaletteShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>("c64");
+  const [isCreateMenuShown, setCreateMenuShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -30,82 +42,182 @@ function App() {
   }, [pixelDimensions]);
 
   return (
-    <div className="App">
-      {isPickerShown && (
-        <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
-      )}
-      <CanvasContainer
-        onCanvasCreated={(canvas) => {
-          setCanvas(canvas);
-          paint.setCanvas(canvas);
-        }}
-        pixelDimensions={pixelDimensions}
-        onTouchEvent={(canvas, event) => {
-          paint.setCanvas(canvas);
-          paint.touchEvent(event, color);
-          paint.drawToCanvas();
-        }}
-      />
-      {canvas && isGridShown && (
-        <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
-      )}
-      {isPaletteShown && (
-        <PaletteColourSwatch palette={palette} onColorPicked={setColor} />
-      )}
-      <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
-      <CurrentColor color={color} />
-      <LoadButton
-        setLoadedImage={(image) => {
-          paint.setPixelsFromImage(image);
-          paint.drawToCanvas();
-        }}
-      />
-      {canvas && <SaveButton canvas={canvas} />}
-      <ClearButton
-        onClearPressed={() => {
-          paint.clear();
-          if (paint.hasCanvas()) {
-            paint.drawToCanvas();
-          } else {
-            console.warn("Tried to clear a canvas that doesn't exist");
-          }
-        }}
-      />
+    <Grommet full theme={grommet}>
+      <Grid
+        fill
+        areas={[
+          { name: "canvas", start: [0, 0], end: [0, 0] },
+          { name: "body", start: [0, 1], end: [0, 1] },
+          { name: "footer", start: [0, 2], end: [0, 2] },
+        ]}
+        columns={["full"]}
+        rows={["flex", "flex", "xxsmall"]}
+      >
+        <Box
+          gridArea="canvas"
+          background={"white"}
+          height={"100vw"}
+          style={{ position: "relative" }}
+        >
+          <CanvasContainer
+            onCanvasCreated={(canvas) => {
+              setCanvas(canvas);
+              paint.setCanvas(canvas);
+            }}
+            pixelDimensions={pixelDimensions}
+            onTouchEvent={(canvas, event) => {
+              paint.setCanvas(canvas);
+              paint.touchEvent(event, color);
+              paint.drawToCanvas();
+            }}
+          />
 
-      <button
-        onTouchEnd={() => {
-          paint.undo();
-          paint.drawToCanvas();
-        }}
-      >
-        Undo
-      </button>
-      <button
-        onTouchEnd={() => {
-          paint.redo();
-          paint.drawToCanvas();
-        }}
-      >
-        Redo
-      </button>
-      <ToggleButton
-        onToggle={() => setGridShown(!isGridShown)}
-        text={isGridShown ? "Hide Grid" : "Show Grid"}
-      />
-      <ToggleButton
-        onToggle={() => setPickerShown(!isPickerShown)}
-        text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
-      />
-      <ToggleButton
-        onToggle={() => setPaletteShown(!isPaletteShown)}
-        text={isPaletteShown ? "Hide Palette" : "Show Palette"}
-      />
-      <DimensionPicker
-        onDimensionChange={setPixelDimensions}
-        dimension={pixelDimensions}
-      />
-      <PalettePicker palette={palette} onPaletteChange={setPalette} />
-    </div>
+          {isPickerShown && (
+            <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
+          )}
+
+          {canvas && isGridShown && (
+            <ComponentGrid
+              pixelDimensions={pixelDimensions}
+              rootCanvas={canvas}
+            />
+          )}
+        </Box>
+        <Box gridArea="body" background={"white"} pad="small">
+          <Grid
+            columns={{
+              count: 2,
+              size: ["auto", "auto"],
+            }}
+          >
+            <Box direction="row" gap="small">
+              <Button
+                primary
+                plain={false}
+                icon={<Undo />}
+                onClick={() => {
+                  paint.undo();
+                  paint.drawToCanvas();
+                }}
+              />
+              <Button
+                primary
+                plain={false}
+                icon={<Redo />}
+                onClick={() => {
+                  paint.redo();
+                  paint.drawToCanvas();
+                }}
+              />
+            </Box>
+            <Box align="end">
+              <CurrentColor color={color} />
+            </Box>
+          </Grid>
+          <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
+
+          <Button
+            label="Clear Canvas"
+            primary
+            onClick={() => {
+              paint.clear();
+              if (paint.hasCanvas()) {
+                paint.drawToCanvas();
+              } else {
+                console.warn("Tried to clear a canvas that doesn't exist");
+              }
+            }}
+          ></Button>
+
+          <CheckBox
+            checked={isGridShown}
+            onChange={() => setGridShown(!isGridShown)}
+            label={"Grid"}
+            toggle
+          />
+          <ToggleButton
+            onToggle={() => setPickerShown(!isPickerShown)}
+            text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
+          />
+        </Box>
+
+        <Box
+          gridArea="footer"
+          background={"grey"}
+          direction="row"
+          pad={{ left: "small", right: "small" }}
+        >
+          <Grid
+            columns={{
+              count: 3,
+              size: ["auto", "auto", "auto"],
+            }}
+            fill
+            gap="small"
+          >
+            <Box align="start">
+              <Button
+                icon={<Actions />}
+                onClick={() => console.log("clicked")}
+              />
+            </Box>
+            <Box align="center">
+              <Button icon={<Add />} onClick={() => setCreateMenuShown(true)} />
+            </Box>
+            <Box align="end">{canvas && <SaveButton canvas={canvas} />}</Box>
+          </Grid>
+        </Box>
+      </Grid>
+
+      {isCreateMenuShown && (
+        <Layer
+          modal
+          position="bottom"
+          responsive={false}
+          full="horizontal"
+          onClickOutside={() => setCreateMenuShown(false)}
+        >
+          <Box pad="small" fill>
+            <Box pad={{ top: "small", bottom: "small" }} gap="small">
+              <Text>Canvas Dimensions</Text>
+              <DimensionPicker
+                onDimensionChange={setPixelDimensions}
+                dimension={pixelDimensions}
+              />
+            </Box>
+            <Box pad={{ top: "small", bottom: "small" }} gap="small">
+              <Text>Upload Image (optional)</Text>
+              <LoadButton
+                setLoadedImage={(image) => {
+                  paint.setPixelsFromImage(image);
+                  paint.drawToCanvas();
+                }}
+              />
+            </Box>
+
+            <Grid
+              columns={{ count: 2, size: ["auto", "auto"] }}
+              gap="small"
+              pad={{ top: "medium", bottom: "small" }}
+            >
+              <Button
+                label="Cancel"
+                onClick={() => setCreateMenuShown(false)}
+              />
+
+              <Button
+                primary
+                label="Create New"
+                onClick={() => {
+                  paint.clear();
+                  paint.drawToCanvas();
+                }}
+              />
+            </Grid>
+          </Box>
+        </Layer>
+      )}
+    </Grommet>
   );
 }
 
