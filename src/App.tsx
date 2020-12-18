@@ -43,7 +43,7 @@ function App() {
   }, [pixelDimensions]);
 
   return (
-    <Grommet full theme={grommet}>
+    <Grommet theme={grommet} style={{ height: "100%" }}>
       <Grid
         fill
         areas={[

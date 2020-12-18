@@ -1,5 +1,4 @@
-html,
-body {
+* {
   overscroll-behavior-y: contain;
 }
 
@@ -11,7 +10,10 @@ canvas {
 }
 
 body,
-html {
+html,
+#root {
+  height: 100%;
+  overflow: hidden;
   margin: 0;
 }
 /* 
