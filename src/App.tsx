@@ -19,17 +19,36 @@ import { Grid as ComponentGrid } from "./components/Grid";
 import { LoadButton } from "./components/LoadButton";
 import { SaveButton } from "./components/SaveButton";
 import { ToggleButton } from "./components/ToggleButton";
-import { RGBColor } from "./drivers/RGBColor";
+import { NoColor, RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import "./styles/App.css";
 import { PaletteColourSwatch } from "./PaletteColorSwatch";
 import { PalettePicker } from "./PalettePicker";
 import { AvailablePalettes } from "./PaletteDictionary";
-import { Undo, Redo, Add, Actions } from "grommet-icons";
+import {
+  Undo,
+  Redo,
+  Add,
+  Actions,
+  Erase,
+  Brush,
+  Grid as GridIcon,
+} from "grommet-icons";
+import { PaletteIcon } from "./components/PaletteIcon";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
+
+  const setColorMode = (color: RGBColor | NoColor) => {
+    if (color === RGBColor.NO_COLOR) {
+      setIsErasing(true);
+    } else {
+      setIsErasing(false);
+      setColor(color);
+    }
+  };
+  const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
   const [isPaletteShown, setPaletteShown] = useState(false);
@@ -42,7 +61,7 @@ function App() {
   }, [pixelDimensions]);
 
   return (
-    <Grommet theme={grommet} style={{ height: "100%" }}>
+    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="dark">
       <Grid
         fill
         areas={[
@@ -62,13 +81,16 @@ function App() {
             pixelDimensions={pixelDimensions}
             onTouchEvent={(canvas, event) => {
               paint.setCanvas(canvas);
-              paint.touchEvent(event, color);
+              paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
               paint.drawToCanvas();
             }}
           />
 
           {isPickerShown && (
-            <ColorPickerSwatch selectedColor={color} onColorPicked={setColor} />
+            <ColorPickerSwatch
+              selectedColor={color}
+              onColorPicked={setColorMode}
+            />
           )}
 
           {canvas && isGridShown && (
@@ -78,17 +100,16 @@ function App() {
             />
           )}
         </Stack>
-        <Box gridArea="body" background={"white"} pad="small">
+        <Box gridArea="body" pad="small">
           <Grid
             columns={{
-              count: 2,
-              size: ["auto", "auto"],
+              count: 3,
+              size: ["auto", "auto", "auto"],
             }}
+            rows="flex"
           >
             <Box direction="row" gap="small">
               <Button
-                primary
-                plain={false}
                 icon={<Undo />}
                 onClick={() => {
                   paint.undo();
@@ -96,8 +117,6 @@ function App() {
                 }}
               />
               <Button
-                primary
-                plain={false}
                 icon={<Redo />}
                 onClick={() => {
                   paint.redo();
@@ -105,40 +124,50 @@ function App() {
                 }}
               />
             </Box>
-            <Box align="end">
-              <CurrentColor color={color} />
+            <Box align="center" justify="center">
+              <Button
+                icon={<GridIcon />}
+                style={{
+                  borderRadius: "18px",
+                  boxShadow: isGridShown ? "0 0 2px 2px green" : "none",
+                }}
+                onClick={() => setGridShown(!isGridShown)}
+              />
+            </Box>
+            <Box align="end" justify="end" direction="row" gap="small">
+              <Button
+                style={{
+                  // background: `url(${checkboardImageSrc})`,
+                  backgroundSize: "20%",
+                  borderRadius: "18px",
+                  boxShadow: isErasing ? "0 0 2px 2px green" : "none",
+                }}
+                onClick={() => setColorMode(RGBColor.NO_COLOR)}
+                icon={<Erase />}
+              />
+              <Button
+                primary
+                style={{
+                  boxShadow: !isErasing ? "0 0 2px 2px green" : "none",
+                }}
+                color={color.toHex()}
+                icon={<Brush />}
+                onClick={() => setColorMode(color)}
+              />
             </Box>
           </Grid>
           <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
 
-          <Button
-            label="Clear Canvas"
-            primary
-            onClick={() => {
-              paint.clear();
-              if (paint.hasCanvas()) {
-                paint.drawToCanvas();
-              } else {
-                console.warn("Tried to clear a canvas that doesn't exist");
-              }
-            }}
-          ></Button>
-
-          <CheckBox
-            checked={isGridShown}
-            onChange={() => setGridShown(!isGridShown)}
-            label={"Grid"}
-            toggle
-          />
           <ToggleButton
             onToggle={() => setPickerShown(!isPickerShown)}
             text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
           />
-          <ToggleButton
-            onToggle={() => setPaletteShown(!isPaletteShown)}
-            text={
-              isPaletteShown ? "Hide Palette Picker" : "Show Pallette Picker"
-            }
+          <Button
+            onClick={() => setPaletteShown(!isPaletteShown)}
+            icon={<PaletteIcon />}
+            // text={
+            //   isPaletteShown ? "Hide Palette Picker" : "Show Pallette Picker"
+            // }
           />
           {isPaletteShown && (
             <PalettePicker
@@ -148,7 +177,7 @@ function App() {
           )}
           {isPickerShown && (
             <PaletteColourSwatch
-              onColorPicked={(color) => setColor(color)}
+              onColorPicked={(color) => setColorMode(color)}
               palette={palette}
             ></PaletteColourSwatch>
           )}
@@ -156,8 +185,8 @@ function App() {
 
         <Box
           gridArea="footer"
-          background={"grey"}
           direction="row"
+          // background="black"
           pad={{ left: "small", right: "small" }}
         >
           <Grid
@@ -191,6 +220,18 @@ function App() {
           onClickOutside={() => setCreateMenuShown(false)}
         >
           <Box pad="small" fill>
+            <Button
+              label="Clear Canvas"
+              primary
+              onClick={() => {
+                paint.clear();
+                if (paint.hasCanvas()) {
+                  paint.drawToCanvas();
+                } else {
+                  console.warn("Tried to clear a canvas that doesn't exist");
+                }
+              }}
+            ></Button>
             <Box pad={{ top: "small", bottom: "small" }} gap="small">
               <Text>Canvas Dimensions</Text>
               <DimensionPicker
