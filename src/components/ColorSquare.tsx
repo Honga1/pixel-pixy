@@ -1,7 +1,7 @@
-import "../styles/ColorSquare.css";
+import { Box } from "grommet";
 import { TouchEvent } from "react";
 import { RGBColor } from "../drivers/RGBColor";
-import { Box } from "grommet";
+import "../styles/ColorSquare.css";
 
 export const ColorSquare = ({
   color,

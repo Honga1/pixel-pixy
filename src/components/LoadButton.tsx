@@ -1,4 +1,4 @@
-import { Text, Box, Button } from "grommet";
+import { Box, Button, Text } from "grommet";
 import { useRef } from "react";
 
 export const LoadButton = ({

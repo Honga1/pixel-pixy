@@ -1,8 +1,8 @@
+import { Box, Text } from "grommet";
 import { useEffect, useState } from "react";
-import { ColorSquare } from "./ColorSquare";
 import { RGBColor } from "../drivers/RGBColor";
 import "../styles/ColorPickerHistory.css";
-import { Box, Text } from "grommet";
+import { ColorSquare } from "./ColorSquare";
 
 export const ColorPickerHistory = ({
   colorSelected,
