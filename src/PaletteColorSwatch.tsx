@@ -17,13 +17,17 @@ export const PaletteColourSwatch = ({
   return (
     <Box direction="row" wrap justify="between" alignSelf="center">
       {Object.values(selectedPalette).map((color, index) => (
-        <Box height="xsmall" width="xsmall" pad={{bottom: "xsmall"}}>
-          <Button fill="vertical"
-
+        <Box height="xsmall" width="xsmall" pad={{ bottom: "xsmall" }}>
+          <Button
+            fill="vertical"
             size="large"
             onClick={() => onColorPicked(color)}
             key={index}
-            style={{ backgroundColor: color.toHex(), borderRadius:"0", border:"none" }}
+            style={{
+              backgroundColor: color.toHex(),
+              borderRadius: "0",
+              border: "none",
+            }}
           ></Button>
         </Box>
       ))}
