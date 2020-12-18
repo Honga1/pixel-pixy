@@ -5,7 +5,6 @@ import { LoadButton } from "./components/LoadButton";
 
 export const NewModal = ({
   onClickOutside,
-  onClickClear,
   onDimensionChange,
   dimension,
   setLoadedImage,
@@ -13,7 +12,6 @@ export const NewModal = ({
   createNew,
 }: {
   onClickOutside: () => void;
-  onClickClear: () => void;
   onDimensionChange: (dimension: ValidDimensions) => void;
   dimension: ValidDimensions;
   setLoadedImage: (image: HTMLImageElement) => void;
@@ -29,7 +27,6 @@ export const NewModal = ({
       onClickOutside={onClickOutside}
     >
       <Box pad="small" fill>
-        <Button label="Clear Canvas" primary onClick={onClickClear}></Button>
         <Box pad={{ top: "small", bottom: "small" }} gap="small">
           <Text>Canvas Dimensions</Text>
           <DimensionPicker

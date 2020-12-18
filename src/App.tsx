@@ -7,6 +7,7 @@ import {
   Grid as GridIcon,
   Redo,
   Undo,
+  Trash,
 } from "grommet-icons";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
@@ -16,6 +17,7 @@ import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { SaveButton } from "./components/SaveButton";
+import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
@@ -35,6 +37,10 @@ function App() {
       setColor(color);
     }
   };
+
+  const [confirmModalParameters, setConfirmModalParameters] = useState<
+    ConfirmModalProps | undefined
+  >(undefined);
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
@@ -155,10 +161,36 @@ function App() {
               setPalette={(palette) => setPalette(palette)}
             ></PaletteModal>
           )}
-          <Button
-            onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
-            icon={<PaletteIcon />}
-          />
+          <Box direction="row">
+            <Button
+              onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
+              icon={<PaletteIcon />}
+            />
+            <Button
+              onClick={() => {
+                setConfirmModalParameters({
+                  onAccept: () => {
+                    setConfirmModalParameters(undefined);
+
+                    paint.clear();
+                    if (paint.hasCanvas()) {
+                      paint.drawToCanvas();
+                    } else {
+                      console.warn(
+                        "Tried to clear a canvas that doesn't exist"
+                      );
+                    }
+                  },
+                  message: "Are you sure you want to clear the canvas?",
+                  acceptButtonText: "Clear",
+                  onCancel: () => {
+                    setConfirmModalParameters(undefined);
+                  },
+                });
+              }}
+              icon={<Trash />}
+            ></Button>
+          </Box>
         </Box>
 
         <Box
@@ -188,17 +220,19 @@ function App() {
         </Box>
       </Grid>
 
+      {!!confirmModalParameters && (
+        <ConfirmModal
+          onAccept={confirmModalParameters.onAccept}
+          onCancel={confirmModalParameters.onCancel}
+          cancelButtonText={confirmModalParameters.cancelButtonText}
+          acceptButtonText={confirmModalParameters.acceptButtonText}
+          message={confirmModalParameters.message}
+        />
+      )}
+
       {isCreateMenuShown && (
         <NewModal
           onClickOutside={() => setCreateMenuShown(false)}
-          onClickClear={() => {
-            paint.clear();
-            if (paint.hasCanvas()) {
-              paint.drawToCanvas();
-            } else {
-              console.warn("Tried to clear a canvas that doesn't exist");
-            }
-          }}
           onDimensionChange={setPixelDimensions}
           dimension={pixelDimensions}
           setLoadedImage={(image) => {
