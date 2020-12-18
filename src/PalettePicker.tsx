@@ -1,5 +1,14 @@
+import { Select } from "grommet";
 import { ReactElement } from "react";
 import { AvailablePalettes, paletteNameDictionary } from "./PaletteDictionary";
+
+const options = ["Commodore 64", "DOS CGA/ EGA", "Teletext"];
+
+const labelToValue = {
+  "Commodore 64": "c64",
+  "DOS CGA/ EGA": "cga",
+  Teletext: "teletext",
+} as const;
 
 export const PalettePicker = ({
   palette,
@@ -10,25 +19,14 @@ export const PalettePicker = ({
 }): ReactElement => {
   const possiblePalettes = paletteNameDictionary;
   return (
-    <div>
-      <label>
-        Palette
-        <select
-          value={palette}
-          onChange={(event) =>
-            onPaletteChange(event.target.value as AvailablePalettes)
-          }
-        >
-          {(Object.entries(possiblePalettes) as [
-            AvailablePalettes,
-            string
-          ][]).map(([key, paletteName]) => (
-            <option key={key} value={key}>
-              {paletteName}
-            </option>
-          ))}
-        </select>
-      </label>
-    </div>
+    <Select
+      name="Select Palette"
+      placeholder={possiblePalettes.c64}
+      value={paletteNameDictionary[palette]}
+      options={options}
+      onChange={({ option }: { option: keyof typeof labelToValue }) =>
+        onPaletteChange(labelToValue[option])
+      }
+    />
   );
 };

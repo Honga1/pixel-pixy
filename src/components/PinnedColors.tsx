@@ -1,39 +1,17 @@
 import { Box, Button, Text } from "grommet";
-import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/RGBColor";
 import "../styles/ColorPickerHistory.css";
 
-export const ColorPickerHistory = ({
-  colorSelected,
+export const PinnedColors = ({
+  pinnedColors = [],
   onColorPicked,
 }: {
-  colorSelected: RGBColor;
+  pinnedColors: RGBColor[];
   onColorPicked: (color: RGBColor) => void;
 }) => {
-  const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
-
-  useEffect(() => {
-    if (
-      colorHistory.filter((color) => {
-        return RGBColor.Equals(color, colorSelected);
-      }).length !== 0
-    ) {
-      return;
-    }
-
-    let newColorHistory = [...colorHistory];
-    newColorHistory.unshift(colorSelected);
-    if (newColorHistory.length > 8) {
-      newColorHistory = newColorHistory.slice(0, 8);
-    }
-
-    setColorHistory(newColorHistory);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colorSelected]);
-
   return (
     <Box gap="small">
-      <Text alignSelf="start">Recent</Text>
+      <Text alignSelf="start">Pinned</Text>
       <Box
         className="ColorPickerHistory"
         direction="row"
@@ -41,7 +19,7 @@ export const ColorPickerHistory = ({
         wrap
         gap="xxsmall"
       >
-        {colorHistory.map((color, index) => (
+        {pinnedColors.slice(0, 8).map((color, index) => (
           <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
             <Button
               fill="vertical"

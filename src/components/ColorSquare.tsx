@@ -1,5 +1,4 @@
-import "../styles/ColorSquare.css";
-import { TouchEvent } from "react";
+import { Button } from "grommet";
 import { RGBColor } from "../drivers/RGBColor";
 
 export const ColorSquare = ({
@@ -7,13 +6,7 @@ export const ColorSquare = ({
   onTouchEnd,
 }: {
   color: RGBColor;
-  onTouchEnd?: (event: TouchEvent<HTMLDivElement>) => void;
+  onTouchEnd?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) => {
-  return (
-    <div
-      onTouchEnd={onTouchEnd}
-      style={{ backgroundColor: color.toHex() }}
-      className="ColorSquare"
-    ></div>
-  );
+  return <Button primary color={color.toHex()} onClick={onTouchEnd} />;
 };

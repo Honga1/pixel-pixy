@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import { RGBColor } from "../drivers/RGBColor";
+import { Box, Grid, Stack } from "grommet";
+import { useEffect, useState } from "react";
 import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
+import { RGBColor } from "../drivers/RGBColor";
 import "../styles/ColorPickerSwatch.css";
 export const ColorPickerSwatch = ({
   selectedColor,
@@ -16,7 +17,6 @@ export const ColorPickerSwatch = ({
   });
 
   useEffect(() => {
-    // Extract HSl from string
     const hsl = selectedColor.toHSL();
     if (hsl) {
       setCurrentHSL(hsl);
@@ -24,12 +24,26 @@ export const ColorPickerSwatch = ({
   }, [selectedColor]);
 
   return (
-    <div className="Wrapper">
-      <div
-        style={{ backgroundColor: `hsl(${currentHSL.h}, 100%, 50%)` }}
-        className="ColorPickerSwatch"
-      >
-        <div
+    <Grid
+      fill
+      areas={[
+        { name: "saturation-lightness", start: [0, 0], end: [0, 0] },
+        {
+          name: "hue",
+          start: [0, 1],
+          end: [0, 1],
+        },
+      ]}
+      columns={["full"]}
+      rows={["auto", "xxsmall"]}
+    >
+      <Stack fill gridArea="saturation-lightness" interactiveChild={1}>
+        <Box
+          className="SelectedColor"
+          style={{ backgroundColor: `hsl(${currentHSL.h}, 100%, 50%)` }}
+        />
+        <Box
+          fill
           className="Saturation"
           onTouchEnd={(event) => {
             const {
@@ -50,24 +64,24 @@ export const ColorPickerSwatch = ({
             currentHSL.l = (1 - scaledY) * (1 - currentHSL.s / 2);
             setCurrentHSL(currentHSL.clone());
           }}
-        >
-          <div className="Lightness" />
-        </div>
-
-        <div
-          className="Hue"
-          onTouchEnd={(event) => {
-            const { relativeX: scaledX } = getRelativeClickPosition(event);
-            currentHSL.h = scaledX * 360;
-            setCurrentHSL(currentHSL.clone());
-          }}
-          onTouchMove={(event) => {
-            const { relativeX: scaledX } = getRelativeClickPosition(event);
-            currentHSL.h = scaledX * 360;
-            setCurrentHSL(currentHSL.clone());
-          }}
-        ></div>
-      </div>
-    </div>
+        />
+        <Box fill className="Lightness" />
+      </Stack>
+      <Box
+        fill
+        gridArea="hue"
+        className="Hue"
+        onTouchEnd={(event) => {
+          const { relativeX: scaledX } = getRelativeClickPosition(event);
+          currentHSL.h = scaledX * 360;
+          setCurrentHSL(currentHSL.clone());
+        }}
+        onTouchMove={(event) => {
+          const { relativeX: scaledX } = getRelativeClickPosition(event);
+          currentHSL.h = scaledX * 360;
+          setCurrentHSL(currentHSL.clone());
+        }}
+      ></Box>
+    </Grid>
   );
 };

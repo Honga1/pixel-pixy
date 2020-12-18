@@ -6,7 +6,7 @@ export class PaintCanvas {
     const context = canvas.getContext("2d");
     if (!context) throw new Error("Could not get context for canvas");
     paintCanvas.forEach(([x, y], color) => {
-      if (color === "NO_COLOR") {
+      if (color === RGBColor.NO_COLOR) {
         context.clearRect(x, y, 1, 1);
         return;
       }

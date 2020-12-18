@@ -1,23 +1,4 @@
-@import "font.css";
 * {
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  user-select: none;
-}
-
-* {
-  font-family: "Retro-Gaming";
-}
-
-html,
-body {
   overscroll-behavior-y: contain;
 }
 
@@ -27,3 +8,18 @@ canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+body,
+html,
+#root {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+/* 
+* {
+  box-sizing: border-box;
+  border-color: red;
+  border-width: 1px;
+  border-style: solid;
+} */

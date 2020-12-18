@@ -1,24 +1,4 @@
-.ColorPickerSwatch {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 90%;
-  flex-wrap: wrap;
-}
-
-.Wrapper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  float: left;
-  height: 0;
-}
-
 .Saturation {
-  height: 100%;
-  width: 100%;
   background: linear-gradient(
     to right,
     rgb(255, 255, 255),
@@ -26,15 +6,16 @@
   );
 }
 
-.Lightness {
+.SelectedColor {
   height: 100%;
   width: 100%;
+}
+
+.Lightness {
   background: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0));
 }
 
 .Hue {
-  height: 10vw;
-  width: 100%;
   background: linear-gradient(
     to right,
     rgb(255, 0, 0) 0%,
