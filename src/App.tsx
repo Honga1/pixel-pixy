@@ -1,4 +1,4 @@
-import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
+import { Box, Button, Grid, grommet, Grommet, Stack, Text } from "grommet";
 import {
   Actions,
   Add,
@@ -12,6 +12,7 @@ import {
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
+import { PinnedColors } from "./components/PinnedColors";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
@@ -21,13 +22,18 @@ import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
-import { AvailablePalettes } from "./PaletteDictionary";
+import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import "./styles/App.css";
+import { DropperIcon } from "./components/DropperIcon";
 
+const defaultPalette = "cga";
+const defaultColor = "#5555ff";
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
-  const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
+  const [color, setColor] = useState<RGBColor>(
+    RGBColor.fromHexString(defaultColor)
+  );
 
   const setColorMode = (color: RGBColor | NoColor) => {
     if (color === RGBColor.NO_COLOR) {
@@ -44,7 +50,7 @@ function App() {
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
-  const [palette, setPalette] = useState<AvailablePalettes>("c64");
+  const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
   const [isCreateMenuShown, setCreateMenuShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
@@ -53,7 +59,7 @@ function App() {
   }, [pixelDimensions]);
 
   return (
-    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="dark">
+    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
       <Grid
         fill
         areas={[
@@ -103,7 +109,7 @@ function App() {
             }}
             rows="flex"
           >
-            <Box direction="row" gap="small">
+            <Box direction="row" gap="">
               <Button
                 icon={<Undo />}
                 onClick={() => {
@@ -119,7 +125,15 @@ function App() {
                 }}
               />
             </Box>
-            <Box align="center" justify="center">
+            <Box align="center" justify="center" direction="row-reverse">
+              <Button
+                onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
+                icon={<PaletteIcon />}
+              />
+              <Button
+                onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
+                icon={<DropperIcon />}
+              />
               <Button
                 icon={<GridIcon />}
                 style={{
@@ -152,6 +166,12 @@ function App() {
             </Box>
           </Grid>
           <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
+          <PinnedColors
+            onColorPicked={setColor}
+            pinnedColors={paletteColorDictionary[palette].map((colorString) =>
+              RGBColor.fromHexString(colorString)
+            )}
+          />
 
           {isPaletteMenuShown && (
             <PaletteModal
@@ -161,11 +181,7 @@ function App() {
               setPalette={(palette) => setPalette(palette)}
             ></PaletteModal>
           )}
-          <Box direction="row">
-            <Button
-              onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
-              icon={<PaletteIcon />}
-            />
+          <Box direction="row" justify="end">
             <Button
               onClick={() => {
                 setConfirmModalParameters({
