@@ -25,7 +25,7 @@ export const ConfirmModal = ({
       onClickOutside={onCancel}
     >
       <Box gap="small" pad="small">
-        <Text>{message}</Text>
+        <Text alignSelf="center">{message}</Text>
         <Box direction="row" justify="between" gap="small">
           <Button
             label={cancelButtonText}
