@@ -1,40 +1,29 @@
+import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
 import {
-  Box,
-  Button,
-  CheckBox,
-  Grid,
-  grommet,
-  Grommet,
-  Layer,
-  Stack,
-  Text,
-} from "grommet";
+  Actions,
+  Add,
+  Brush,
+  Erase,
+  Grid as GridIcon,
+  Redo,
+  Undo,
+} from "grommet-icons";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
-import { CurrentColor } from "./components/CurrentColor";
-import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
+import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
-import { LoadButton } from "./components/LoadButton";
+import { PaletteIcon } from "./components/PaletteIcon";
 import { SaveButton } from "./components/SaveButton";
 import { ToggleButton } from "./components/ToggleButton";
 import { NoColor, RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
-import "./styles/App.css";
+import { NewModal } from "./NewModal";
 import { PaletteColourSwatch } from "./PaletteColorSwatch";
-import { PalettePicker } from "./PalettePicker";
 import { AvailablePalettes } from "./PaletteDictionary";
-import {
-  Undo,
-  Redo,
-  Add,
-  Actions,
-  Erase,
-  Brush,
-  Grid as GridIcon,
-} from "grommet-icons";
-import { PaletteIcon } from "./components/PaletteIcon";
+import { PalettePicker } from "./PalettePicker";
+import "./styles/App.css";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
@@ -165,9 +154,6 @@ function App() {
           <Button
             onClick={() => setPaletteShown(!isPaletteShown)}
             icon={<PaletteIcon />}
-            // text={
-            //   isPaletteShown ? "Hide Palette Picker" : "Show Pallette Picker"
-            // }
           />
           {isPaletteShown && (
             <PalettePicker
@@ -212,64 +198,28 @@ function App() {
       </Grid>
 
       {isCreateMenuShown && (
-        <Layer
-          modal
-          position="bottom"
-          responsive={false}
-          full="horizontal"
+        <NewModal
           onClickOutside={() => setCreateMenuShown(false)}
-        >
-          <Box pad="small" fill>
-            <Button
-              label="Clear Canvas"
-              primary
-              onClick={() => {
-                paint.clear();
-                if (paint.hasCanvas()) {
-                  paint.drawToCanvas();
-                } else {
-                  console.warn("Tried to clear a canvas that doesn't exist");
-                }
-              }}
-            ></Button>
-            <Box pad={{ top: "small", bottom: "small" }} gap="small">
-              <Text>Canvas Dimensions</Text>
-              <DimensionPicker
-                onDimensionChange={setPixelDimensions}
-                dimension={pixelDimensions}
-              />
-            </Box>
-            <Box pad={{ top: "small", bottom: "small" }} gap="small">
-              <Text>Upload Image (optional)</Text>
-              <LoadButton
-                setLoadedImage={(image) => {
-                  paint.setPixelsFromImage(image);
-                  paint.drawToCanvas();
-                }}
-              />
-            </Box>
-
-            <Grid
-              columns={{ count: 2, size: ["auto", "auto"] }}
-              gap="small"
-              pad={{ top: "medium", bottom: "small" }}
-            >
-              <Button
-                label="Cancel"
-                onClick={() => setCreateMenuShown(false)}
-              />
-
-              <Button
-                primary
-                label="Create New"
-                onClick={() => {
-                  paint.clear();
-                  paint.drawToCanvas();
-                }}
-              />
-            </Grid>
-          </Box>
-        </Layer>
+          onClickClear={() => {
+            paint.clear();
+            if (paint.hasCanvas()) {
+              paint.drawToCanvas();
+            } else {
+              console.warn("Tried to clear a canvas that doesn't exist");
+            }
+          }}
+          onDimensionChange={setPixelDimensions}
+          dimension={pixelDimensions}
+          setLoadedImage={(image) => {
+            paint.setPixelsFromImage(image);
+            paint.drawToCanvas();
+          }}
+          setCreateMenuShown={() => setCreateMenuShown(false)}
+          createNew={() => {
+            paint.clear();
+            paint.drawToCanvas();
+          }}
+        ></NewModal>
       )}
     </Grommet>
   );
