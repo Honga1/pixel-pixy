@@ -27,7 +27,10 @@ export const PaletteModal = ({
       <Box pad="small" fill>
         <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
           <PaletteColourSwatch
-            onColorPicked={setColor}
+            onColorPicked={(color) => {
+              setColor(color);
+              onClickOutside();
+            }}
             palette={palette}
           ></PaletteColourSwatch>
         </Box>
