@@ -11,7 +11,7 @@ export const CurrentColor = ({ color }: { color: RGBColor }) => {
         <br />
         Color
       </Text>
-      <ColorSquare color={color}></ColorSquare>
+      <ColorSquare color={color} />
     </Box>
   );
 };

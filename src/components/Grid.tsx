@@ -45,6 +45,6 @@ export const Grid = ({
       className="Grid"
       width={rootCanvas.clientWidth}
       height={rootCanvas.clientHeight}
-    ></canvas>
+    />
   );
 };
