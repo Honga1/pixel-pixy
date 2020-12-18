@@ -6,6 +6,7 @@ import {
   grommet,
   Grommet,
   Layer,
+  Stack,
   Text,
 } from "grommet";
 import React, { useMemo, useState } from "react";
@@ -51,14 +52,9 @@ function App() {
           { name: "footer", start: [0, 2], end: [0, 2] },
         ]}
         columns={["full"]}
-        rows={["flex", "flex", "xxsmall"]}
+        rows={["auto", "flex", "xxsmall"]}
       >
-        <Box
-          gridArea="canvas"
-          background={"white"}
-          height={"100vw"}
-          style={{ position: "relative" }}
-        >
+        <Stack gridArea="canvas" interactiveChild={isPickerShown ? 1 : "first"}>
           <CanvasContainer
             onCanvasCreated={(canvas) => {
               setCanvas(canvas);
@@ -82,7 +78,7 @@ function App() {
               rootCanvas={canvas}
             />
           )}
-        </Box>
+        </Stack>
         <Box gridArea="body" background={"white"} pad="small">
           <Grid
             columns={{

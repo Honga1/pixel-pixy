@@ -9,3 +9,15 @@ canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+body,
+html {
+  margin: 0;
+}
+/* 
+* {
+  box-sizing: border-box;
+  border-color: red;
+  border-width: 1px;
+  border-style: solid;
+} */
