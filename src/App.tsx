@@ -12,12 +12,17 @@ import { ToggleButton } from "./components/ToggleButton";
 import { RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import "./styles/App.css";
+import { PaletteColourSwatch } from "./PaletteColorSwatch";
+import { PalettePicker } from "./PalettePicker";
+import { AvailablePalettes } from "./PaletteDictionary";
 
 function App() {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(1);
   const [color, setColor] = useState<RGBColor>(new RGBColor(0, 0, 0));
   const [isGridShown, setGridShown] = useState(false);
   const [isPickerShown, setPickerShown] = useState(false);
+  const [isPaletteShown, setPaletteShown] = useState(false);
+  const [palette, setPalette] = useState<AvailablePalettes>("c64");
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -43,6 +48,9 @@ function App() {
       />
       {canvas && isGridShown && (
         <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
+      )}
+      {isPaletteShown && (
+        <PaletteColourSwatch palette={palette} onColorPicked={setColor} />
       )}
       <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
       <CurrentColor color={color} />
@@ -88,10 +96,15 @@ function App() {
         onToggle={() => setPickerShown(!isPickerShown)}
         text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
       />
+      <ToggleButton
+        onToggle={() => setPaletteShown(!isPaletteShown)}
+        text={isPaletteShown ? "Hide Palette" : "Show Palette"}
+      />
       <DimensionPicker
         onDimensionChange={setPixelDimensions}
         dimension={pixelDimensions}
       />
+      <PalettePicker palette={palette} onPaletteChange={setPalette} />
     </div>
   );
 }
