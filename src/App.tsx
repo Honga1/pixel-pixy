@@ -134,6 +134,24 @@ function App() {
             onToggle={() => setPickerShown(!isPickerShown)}
             text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
           />
+          <ToggleButton
+            onToggle={() => setPaletteShown(!isPaletteShown)}
+            text={
+              isPaletteShown ? "Hide Palette Picker" : "Show Pallette Picker"
+            }
+          />
+          {isPaletteShown && (
+            <PalettePicker
+              palette={palette}
+              onPaletteChange={(palette) => setPalette(palette)}
+            ></PalettePicker>
+          )}
+          {isPickerShown && (
+            <PaletteColourSwatch
+              onColorPicked={(color) => setColor(color)}
+              palette={palette}
+            ></PaletteColourSwatch>
+          )}
         </Box>
 
         <Box
