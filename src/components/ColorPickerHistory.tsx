@@ -1,8 +1,7 @@
-import { Box, Text } from "grommet";
+import { Box, Button, Text } from "grommet";
 import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/RGBColor";
 import "../styles/ColorPickerHistory.css";
-import { ColorSquare } from "./ColorSquare";
 
 export const ColorPickerHistory = ({
   colorSelected,
@@ -14,6 +13,14 @@ export const ColorPickerHistory = ({
   const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
 
   useEffect(() => {
+    if (
+      colorHistory.filter((color) => {
+        return RGBColor.Equals(color, colorSelected);
+      }).length !== 0
+    ) {
+      return;
+    }
+
     let newColorHistory = [...colorHistory];
     newColorHistory.unshift(colorSelected);
     if (newColorHistory.length > 8) {
@@ -25,19 +32,30 @@ export const ColorPickerHistory = ({
   }, [colorSelected]);
 
   return (
-    <Box className="ColorPickerHistory" direction="row">
-      <Text>
-        Color
-        <br />
-        History
-      </Text>
-      {colorHistory.map((color, index) => (
-        <ColorSquare
-          onTouchEnd={() => onColorPicked(color)}
-          key={index}
-          color={color}
-        />
-      ))}
+    <Box gap="small">
+      <Text alignSelf="start">Recent</Text>
+      <Box
+        className="ColorPickerHistory"
+        direction="row"
+        justify="start"
+        wrap
+        gap="xxsmall"
+      >
+        {colorHistory.map((color, index) => (
+          <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
+            <Button
+              fill="vertical"
+              size="small"
+              onClick={() => onColorPicked(color)}
+              key={index}
+              style={{
+                backgroundColor: color.toHex(),
+                border: "none",
+              }}
+            ></Button>
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };
