@@ -16,13 +16,11 @@ import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { SaveButton } from "./components/SaveButton";
-import { ToggleButton } from "./components/ToggleButton";
 import { NoColor, RGBColor } from "./drivers/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
-import { PaletteColourSwatch } from "./PaletteColorSwatch";
 import { AvailablePalettes } from "./PaletteDictionary";
-import { PalettePicker } from "./PalettePicker";
+import { PaletteModal } from "./PaletteModal";
 import "./styles/App.css";
 
 function App() {
@@ -39,8 +37,7 @@ function App() {
   };
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
-  const [isPickerShown, setPickerShown] = useState(false);
-  const [isPaletteShown, setPaletteShown] = useState(false);
+  const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>("c64");
   const [isCreateMenuShown, setCreateMenuShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
@@ -61,7 +58,10 @@ function App() {
         columns={["full"]}
         rows={["auto", "flex", "xxsmall"]}
       >
-        <Stack gridArea="canvas" interactiveChild={isPickerShown ? 1 : "first"}>
+        <Stack
+          gridArea="canvas"
+          interactiveChild={isPaletteMenuShown ? 1 : "first"}
+        >
           <CanvasContainer
             onCanvasCreated={(canvas) => {
               setCanvas(canvas);
@@ -75,7 +75,7 @@ function App() {
             }}
           />
 
-          {isPickerShown && (
+          {isPaletteMenuShown && (
             <ColorPickerSwatch
               selectedColor={color}
               onColorPicked={setColorMode}
@@ -147,32 +147,23 @@ function App() {
           </Grid>
           <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
 
-          <ToggleButton
-            onToggle={() => setPickerShown(!isPickerShown)}
-            text={isPickerShown ? "Hide Color Picker" : "Show Color Picker"}
-          />
+          {isPaletteMenuShown && (
+            <PaletteModal
+              onClickOutside={() => setPaletteMenuShown(false)}
+              setColor={(color) => setColorMode(color)}
+              palette={palette}
+              setPalette={(palette) => setPalette(palette)}
+            ></PaletteModal>
+          )}
           <Button
-            onClick={() => setPaletteShown(!isPaletteShown)}
+            onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
             icon={<PaletteIcon />}
           />
-          {isPaletteShown && (
-            <PalettePicker
-              palette={palette}
-              onPaletteChange={(palette) => setPalette(palette)}
-            ></PalettePicker>
-          )}
-          {isPickerShown && (
-            <PaletteColourSwatch
-              onColorPicked={(color) => setColorMode(color)}
-              palette={palette}
-            ></PaletteColourSwatch>
-          )}
         </Box>
 
         <Box
           gridArea="footer"
           direction="row"
-          // background="black"
           pad={{ left: "small", right: "small" }}
         >
           <Grid
