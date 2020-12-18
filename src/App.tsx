@@ -11,7 +11,6 @@ import {
 } from "grommet";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
-import { ClearButton } from "./components/ClearButton";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { CurrentColor } from "./components/CurrentColor";
