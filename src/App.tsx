@@ -213,7 +213,7 @@ function App() {
                 });
               }}
               icon={<Trash />}
-            ></Button>
+            />
           </Box>
         </Box>
         {canvas && (
@@ -227,7 +227,7 @@ function App() {
           setColor={(color) => setColorMode(color)}
           palette={palette}
           setPalette={(palette) => setPalette(palette)}
-        ></PaletteModal>
+        />
       )}
 
       {!!confirmModalParameters && (
@@ -254,7 +254,7 @@ function App() {
             paint.clear();
             paint.drawToCanvas();
           }}
-        ></NewModal>
+        />
       )}
     </Grommet>
   );
