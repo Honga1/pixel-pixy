@@ -1,5 +1,5 @@
 import { createCanvas, loadImage } from "canvas";
-import { PaintCanvas } from "../drivers/PaintCanvas";
+import { PaintCanvas } from "../drivers/UndoablePaintCanvas";
 import { RGBColor } from "../drivers/RGBColor";
 
 it("Paint can create", () => {
