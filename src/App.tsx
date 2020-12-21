@@ -58,6 +58,41 @@ function App() {
     return new UndoablePaintCanvas(pixelDimensions);
   }, [pixelDimensions]);
 
+  const onCanvasTouch = (
+    canvas: HTMLCanvasElement,
+    event: React.TouchEvent<HTMLCanvasElement>
+  ): void => {
+    if (isDropper) {
+      const coords = paint.touchToCoords(event);
+      const color = paint.getColorAt(coords.quantX, coords.quantY);
+      setColorMode(color);
+      setIsDropper(false);
+      return;
+    }
+
+    paint.setCanvas(canvas);
+    paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
+    paint.drawToCanvas();
+  };
+
+  const onCanvasCreated = (canvas: HTMLCanvasElement): void => {
+    setCanvas(canvas);
+    paint.setCanvas(canvas);
+  };
+
+  const onUndoClick = () => {
+    paint.undo();
+    paint.drawToCanvas();
+  };
+  const onRedoClick = () => {
+    paint.redo();
+    paint.drawToCanvas();
+  };
+  const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
+  const onDropperButtonClick = () => setIsDropper(true);
+  const onGridButtonClick = () => setGridShown(!isGridShown);
+  const onEraserButtonClick = () => setColorMode(RGBColor.NO_COLOR);
+  const onPaintButtonClick = () => setColorMode(color);
   return (
     <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
       <Grid
@@ -75,24 +110,9 @@ function App() {
           interactiveChild={isPaletteMenuShown ? 1 : "first"}
         >
           <CanvasContainer
-            onCanvasCreated={(canvas) => {
-              setCanvas(canvas);
-              paint.setCanvas(canvas);
-            }}
+            onCanvasCreated={onCanvasCreated}
             pixelDimensions={pixelDimensions}
-            onTouchEvent={(canvas, event) => {
-              if (isDropper) {
-                const coords = paint.touchToCoords(event);
-                const color = paint.getColorAt(coords.quantX, coords.quantY);
-                setColorMode(color);
-                setIsDropper(false);
-                return;
-              }
-
-              paint.setCanvas(canvas);
-              paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
-              paint.drawToCanvas();
-            }}
+            onTouchEvent={onCanvasTouch}
           />
 
           {isPaletteMenuShown && (
@@ -118,29 +138,14 @@ function App() {
             rows="flex"
           >
             <Box direction="row" gap="">
-              <Button
-                icon={<Undo />}
-                onClick={() => {
-                  paint.undo();
-                  paint.drawToCanvas();
-                }}
-              />
-              <Button
-                icon={<Redo />}
-                onClick={() => {
-                  paint.redo();
-                  paint.drawToCanvas();
-                }}
-              />
+              <Button icon={<Undo />} onClick={onUndoClick} />
+              <Button icon={<Redo />} onClick={onRedoClick} />
             </Box>
             <Box align="center" justify="center" direction="row-reverse">
-              <Button
-                onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
-                icon={<PaletteIcon />}
-              />
+              <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
 
               <Button
-                onClick={() => setIsDropper(true)}
+                onClick={onDropperButtonClick}
                 style={{
                   borderRadius: "18px",
                   boxShadow: isDropper ? "0 0 2px 2px green" : "none",
@@ -154,18 +159,17 @@ function App() {
                   borderRadius: "18px",
                   boxShadow: isGridShown ? "0 0 2px 2px green" : "none",
                 }}
-                onClick={() => setGridShown(!isGridShown)}
+                onClick={onGridButtonClick}
               />
             </Box>
             <Box align="end" justify="end" direction="row" gap="small">
               <Button
                 style={{
-                  // background: `url(${checkboardImageSrc})`,
                   backgroundSize: "20%",
                   borderRadius: "18px",
                   boxShadow: isErasing ? "0 0 2px 2px green" : "none",
                 }}
-                onClick={() => setColorMode(RGBColor.NO_COLOR)}
+                onClick={onEraserButtonClick}
                 icon={<Erase />}
               />
               <Button
@@ -175,7 +179,7 @@ function App() {
                 }}
                 color={color.toHex()}
                 icon={<Brush />}
-                onClick={() => setColorMode(color)}
+                onClick={onPaintButtonClick}
               />
             </Box>
           </Grid>
@@ -187,14 +191,6 @@ function App() {
             )}
           />
 
-          {isPaletteMenuShown && (
-            <PaletteModal
-              onClickOutside={() => setPaletteMenuShown(false)}
-              setColor={(color) => setColorMode(color)}
-              palette={palette}
-              setPalette={(palette) => setPalette(palette)}
-            ></PaletteModal>
-          )}
           <Box direction="row" justify="end">
             <Button
               onClick={() => {
@@ -249,6 +245,15 @@ function App() {
           </Grid>
         </Box>
       </Grid>
+
+      {isPaletteMenuShown && (
+        <PaletteModal
+          onClickOutside={() => setPaletteMenuShown(false)}
+          setColor={(color) => setColorMode(color)}
+          palette={palette}
+          setPalette={(palette) => setPalette(palette)}
+        ></PaletteModal>
+      )}
 
       {!!confirmModalParameters && (
         <ConfirmModal
