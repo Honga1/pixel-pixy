@@ -74,15 +74,25 @@ function App() {
     paint.undo();
     paint.drawToCanvas();
   };
+
   const onRedoClick = () => {
     paint.redo();
     paint.drawToCanvas();
   };
+
   const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
   const onDropperButtonClick = () => setIsDropper(true);
   const onGridButtonClick = () => setGridShown(!isGridShown);
-  const onEraserButtonClick = () => setColorMode(RGBColor.NO_COLOR);
-  const onPaintButtonClick = () => setColorMode(color);
+  const onEraserButtonClick = () => {
+    setIsDropper(false);
+    setColorMode(RGBColor.NO_COLOR);
+  };
+
+  const onPaintButtonClick = () => {
+    setIsDropper(false);
+    setColorMode(color);
+  };
+
   const onTrashClick = () => {
     setConfirmModalParameters({
       onAccept: () => {
@@ -102,6 +112,12 @@ function App() {
       },
     });
   };
+
+  const setColorAndTurnOffPicker = (color: RGBColor): void => {
+    setIsDropper(false);
+    setColorMode(color);
+  };
+
   return (
     <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
       <Grid
@@ -127,7 +143,10 @@ function App() {
           {isPaletteMenuShown && (
             <ColorPickerSwatch
               selectedColor={color}
-              onColorPicked={setColorMode}
+              onColorPicked={(color) => {
+                setIsDropper(false);
+                setColorMode(color);
+              }}
             />
           )}
 
@@ -154,9 +173,12 @@ function App() {
             onTrashClick={onTrashClick}
           />
 
-          <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
+          <ColorPickerHistory
+            onColorPicked={setColorAndTurnOffPicker}
+            colorSelected={color}
+          />
           <PinnedColors
-            onColorPicked={setColor}
+            onColorPicked={setColorAndTurnOffPicker}
             pinnedColors={paletteColorDictionary[palette].map((colorString) =>
               RGBColor.fromHexString(colorString)
             )}
@@ -170,7 +192,7 @@ function App() {
       {isPaletteMenuShown && (
         <PaletteModal
           onClickOutside={() => setPaletteMenuShown(false)}
-          setColor={(color) => setColorMode(color)}
+          setColor={setColorAndTurnOffPicker}
           palette={palette}
           setPalette={(palette) => setPalette(palette)}
         />
