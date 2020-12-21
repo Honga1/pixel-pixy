@@ -1,7 +1,5 @@
 import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
 import {
-  Actions,
-  Add,
   Brush,
   Erase,
   Grid as GridIcon,
@@ -18,10 +16,10 @@ import { DropperIcon } from "./components/DropperIcon";
 import { Grid as ComponentGrid } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { PinnedColors } from "./components/PinnedColors";
-import { SaveButton } from "./components/SaveButton";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
+import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
@@ -218,32 +216,9 @@ function App() {
             ></Button>
           </Box>
         </Box>
-
-        <Box
-          gridArea="footer"
-          direction="row"
-          pad={{ left: "small", right: "small" }}
-        >
-          <Grid
-            columns={{
-              count: 3,
-              size: ["auto", "auto", "auto"],
-            }}
-            fill
-            gap="small"
-          >
-            <Box align="start">
-              <Button
-                icon={<Actions />}
-                onClick={() => console.log("clicked")}
-              />
-            </Box>
-            <Box align="center">
-              <Button icon={<Add />} onClick={() => setCreateMenuShown(true)} />
-            </Box>
-            <Box align="end">{canvas && <SaveButton canvas={canvas} />}</Box>
-          </Grid>
-        </Box>
+        {canvas && (
+          <Footer canvas={canvas} setCreateMenuShown={setCreateMenuShown} />
+        )}
       </Grid>
 
       {isPaletteMenuShown && (
