@@ -1,20 +1,11 @@
 import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
-import {
-  Brush,
-  Erase,
-  Grid as GridIcon,
-  Redo,
-  Trash,
-  Undo,
-} from "grommet-icons";
+import { Trash } from "grommet-icons";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { ValidDimensions } from "./components/DimensionPicker";
-import { DropperIcon } from "./components/DropperIcon";
 import { Grid as ComponentGrid } from "./components/Grid";
-import { PaletteIcon } from "./components/PaletteIcon";
 import { PinnedColors } from "./components/PinnedColors";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/Color";
@@ -23,7 +14,7 @@ import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
-import { HighlightableButton } from "./HighlightableButton";
+import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
@@ -129,48 +120,20 @@ function App() {
           )}
         </Stack>
         <Box gridArea="body" pad="small">
-          <Grid
-            columns={{
-              count: 3,
-              size: ["auto", "auto", "auto"],
-            }}
-            rows="flex"
-          >
-            <Box direction="row" gap="">
-              <Button icon={<Undo />} onClick={onUndoClick} />
-              <Button icon={<Redo />} onClick={onRedoClick} />
-            </Box>
-            <Box align="center" justify="center" direction="row-reverse">
-              <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
+          <ToolsBanner
+            color={color}
+            isDropper={isDropper}
+            isErasing={isErasing}
+            isGridShown={isGridShown}
+            onDropperButtonClick={onDropperButtonClick}
+            onEraserButtonClick={onEraserButtonClick}
+            onGridButtonClick={onGridButtonClick}
+            onPaintButtonClick={onPaintButtonClick}
+            onPaletteButtonClick={onPaletteButtonClick}
+            onRedoClick={onRedoClick}
+            onUndoClick={onUndoClick}
+          />
 
-              <HighlightableButton
-                onClick={onDropperButtonClick}
-                isHighlighted={isDropper}
-                icon={<DropperIcon />}
-              />
-
-              <HighlightableButton
-                onClick={onGridButtonClick}
-                isHighlighted={isGridShown}
-                icon={<GridIcon />}
-              />
-            </Box>
-            <Box align="end" justify="end" direction="row" gap="small">
-              <HighlightableButton
-                onClick={onEraserButtonClick}
-                isHighlighted={isErasing}
-                icon={<Erase />}
-              />
-
-              <HighlightableButton
-                primary
-                onClick={onPaintButtonClick}
-                isHighlighted={!isErasing}
-                icon={<Brush />}
-                color={color.toHex()}
-              />
-            </Box>
-          </Grid>
           <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
           <PinnedColors
             onColorPicked={setColor}
