@@ -23,6 +23,7 @@ import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
+import { HighlightableButton } from "./HighlightableButton";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
@@ -142,42 +143,31 @@ function App() {
             <Box align="center" justify="center" direction="row-reverse">
               <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
 
-              <Button
+              <HighlightableButton
                 onClick={onDropperButtonClick}
-                style={{
-                  borderRadius: "18px",
-                  boxShadow: isDropper ? "0 0 2px 2px green" : "none",
-                }}
+                isHighlighted={isDropper}
                 icon={<DropperIcon />}
               />
 
-              <Button
-                icon={<GridIcon />}
-                style={{
-                  borderRadius: "18px",
-                  boxShadow: isGridShown ? "0 0 2px 2px green" : "none",
-                }}
+              <HighlightableButton
                 onClick={onGridButtonClick}
+                isHighlighted={isGridShown}
+                icon={<GridIcon />}
               />
             </Box>
             <Box align="end" justify="end" direction="row" gap="small">
-              <Button
-                style={{
-                  backgroundSize: "20%",
-                  borderRadius: "18px",
-                  boxShadow: isErasing ? "0 0 2px 2px green" : "none",
-                }}
+              <HighlightableButton
                 onClick={onEraserButtonClick}
+                isHighlighted={isErasing}
                 icon={<Erase />}
               />
-              <Button
+
+              <HighlightableButton
                 primary
-                style={{
-                  boxShadow: !isErasing ? "0 0 2px 2px green" : "none",
-                }}
-                color={color.toHex()}
-                icon={<Brush />}
                 onClick={onPaintButtonClick}
+                isHighlighted={!isErasing}
+                icon={<Brush />}
+                color={color.toHex()}
               />
             </Box>
           </Grid>
