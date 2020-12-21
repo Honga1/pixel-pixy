@@ -1,31 +1,18 @@
-import { Box, Button, Grid, grommet, Grommet, Stack, Text } from "grommet";
-import {
-  Actions,
-  Add,
-  Brush,
-  Erase,
-  Grid as GridIcon,
-  Redo,
-  Undo,
-  Trash,
-} from "grommet-icons";
+import { Box, Grid, grommet, Grommet, Stack } from "grommet";
 import React, { useMemo, useState } from "react";
+import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasContainer } from "./components/CanvasContainer";
-import { ColorPickerHistory } from "./components/ColorPickerHistory";
-import { PinnedColors } from "./components/PinnedColors";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
-import { PaletteIcon } from "./components/PaletteIcon";
-import { SaveButton } from "./components/SaveButton";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
-import { NoColor, RGBColor } from "./drivers/RGBColor";
+import { NoColor, RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
+import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
-import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
+import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
-import "./styles/App.css";
-import { DropperIcon } from "./components/DropperIcon";
+import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
@@ -47,6 +34,7 @@ function App() {
   const [confirmModalParameters, setConfirmModalParameters] = useState<
     ConfirmModalProps | undefined
   >(undefined);
+  const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isDropper, setIsDropper] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
@@ -58,6 +46,76 @@ function App() {
   const paint = useMemo(() => {
     return new UndoablePaintCanvas(pixelDimensions);
   }, [pixelDimensions]);
+
+  const onCanvasTouch = (
+    canvas: HTMLCanvasElement,
+    event: React.TouchEvent<HTMLCanvasElement>
+  ): void => {
+    if (isDropper) {
+      const coords = paint.touchToCoords(event);
+      const color = paint.getColorAt(coords.quantX, coords.quantY);
+      setColorMode(color);
+      setIsDropper(false);
+      return;
+    }
+
+    paint.setCanvas(canvas);
+    paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
+    paint.drawToCanvas();
+  };
+
+  const onCanvasCreated = (canvas: HTMLCanvasElement): void => {
+    setCanvas(canvas);
+    paint.setCanvas(canvas);
+  };
+
+  const onUndoClick = () => {
+    paint.undo();
+    paint.drawToCanvas();
+  };
+
+  const onRedoClick = () => {
+    paint.redo();
+    paint.drawToCanvas();
+  };
+
+  const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
+  const onDropperButtonClick = () => setIsDropper(true);
+  const onGridButtonClick = () => setGridShown(!isGridShown);
+  const onEraserButtonClick = () => {
+    setIsDropper(false);
+    setColorMode(RGBColor.NO_COLOR);
+  };
+
+  const onPaintButtonClick = () => {
+    setIsDropper(false);
+    setColorMode(color);
+  };
+
+  const onTrashClick = () => {
+    setConfirmModalParameters({
+      onAccept: () => {
+        setConfirmModalParameters(undefined);
+
+        paint.clear();
+        if (paint.hasCanvas()) {
+          paint.drawToCanvas();
+        } else {
+          console.warn("Tried to clear a canvas that doesn't exist");
+        }
+      },
+      message: "Are you sure you want to clear the canvas?",
+      acceptButtonText: "Clear",
+      onCancel: () => {
+        setConfirmModalParameters(undefined);
+      },
+    });
+  };
+
+  const setColorAndTurnOffPicker = (color: RGBColor): void => {
+    setIsDropper(false);
+    setColorMode(color);
+  };
 
   return (
     <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
@@ -76,30 +134,18 @@ function App() {
           interactiveChild={isPaletteMenuShown ? 1 : "first"}
         >
           <CanvasContainer
-            onCanvasCreated={(canvas) => {
-              setCanvas(canvas);
-              paint.setCanvas(canvas);
-            }}
+            onCanvasCreated={onCanvasCreated}
             pixelDimensions={pixelDimensions}
-            onTouchEvent={(canvas, event) => {
-              if (isDropper) {
-                const coords = paint.touchToCoords(event);
-                const color = paint.getColorAt(coords.quantX, coords.quantY);
-                setColorMode(color);
-                setIsDropper(false);
-                return;
-              }
-
-              paint.setCanvas(canvas);
-              paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
-              paint.drawToCanvas();
-            }}
+            onTouchEvent={onCanvasTouch}
           />
 
           {isPaletteMenuShown && (
             <ColorPickerSwatch
               selectedColor={color}
-              onColorPicked={setColorMode}
+              onColorPicked={(color) => {
+                setIsDropper(false);
+                setColorMode(color);
+              }}
             />
           )}
 
@@ -111,145 +157,43 @@ function App() {
           )}
         </Stack>
         <Box gridArea="body" pad="small">
-          <Grid
-            columns={{
-              count: 3,
-              size: ["auto", "auto", "auto"],
-            }}
-            rows="flex"
-          >
-            <Box direction="row" gap="">
-              <Button
-                icon={<Undo />}
-                onClick={() => {
-                  paint.undo();
-                  paint.drawToCanvas();
-                }}
-              />
-              <Button
-                icon={<Redo />}
-                onClick={() => {
-                  paint.redo();
-                  paint.drawToCanvas();
-                }}
-              />
-            </Box>
-            <Box align="center" justify="center" direction="row-reverse">
-              <Button
-                onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
-                icon={<PaletteIcon />}
-              />
-
-              <Button
-                onClick={() => setIsDropper(true)}
-                style={{
-                  borderRadius: "18px",
-                  boxShadow: isDropper ? "0 0 2px 2px green" : "none",
-                }}
-                icon={<DropperIcon />}
-              />
-
-              <Button
-                icon={<GridIcon />}
-                style={{
-                  borderRadius: "18px",
-                  boxShadow: isGridShown ? "0 0 2px 2px green" : "none",
-                }}
-                onClick={() => setGridShown(!isGridShown)}
-              />
-            </Box>
-            <Box align="end" justify="end" direction="row" gap="small">
-              <Button
-                style={{
-                  // background: `url(${checkboardImageSrc})`,
-                  backgroundSize: "20%",
-                  borderRadius: "18px",
-                  boxShadow: isErasing ? "0 0 2px 2px green" : "none",
-                }}
-                onClick={() => setColorMode(RGBColor.NO_COLOR)}
-                icon={<Erase />}
-              />
-              <Button
-                primary
-                style={{
-                  boxShadow: !isErasing ? "0 0 2px 2px green" : "none",
-                }}
-                color={color.toHex()}
-                icon={<Brush />}
-                onClick={() => setColorMode(color)}
-              />
-            </Box>
-          </Grid>
-          <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
-          <PinnedColors
-            onColorPicked={setColor}
-            pinnedColors={paletteColorDictionary[palette].map((colorString) =>
-              RGBColor.fromHexString(colorString)
-            )}
+          <ToolsBanner
+            color={color}
+            isDropper={isDropper}
+            isErasing={isErasing}
+            isGridShown={isGridShown}
+            onPickerModeClick={setPickerMode}
+            onDropperButtonClick={onDropperButtonClick}
+            onEraserButtonClick={onEraserButtonClick}
+            onGridButtonClick={onGridButtonClick}
+            onPaintButtonClick={onPaintButtonClick}
+            onPaletteButtonClick={onPaletteButtonClick}
+            onRedoClick={onRedoClick}
+            onUndoClick={onUndoClick}
+            onTrashClick={onTrashClick}
+            pickerMode={pickerMode}
           />
 
-          {isPaletteMenuShown && (
-            <PaletteModal
-              onClickOutside={() => setPaletteMenuShown(false)}
-              setColor={(color) => setColorMode(color)}
-              palette={palette}
-              setPalette={(palette) => setPalette(palette)}
-            ></PaletteModal>
-          )}
-          <Box direction="row" justify="end">
-            <Button
-              onClick={() => {
-                setConfirmModalParameters({
-                  onAccept: () => {
-                    setConfirmModalParameters(undefined);
-
-                    paint.clear();
-                    if (paint.hasCanvas()) {
-                      paint.drawToCanvas();
-                    } else {
-                      console.warn(
-                        "Tried to clear a canvas that doesn't exist"
-                      );
-                    }
-                  },
-                  message: "Are you sure you want to clear the canvas?",
-                  acceptButtonText: "Clear",
-                  onCancel: () => {
-                    setConfirmModalParameters(undefined);
-                  },
-                });
-              }}
-              icon={<Trash />}
-            ></Button>
-          </Box>
+          <BodyColorPicker
+            pickerMode={pickerMode}
+            color={color}
+            palette={palette}
+            setColorAndTurnOffPicker={setColorAndTurnOffPicker}
+          />
         </Box>
-
-        <Box
-          gridArea="footer"
-          direction="row"
-          pad={{ left: "small", right: "small" }}
-        >
-          <Grid
-            columns={{
-              count: 3,
-              size: ["auto", "auto", "auto"],
-            }}
-            fill
-            gap="small"
-          >
-            <Box align="start">
-              <Button
-                icon={<Actions />}
-                onClick={() => console.log("clicked")}
-              />
-            </Box>
-            <Box align="center">
-              <Button icon={<Add />} onClick={() => setCreateMenuShown(true)} />
-            </Box>
-            <Box align="end">{canvas && <SaveButton canvas={canvas} />}</Box>
-          </Grid>
-        </Box>
+        {canvas && (
+          <Footer canvas={canvas} setCreateMenuShown={setCreateMenuShown} />
+        )}
       </Grid>
+
+      {isPaletteMenuShown && (
+        <PaletteModal
+          onClickOutside={() => setPaletteMenuShown(false)}
+          setColor={setColorAndTurnOffPicker}
+          palette={palette}
+          setPalette={(palette) => setPalette(palette)}
+        />
+      )}
 
       {!!confirmModalParameters && (
         <ConfirmModal
@@ -275,7 +219,7 @@ function App() {
             paint.clear();
             paint.drawToCanvas();
           }}
-        ></NewModal>
+        />
       )}
     </Grommet>
   );

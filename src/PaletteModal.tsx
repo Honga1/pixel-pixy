@@ -1,6 +1,6 @@
 import { Box, Grid, Layer } from "grommet";
 import React from "react";
-import { RGBColor } from "./drivers/RGBColor";
+import { RGBColor } from "./drivers/Color";
 import { PaletteColourSwatch } from "./PaletteColorSwatch";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PalettePicker } from "./PalettePicker";

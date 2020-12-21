@@ -1,4 +1,3 @@
-import React from "react";
 import { IconProps } from "grommet-icons";
 import { StyledIcon } from "grommet-icons/StyledIcon";
 
