@@ -83,6 +83,25 @@ function App() {
   const onGridButtonClick = () => setGridShown(!isGridShown);
   const onEraserButtonClick = () => setColorMode(RGBColor.NO_COLOR);
   const onPaintButtonClick = () => setColorMode(color);
+  const onTrashClick = () => {
+    setConfirmModalParameters({
+      onAccept: () => {
+        setConfirmModalParameters(undefined);
+
+        paint.clear();
+        if (paint.hasCanvas()) {
+          paint.drawToCanvas();
+        } else {
+          console.warn("Tried to clear a canvas that doesn't exist");
+        }
+      },
+      message: "Are you sure you want to clear the canvas?",
+      acceptButtonText: "Clear",
+      onCancel: () => {
+        setConfirmModalParameters(undefined);
+      },
+    });
+  };
   return (
     <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
       <Grid
@@ -132,6 +151,7 @@ function App() {
             onPaletteButtonClick={onPaletteButtonClick}
             onRedoClick={onRedoClick}
             onUndoClick={onUndoClick}
+            onTrashClick={onTrashClick}
           />
 
           <ColorPickerHistory onColorPicked={setColor} colorSelected={color} />
@@ -141,33 +161,6 @@ function App() {
               RGBColor.fromHexString(colorString)
             )}
           />
-
-          <Box direction="row" justify="end">
-            <Button
-              onClick={() => {
-                setConfirmModalParameters({
-                  onAccept: () => {
-                    setConfirmModalParameters(undefined);
-
-                    paint.clear();
-                    if (paint.hasCanvas()) {
-                      paint.drawToCanvas();
-                    } else {
-                      console.warn(
-                        "Tried to clear a canvas that doesn't exist"
-                      );
-                    }
-                  },
-                  message: "Are you sure you want to clear the canvas?",
-                  acceptButtonText: "Clear",
-                  onCancel: () => {
-                    setConfirmModalParameters(undefined);
-                  },
-                });
-              }}
-              icon={<Trash />}
-            />
-          </Box>
         </Box>
         {canvas && (
           <Footer canvas={canvas} setCreateMenuShown={setCreateMenuShown} />

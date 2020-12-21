@@ -1,7 +1,14 @@
 import { Box, Button, Grid } from "grommet";
 import { DropperIcon } from "./components/DropperIcon";
 import { HighlightableButton } from "./HighlightableButton";
-import { Grid as GridIcon, Undo, Redo, Brush, Erase } from "grommet-icons";
+import {
+  Grid as GridIcon,
+  Undo,
+  Redo,
+  Brush,
+  Erase,
+  Trash,
+} from "grommet-icons";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
 
@@ -13,6 +20,7 @@ export const ToolsBanner = ({
   onEraserButtonClick,
   onPaintButtonClick,
   onDropperButtonClick,
+  onTrashClick,
   isDropper,
   isGridShown,
   isErasing,
@@ -25,6 +33,7 @@ export const ToolsBanner = ({
   onEraserButtonClick: () => void;
   onPaintButtonClick: () => void;
   onDropperButtonClick: () => void;
+  onTrashClick: () => void;
   isDropper: boolean;
   isGridShown: boolean;
   isErasing: boolean;
@@ -41,6 +50,7 @@ export const ToolsBanner = ({
       <Box direction="row" gap="">
         <Button icon={<Undo />} onClick={onUndoClick} />
         <Button icon={<Redo />} onClick={onRedoClick} />
+        <Button onClick={onTrashClick} icon={<Trash />} />
       </Box>
       <Box align="center" justify="center" direction="row-reverse">
         <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
