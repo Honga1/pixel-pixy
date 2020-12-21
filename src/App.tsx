@@ -117,8 +117,11 @@ function App() {
     setColorMode(color);
   };
 
+  /**
+   * TODO: Add darkmode and settings modal
+   */
   return (
-    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="light">
+    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="dark">
       <Grid
         fill
         areas={[
