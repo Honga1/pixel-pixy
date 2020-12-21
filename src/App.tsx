@@ -1,18 +1,16 @@
-import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
-import { Trash } from "grommet-icons";
+import { Box, Grid, grommet, Grommet, Stack } from "grommet";
 import React, { useMemo, useState } from "react";
+import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasContainer } from "./components/CanvasContainer";
-import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid as ComponentGrid } from "./components/Grid";
-import { PinnedColors } from "./components/PinnedColors";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
-import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
+import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { ToolsBanner } from "./ToolsBanner";
 
@@ -36,6 +34,7 @@ function App() {
   const [confirmModalParameters, setConfirmModalParameters] = useState<
     ConfirmModalProps | undefined
   >(undefined);
+  const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isDropper, setIsDropper] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
@@ -163,6 +162,7 @@ function App() {
             isDropper={isDropper}
             isErasing={isErasing}
             isGridShown={isGridShown}
+            onPickerModeClick={setPickerMode}
             onDropperButtonClick={onDropperButtonClick}
             onEraserButtonClick={onEraserButtonClick}
             onGridButtonClick={onGridButtonClick}
@@ -171,17 +171,14 @@ function App() {
             onRedoClick={onRedoClick}
             onUndoClick={onUndoClick}
             onTrashClick={onTrashClick}
+            pickerMode={pickerMode}
           />
 
-          <ColorPickerHistory
-            onColorPicked={setColorAndTurnOffPicker}
-            colorSelected={color}
-          />
-          <PinnedColors
-            onColorPicked={setColorAndTurnOffPicker}
-            pinnedColors={paletteColorDictionary[palette].map((colorString) =>
-              RGBColor.fromHexString(colorString)
-            )}
+          <BodyColorPicker
+            pickerMode={pickerMode}
+            color={color}
+            palette={palette}
+            setColorAndTurnOffPicker={setColorAndTurnOffPicker}
           />
         </Box>
         {canvas && (

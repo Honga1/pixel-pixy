@@ -1,4 +1,4 @@
-import { Box, Button, Text } from "grommet";
+import { Box, Button } from "grommet";
 import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/Color";
 
@@ -31,30 +31,27 @@ export const ColorPickerHistory = ({
   }, [colorSelected]);
 
   return (
-    <Box gap="small">
-      <Text alignSelf="start">Recent</Text>
-      <Box
-        className="ColorPickerHistory"
-        direction="row"
-        justify="start"
-        wrap
-        gap="xxsmall"
-      >
-        {colorHistory.map((color, index) => (
-          <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
-            <Button
-              fill="vertical"
-              size="small"
-              onClick={() => onColorPicked(color)}
-              key={index}
-              style={{
-                backgroundColor: color.toHex(),
-                border: "none",
-              }}
-            ></Button>
-          </Box>
-        ))}
-      </Box>
+    <Box
+      className="ColorPickerHistory"
+      direction="row"
+      justify="start"
+      wrap
+      gap="xxsmall"
+    >
+      {colorHistory.map((color, index) => (
+        <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
+          <Button
+            fill="vertical"
+            size="small"
+            onClick={() => onColorPicked(color)}
+            key={index}
+            style={{
+              backgroundColor: color.toHex(),
+              border: "none",
+            }}
+          ></Button>
+        </Box>
+      ))}
     </Box>
   );
 };

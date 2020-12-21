@@ -1,20 +1,21 @@
-import { Box, Button, Grid, TableRow } from "grommet";
-import { DropperIcon } from "./components/DropperIcon";
-import { HighlightableButton } from "./HighlightableButton";
+import { Box, Button, Grid } from "grommet";
 import {
-  Grid as GridIcon,
-  Undo,
-  Redo,
   Brush,
   Erase,
-  Trash,
-  Pin,
+  Grid as GridIcon,
   History,
+  Pin,
+  Redo,
+  Trash,
+  Undo,
 } from "grommet-icons";
+import { DropperIcon } from "./components/DropperIcon";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
+import { HighlightableButton } from "./HighlightableButton";
 
 export const ToolsBanner = ({
+  onPickerModeClick,
   onUndoClick,
   onRedoClick,
   onPaletteButtonClick,
@@ -27,7 +28,9 @@ export const ToolsBanner = ({
   isGridShown,
   isErasing,
   color,
+  pickerMode,
 }: {
+  onPickerModeClick: (pickerMode: "history" | "pinned") => void;
   onUndoClick: () => void;
   onRedoClick: () => void;
   onPaletteButtonClick: () => void;
@@ -36,6 +39,7 @@ export const ToolsBanner = ({
   onPaintButtonClick: () => void;
   onDropperButtonClick: () => void;
   onTrashClick: () => void;
+  pickerMode: "history" | "pinned";
   isDropper: boolean;
   isGridShown: boolean;
   isErasing: boolean;
@@ -75,14 +79,14 @@ export const ToolsBanner = ({
       <Box gridArea="left-bot" direction="row">
         <HighlightableButton
           icon={<Pin />}
-          onClick={() => {}}
-          isHighlighted={false}
+          onClick={() => onPickerModeClick("pinned")}
+          isHighlighted={pickerMode === "pinned"}
         />
 
         <HighlightableButton
           icon={<History />}
-          onClick={() => {}}
-          isHighlighted={false}
+          onClick={() => onPickerModeClick("history")}
+          isHighlighted={pickerMode === "history"}
         />
       </Box>
       <Box gridArea="right-top" direction="row" justify="end">
