@@ -19,7 +19,7 @@ import { Grid as ComponentGrid } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { SaveButton } from "./components/SaveButton";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
-import { NoColor, RGBColor } from "./drivers/RGBColor";
+import { NoColor, RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
