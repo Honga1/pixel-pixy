@@ -3,7 +3,6 @@ import { Box } from "grommet/components/Box";
 import React from "react";
 import { RGBColor } from "./drivers/RGBColor";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
-import "./styles/PaletteColorSwatch.css";
 
 export const PaletteColourSwatch = ({
   palette,

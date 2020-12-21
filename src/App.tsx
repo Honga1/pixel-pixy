@@ -1,4 +1,4 @@
-import { Box, Button, Grid, grommet, Grommet, Stack, Text } from "grommet";
+import { Box, Button, Grid, grommet, Grommet, Stack } from "grommet";
 import {
   Actions,
   Add,
@@ -24,7 +24,6 @@ import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
-import "./styles/App.css";
 import { DropperIcon } from "./components/DropperIcon";
 
 const defaultPalette = "cga";

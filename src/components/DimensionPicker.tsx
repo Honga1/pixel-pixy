@@ -1,6 +1,5 @@
 import { Select } from "grommet";
 import { ReactElement } from "react";
-import "../styles/DimensionPicker.css";
 
 const validDimensions = [
   { value: 1, label: "1x1" },

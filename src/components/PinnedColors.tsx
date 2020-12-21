@@ -1,6 +1,5 @@
 import { Box, Button, Text } from "grommet";
 import { RGBColor } from "../drivers/RGBColor";
-import "../styles/ColorPickerHistory.css";
 
 export const PinnedColors = ({
   pinnedColors = [],

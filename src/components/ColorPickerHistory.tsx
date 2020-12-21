@@ -1,7 +1,6 @@
 import { Box, Button, Text } from "grommet";
 import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/RGBColor";
-import "../styles/ColorPickerHistory.css";
 
 export const ColorPickerHistory = ({
   colorSelected,
