@@ -171,11 +171,7 @@ export class PaintCanvas {
   }
 
   touchEvent(event: React.TouchEvent<HTMLElement>, color: RGBColor | NoColor) {
-    const { relativeX, relativeY } = getRelativeClickPosition(event);
-    const scaledX = relativeX * this.dimension();
-    const scaledY = relativeY * this.dimension();
-    const quantX = Math.floor(scaledX);
-    const quantY = Math.floor(scaledY);
+    const { quantX, quantY } = this.touchToCoords(event);
 
     const currentColor = this.getColorAt(quantX, quantY);
 
@@ -198,5 +194,14 @@ export class PaintCanvas {
         this.setColorAt(quantX, quantY, color);
       }
     }
+  }
+
+  touchToCoords(event: React.TouchEvent<HTMLElement>) {
+    const { relativeX, relativeY } = getRelativeClickPosition(event);
+    const scaledX = relativeX * this.dimension();
+    const scaledY = relativeY * this.dimension();
+    const quantX = Math.floor(scaledX);
+    const quantY = Math.floor(scaledY);
+    return { quantX, quantY };
   }
 }

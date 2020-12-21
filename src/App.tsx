@@ -47,6 +47,7 @@ function App() {
   const [confirmModalParameters, setConfirmModalParameters] = useState<
     ConfirmModalProps | undefined
   >(undefined);
+  const [isDropper, setIsDropper] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
@@ -81,6 +82,14 @@ function App() {
             }}
             pixelDimensions={pixelDimensions}
             onTouchEvent={(canvas, event) => {
+              if (isDropper) {
+                const coords = paint.touchToCoords(event);
+                const color = paint.getColorAt(coords.quantX, coords.quantY);
+                setColorMode(color);
+                setIsDropper(false);
+                return;
+              }
+
               paint.setCanvas(canvas);
               paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
               paint.drawToCanvas();
@@ -130,10 +139,16 @@ function App() {
                 onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
                 icon={<PaletteIcon />}
               />
+
               <Button
-                onClick={() => setPaletteMenuShown(!isPaletteMenuShown)}
+                onClick={() => setIsDropper(true)}
+                style={{
+                  borderRadius: "18px",
+                  boxShadow: isDropper ? "0 0 2px 2px green" : "none",
+                }}
                 icon={<DropperIcon />}
               />
+
               <Button
                 icon={<GridIcon />}
                 style={{
