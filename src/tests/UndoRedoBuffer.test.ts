@@ -1,4 +1,4 @@
-import { UndoRedoBuffer } from "./UndoRedoBuffer";
+import { UndoRedoBuffer } from "../drivers/UndoRedoBuffer";
 it("Can create", () => {
   expect(() => new UndoRedoBuffer(0)).not.toThrow();
 });
