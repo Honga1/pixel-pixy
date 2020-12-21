@@ -6,17 +6,18 @@ import {
   Erase,
   Grid as GridIcon,
   Redo,
-  Undo,
   Trash,
+  Undo,
 } from "grommet-icons";
 import React, { useMemo, useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
-import { PinnedColors } from "./components/PinnedColors";
 import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
 import { ValidDimensions } from "./components/DimensionPicker";
+import { DropperIcon } from "./components/DropperIcon";
 import { Grid as ComponentGrid } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
+import { PinnedColors } from "./components/PinnedColors";
 import { SaveButton } from "./components/SaveButton";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/Color";
@@ -24,7 +25,6 @@ import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { NewModal } from "./NewModal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
-import { DropperIcon } from "./components/DropperIcon";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";

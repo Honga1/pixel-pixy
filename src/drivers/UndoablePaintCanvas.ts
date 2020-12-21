@@ -1,5 +1,5 @@
-import { getRelativeClickPosition } from "./getRelativeClickPosition";
 import { NoColor, RGBColor } from "./Color";
+import { getRelativeClickPosition } from "./getRelativeClickPosition";
 
 export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {
   constructor(keyPairMap?: KeyPairMap<KeyA, KeyB, Value>) {
