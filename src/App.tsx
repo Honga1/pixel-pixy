@@ -10,6 +10,7 @@ import { Footer } from "./Footer";
 import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
+import { SettingsModal } from "./SettingsModal";
 import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
@@ -34,6 +35,8 @@ const App = () => {
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
+  const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -110,7 +113,11 @@ const App = () => {
    * TODO: Add darkmode and settings modal
    */
   return (
-    <Grommet theme={grommet} style={{ height: "100%" }} themeMode="dark">
+    <Grommet
+      theme={grommet}
+      style={{ height: "100%" }}
+      themeMode={darkMode ? "dark" : "light"}
+    >
       <Grid
         fill
         areas={[
@@ -156,6 +163,7 @@ const App = () => {
           <Footer
             canvas={canvas}
             onAddButtonClicked={() => setCreateMenuShown(true)}
+            setSettingsMenuShown={setSettingsMenuShown}
           />
         )}
       </Grid>
@@ -193,6 +201,13 @@ const App = () => {
             paint.clear();
             paint.drawToCanvas();
           }}
+        />
+      )}
+
+      {isSettingsMenuShown && (
+        <SettingsModal
+          onClickOutside={() => setSettingsMenuShown(false)}
+          resetMode={setDarkMode}
         />
       )}
     </Grommet>

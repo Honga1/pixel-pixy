@@ -4,9 +4,11 @@ import { SaveButton } from "./components/SaveButton";
 export const Footer = ({
   canvas,
   onAddButtonClicked,
+  setSettingsMenuShown,
 }: {
   canvas: HTMLCanvasElement;
   onAddButtonClicked: () => void;
+  setSettingsMenuShown: (value: boolean) => void;
 }) => {
   return (
     <Box
@@ -23,7 +25,10 @@ export const Footer = ({
         gap="small"
       >
         <Box align="start">
-          <Button icon={<Actions />} onClick={() => console.log("clicked")} />
+          <Button
+            icon={<Actions />}
+            onClick={() => setSettingsMenuShown(true)}
+          />
         </Box>
         <Box align="center">
           <Button icon={<Add />} onClick={onAddButtonClicked} />
