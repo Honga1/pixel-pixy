@@ -33,7 +33,7 @@ const App = () => {
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
-  const [inNewPageModalShown, setCreateMenuShown] = useState(false);
+  const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -179,7 +179,7 @@ const App = () => {
         />
       )}
 
-      {inNewPageModalShown && (
+      {isNewPageModalShown && (
         <NewPageModal
           onClickOutside={() => setCreateMenuShown(false)}
           onDimensionChange={setPixelDimensions}
