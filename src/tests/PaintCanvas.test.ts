@@ -199,3 +199,14 @@ it("Can load from image", async () => {
   expect((paint.getColorAt(9, 9) as RGBColor).rgb).toStrictEqual([255, 0, 0]);
   expect((paint.getColorAt(0, 0) as RGBColor).rgb).toStrictEqual([0, 0, 255]);
 });
+
+it("Can try to draw to canvas", () => {
+  const paint = new PaintCanvas(10);
+  paint.setColorAt(1, 1, new RGBColor(255, 0, 0));
+
+  expect(paint.tryDrawToCanvas()).toEqual(false);
+
+  paint.setCanvas((createCanvas(10, 10) as unknown) as HTMLCanvasElement);
+
+  expect(paint.tryDrawToCanvas()).toEqual(true);
+});

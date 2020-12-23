@@ -140,6 +140,15 @@ export class PaintCanvas {
     PaintCanvas.DrawToCanvas(this, this.canvas);
   }
 
+  tryDrawToCanvas(): boolean {
+    try {
+      this.drawToCanvas();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   setCanvas(canvas: HTMLCanvasElement) {
     if (!PaintCanvas.AreDimensionsCompatible(this, canvas)) {
       throw new RangeError(
