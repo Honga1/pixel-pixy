@@ -73,15 +73,14 @@ export const ToolsBanner = ({
       </Box>
       <Box gridArea="left-bot" direction="row">
         <HighlightableButton
-          icon={<Pin />}
-          onClick={() => onPickerModeClick("pinned")}
-          isHighlighted={pickerMode === "pinned"}
-        />
-
-        <HighlightableButton
           icon={<History />}
           onClick={() => onPickerModeClick("history")}
           isHighlighted={pickerMode === "history"}
+        />
+        <HighlightableButton
+          icon={<Pin />}
+          onClick={() => onPickerModeClick("pinned")}
+          isHighlighted={pickerMode === "pinned"}
         />
       </Box>
       <Box gridArea="right-top" direction="row" justify="end">

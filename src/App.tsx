@@ -38,6 +38,7 @@ const App = () => {
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
+  const [pinnedColors, setPinnedColors] = useState<RGBColor[]>([]);
 
   const paint = useMemo(() => {
     return new UndoablePaintCanvas(pixelDimensions);
@@ -156,6 +157,7 @@ const App = () => {
             pickerMode={pickerMode}
             color={color}
             palette={palette}
+            pinnedColors={pinnedColors}
             setColorAndTurnOffPicker={setColorAndTurnOffPicker}
           />
         </Box>
@@ -170,6 +172,8 @@ const App = () => {
 
       {isPaletteModalShown && (
         <PaletteModal
+          pinnedColors={pinnedColors}
+          setPinnedColors={setPinnedColors}
           onClickOutside={() => setPaletteMenuShown(false)}
           setColor={setColorAndTurnOffPicker}
           palette={palette}
