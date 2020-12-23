@@ -39,7 +39,12 @@ export const ColorPickerHistory = ({
       gap="xxsmall"
     >
       {colorHistory.map((color, index) => (
-        <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
+        <Box
+          key={color.toHex()}
+          height="xxsmall"
+          width="xxsmall"
+          pad={{ bottom: "xsmall" }}
+        >
           <Button
             fill="vertical"
             size="small"

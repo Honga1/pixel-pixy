@@ -17,7 +17,12 @@ export const PinnedColors = ({
       gap="xxsmall"
     >
       {pinnedColors.slice(0, 8).map((color, index) => (
-        <Box height="xxsmall" width="xxsmall" pad={{ bottom: "xsmall" }}>
+        <Box
+          key={color.toHex()}
+          height="xxsmall"
+          width="xxsmall"
+          pad={{ bottom: "xsmall" }}
+        >
           <Button
             fill="vertical"
             size="small"
