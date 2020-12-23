@@ -15,38 +15,33 @@ import { RGBColor } from "./drivers/Color";
 import { HighlightableButton } from "./HighlightableButton";
 
 export const ToolsBanner = ({
+  onBrushChange,
   onPickerModeClick,
   onUndoClick,
   onRedoClick,
   onPaletteButtonClick,
   onGridButtonClick,
-  onEraserButtonClick,
-  onPaintButtonClick,
-  onDropperButtonClick,
   onTrashClick,
-  isDropper,
   isGridShown,
-  isErasing,
   color,
   pickerMode,
+  brush,
 }: {
   onPickerModeClick: (pickerMode: "history" | "pinned") => void;
   onUndoClick: () => void;
   onRedoClick: () => void;
   onPaletteButtonClick: () => void;
   onGridButtonClick: () => void;
-  onEraserButtonClick: () => void;
-  onPaintButtonClick: () => void;
-  onDropperButtonClick: () => void;
   onTrashClick: () => void;
+  onBrushChange: (brush: "eraser" | "paint" | "dropper") => void;
   pickerMode: "history" | "pinned";
-  isDropper: boolean;
+  brush: "eraser" | "paint" | "dropper";
   isGridShown: boolean;
-  isErasing: boolean;
   color: RGBColor;
 }) => {
   return (
     <Grid
+      fill
       columns={["auto", "auto"]}
       rows={["flex", "flex"]}
       areas={[
@@ -59,20 +54,20 @@ export const ToolsBanner = ({
       <Box gridArea="left-top" direction="row">
         <HighlightableButton
           primary
-          onClick={onPaintButtonClick}
-          isHighlighted={!isErasing}
+          onClick={() => onBrushChange("paint")}
+          isHighlighted={brush === "paint"}
           icon={<Brush />}
           color={color.toHex()}
         />
         <HighlightableButton
-          onClick={onEraserButtonClick}
-          isHighlighted={isErasing}
+          onClick={() => onBrushChange("eraser")}
+          isHighlighted={brush === "eraser"}
           icon={<Erase />}
         />
         <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
         <HighlightableButton
-          onClick={onDropperButtonClick}
-          isHighlighted={isDropper}
+          onClick={() => onBrushChange("dropper")}
+          isHighlighted={brush === "dropper"}
           icon={<DropperIcon />}
         />
       </Box>

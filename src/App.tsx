@@ -84,10 +84,8 @@ const App = () => {
   };
 
   const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
-  const onDropperButtonClick = () => setBrush("dropper");
   const onGridButtonClick = () => setGridShown(!isGridShown);
-  const onEraserButtonClick = () => setBrush("eraser");
-  const onPaintButtonClick = () => setBrush("paint");
+
   const onTrashClick = () =>
     createModal({
       onAccept: () => {
@@ -134,14 +132,11 @@ const App = () => {
         <Box gridArea="body" pad="small">
           <ToolsBanner
             color={color}
-            isDropper={brush === "dropper"}
-            isErasing={brush === "eraser"}
+            brush={brush}
             isGridShown={isGridShown}
             onPickerModeClick={setPickerMode}
-            onDropperButtonClick={onDropperButtonClick}
-            onEraserButtonClick={onEraserButtonClick}
+            onBrushChange={setBrush}
             onGridButtonClick={onGridButtonClick}
-            onPaintButtonClick={onPaintButtonClick}
             onPaletteButtonClick={onPaletteButtonClick}
             onRedoClick={onRedoClick}
             onUndoClick={onUndoClick}
