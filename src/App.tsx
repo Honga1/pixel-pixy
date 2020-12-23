@@ -4,7 +4,7 @@ import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
-import { NoColor, RGBColor } from "./drivers/Color";
+import { RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { Footer } from "./Footer";
 import { NewModal } from "./NewModal";
@@ -14,18 +14,22 @@ import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
-function App() {
+
+type Brushes = "paint" | "dropper" | "eraser";
+
+const App = () => {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(16);
   const [color, setColor] = useState<RGBColor>(
     RGBColor.fromHexString(defaultColor)
   );
 
-  const [confirmModalParameters, setConfirmModalParameters] = useState<
+  const [confirmModalParameters, createModal] = useState<
     ConfirmModalProps | undefined
   >(undefined);
+
+  const [brush, setBrush] = useState<Brushes>("paint");
+
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
-  const [isDropper, setIsDropper] = useState(false);
-  const [isErasing, setIsErasing] = useState(false);
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
@@ -36,30 +40,32 @@ function App() {
     return new UndoablePaintCanvas(pixelDimensions);
   }, [pixelDimensions]);
 
-  const setColorMode = (color: RGBColor | NoColor) => {
-    if (color === RGBColor.NO_COLOR) {
-      setIsErasing(true);
-    } else {
-      setIsErasing(false);
-      setColor(color);
-    }
-  };
-
   const onCanvasTouch = (
     canvas: HTMLCanvasElement,
     event: React.TouchEvent<HTMLCanvasElement>
   ): void => {
-    if (isDropper) {
-      const coords = paint.touchToCoords(event);
-      const color = paint.getColorAt(coords.quantX, coords.quantY);
-      setColorMode(color);
-      setIsDropper(false);
-      return;
+    switch (brush) {
+      case "dropper": {
+        setBrush("paint");
+        const coords = paint.touchToCoords(event);
+        const selectedColor = paint.getColorAt(coords.quantX, coords.quantY);
+        if (selectedColor === RGBColor.NO_COLOR) break;
+        setColor(selectedColor);
+        break;
+      }
+      case "paint": {
+        paint.setCanvas(canvas);
+        paint.touchEvent(event, color);
+        paint.drawToCanvas();
+        break;
+      }
+      case "eraser": {
+        paint.setCanvas(canvas);
+        paint.touchEvent(event, RGBColor.NO_COLOR);
+        paint.drawToCanvas();
+        break;
+      }
     }
-
-    paint.setCanvas(canvas);
-    paint.touchEvent(event, isErasing ? RGBColor.NO_COLOR : color);
-    paint.drawToCanvas();
   };
 
   const onCanvasCreated = (canvas: HTMLCanvasElement): void => {
@@ -78,41 +84,27 @@ function App() {
   };
 
   const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
-  const onDropperButtonClick = () => setIsDropper(true);
+  const onDropperButtonClick = () => setBrush("dropper");
   const onGridButtonClick = () => setGridShown(!isGridShown);
-  const onEraserButtonClick = () => {
-    setIsDropper(false);
-    setColorMode(RGBColor.NO_COLOR);
-  };
-
-  const onPaintButtonClick = () => {
-    setIsDropper(false);
-    setColorMode(color);
-  };
-
-  const onTrashClick = () => {
-    setConfirmModalParameters({
+  const onEraserButtonClick = () => setBrush("eraser");
+  const onPaintButtonClick = () => setBrush("paint");
+  const onTrashClick = () =>
+    createModal({
       onAccept: () => {
-        setConfirmModalParameters(undefined);
+        createModal(undefined);
 
         paint.clear();
-        if (paint.hasCanvas()) {
-          paint.drawToCanvas();
-        } else {
-          console.warn("Tried to clear a canvas that doesn't exist");
-        }
+        paint.drawToCanvas();
       },
       message: "Are you sure you want to clear the canvas?",
       acceptButtonText: "Clear",
       onCancel: () => {
-        setConfirmModalParameters(undefined);
+        createModal(undefined);
       },
     });
-  };
-
   const setColorAndTurnOffPicker = (color: RGBColor): void => {
-    setIsDropper(false);
-    setColorMode(color);
+    setColor(color);
+    setBrush("paint");
   };
 
   /**
@@ -142,8 +134,8 @@ function App() {
         <Box gridArea="body" pad="small">
           <ToolsBanner
             color={color}
-            isDropper={isDropper}
-            isErasing={isErasing}
+            isDropper={brush === "dropper"}
+            isErasing={brush === "eraser"}
             isGridShown={isGridShown}
             onPickerModeClick={setPickerMode}
             onDropperButtonClick={onDropperButtonClick}
@@ -206,6 +198,6 @@ function App() {
       )}
     </Grommet>
   );
-}
+};
 
 export default App;
