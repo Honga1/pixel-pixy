@@ -7,7 +7,7 @@ import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { Footer } from "./Footer";
-import { NewModal } from "./NewModal";
+import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { ToolsBanner } from "./ToolsBanner";
@@ -31,9 +31,9 @@ const App = () => {
 
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
-  const [isPaletteMenuShown, setPaletteMenuShown] = useState(false);
+  const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
-  const [isCreateMenuShown, setCreateMenuShown] = useState(false);
+  const [inNewPageModalShown, setCreateMenuShown] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
 
   const paint = useMemo(() => {
@@ -83,7 +83,7 @@ const App = () => {
     paint.drawToCanvas();
   };
 
-  const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteMenuShown);
+  const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteModalShown);
   const onGridButtonClick = () => setGridShown(!isGridShown);
 
   const onTrashClick = () =>
@@ -105,6 +105,7 @@ const App = () => {
     setBrush("paint");
   };
 
+  const isConfirmModalShown = !!confirmModalParameters;
   /**
    * TODO: Add darkmode and settings modal
    */
@@ -123,7 +124,7 @@ const App = () => {
         <CanvasStack
           stackProps={{ gridArea: "canvas" }}
           isGridShown={isGridShown}
-          isPaletteMenuShown={isPaletteMenuShown}
+          isPaletteMenuShown={isPaletteModalShown}
           onCanvasCreated={onCanvasCreated}
           onCanvasTouch={onCanvasTouch}
           pixelDimensions={pixelDimensions}
@@ -152,31 +153,34 @@ const App = () => {
           />
         </Box>
         {canvas && (
-          <Footer canvas={canvas} setCreateMenuShown={setCreateMenuShown} />
+          <Footer
+            canvas={canvas}
+            onAddButtonClicked={() => setCreateMenuShown(true)}
+          />
         )}
       </Grid>
 
-      {isPaletteMenuShown && (
+      {isPaletteModalShown && (
         <PaletteModal
           onClickOutside={() => setPaletteMenuShown(false)}
           setColor={setColorAndTurnOffPicker}
           palette={palette}
-          setPalette={(palette) => setPalette(palette)}
+          setPalette={setPalette}
         />
       )}
 
-      {!!confirmModalParameters && (
+      {isConfirmModalShown && (
         <ConfirmModal
-          onAccept={confirmModalParameters.onAccept}
-          onCancel={confirmModalParameters.onCancel}
-          cancelButtonText={confirmModalParameters.cancelButtonText}
-          acceptButtonText={confirmModalParameters.acceptButtonText}
-          message={confirmModalParameters.message}
+          onAccept={confirmModalParameters!.onAccept}
+          onCancel={confirmModalParameters!.onCancel}
+          cancelButtonText={confirmModalParameters!.cancelButtonText}
+          acceptButtonText={confirmModalParameters!.acceptButtonText}
+          message={confirmModalParameters!.message}
         />
       )}
 
-      {isCreateMenuShown && (
-        <NewModal
+      {inNewPageModalShown && (
+        <NewPageModal
           onClickOutside={() => setCreateMenuShown(false)}
           onDimensionChange={setPixelDimensions}
           dimension={pixelDimensions}

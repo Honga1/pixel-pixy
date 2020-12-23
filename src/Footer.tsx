@@ -3,10 +3,10 @@ import { Actions, Add } from "grommet-icons";
 import { SaveButton } from "./components/SaveButton";
 export const Footer = ({
   canvas,
-  setCreateMenuShown,
+  onAddButtonClicked,
 }: {
   canvas: HTMLCanvasElement;
-  setCreateMenuShown: (value: boolean) => void;
+  onAddButtonClicked: () => void;
 }) => {
   return (
     <Box
@@ -26,7 +26,7 @@ export const Footer = ({
           <Button icon={<Actions />} onClick={() => console.log("clicked")} />
         </Box>
         <Box align="center">
-          <Button icon={<Add />} onClick={() => setCreateMenuShown(true)} />
+          <Button icon={<Add />} onClick={onAddButtonClicked} />
         </Box>
         <Box align="end">{<SaveButton canvas={canvas} />}</Box>
       </Grid>

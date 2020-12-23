@@ -3,7 +3,7 @@ import React from "react";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { LoadButton } from "./components/LoadButton";
 
-export const NewModal = ({
+export const NewPageModal = ({
   onClickOutside,
   onDimensionChange,
   dimension,
