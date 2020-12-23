@@ -16,7 +16,7 @@ import { ToolsBanner } from "./ToolsBanner";
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
 
-type Brushes = "paint" | "dropper" | "eraser";
+type Brushes = "paint" | "dropper" | "eraser" | "fill";
 
 const App = () => {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(16);
@@ -67,6 +67,14 @@ const App = () => {
         paint.setCanvas(canvas);
         paint.touchEvent(event, RGBColor.NO_COLOR);
         paint.drawToCanvas();
+        break;
+      }
+      case "fill": {
+        paint.setCanvas(canvas);
+        const coords = paint.touchToCoords(event);
+        paint.fillWithColor(coords.quantX, coords.quantY, color);
+        paint.drawToCanvas();
+
         break;
       }
     }

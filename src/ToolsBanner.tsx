@@ -8,6 +8,7 @@ import {
   Redo,
   Trash,
   Undo,
+  Paint,
 } from "grommet-icons";
 import { DropperIcon } from "./components/DropperIcon";
 import { PaletteIcon } from "./components/PaletteIcon";
@@ -33,9 +34,9 @@ export const ToolsBanner = ({
   onPaletteButtonClick: () => void;
   onGridButtonClick: () => void;
   onTrashClick: () => void;
-  onBrushChange: (brush: "eraser" | "paint" | "dropper") => void;
+  onBrushChange: (brush: "eraser" | "paint" | "dropper" | "fill") => void;
   pickerMode: "history" | "pinned";
-  brush: "eraser" | "paint" | "dropper";
+  brush: "eraser" | "paint" | "dropper" | "fill";
   isGridShown: boolean;
   color: RGBColor;
 }) => {
@@ -63,6 +64,13 @@ export const ToolsBanner = ({
           onClick={() => onBrushChange("eraser")}
           isHighlighted={brush === "eraser"}
           icon={<Erase />}
+        />
+        <HighlightableButton
+          primary
+          onClick={() => onBrushChange("fill")}
+          isHighlighted={brush === "fill"}
+          icon={<Paint />}
+          color={color.toHex()}
         />
         <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
         <HighlightableButton
