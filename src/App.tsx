@@ -20,15 +20,6 @@ function App() {
     RGBColor.fromHexString(defaultColor)
   );
 
-  const setColorMode = (color: RGBColor | NoColor) => {
-    if (color === RGBColor.NO_COLOR) {
-      setIsErasing(true);
-    } else {
-      setIsErasing(false);
-      setColor(color);
-    }
-  };
-
   const [confirmModalParameters, setConfirmModalParameters] = useState<
     ConfirmModalProps | undefined
   >(undefined);
@@ -44,6 +35,15 @@ function App() {
   const paint = useMemo(() => {
     return new UndoablePaintCanvas(pixelDimensions);
   }, [pixelDimensions]);
+
+  const setColorMode = (color: RGBColor | NoColor) => {
+    if (color === RGBColor.NO_COLOR) {
+      setIsErasing(true);
+    } else {
+      setIsErasing(false);
+      setColor(color);
+    }
+  };
 
   const onCanvasTouch = (
     canvas: HTMLCanvasElement,
