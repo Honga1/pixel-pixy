@@ -1,7 +1,7 @@
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { PinnedColors } from "./components/PinnedColors";
 import { RGBColor } from "./drivers/Color";
-import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
+import { AvailablePalettes } from "./PaletteDictionary";
 
 /** TODO: Make a component that displays a list of colors.
  * Use logic here to decide which colors to show.
@@ -11,11 +11,13 @@ export const BodyColorPicker = ({
   color,
   palette,
   pickerMode,
+  pinnedColors,
 }: {
   pickerMode: "history" | "pinned";
   setColorAndTurnOffPicker: (color: RGBColor) => void;
   color: RGBColor;
   palette: AvailablePalettes;
+  pinnedColors: RGBColor[];
 }) => {
   if (pickerMode === "history") {
     return (
@@ -28,9 +30,7 @@ export const BodyColorPicker = ({
     return (
       <PinnedColors
         onColorPicked={setColorAndTurnOffPicker}
-        pinnedColors={paletteColorDictionary[palette].map((colorString) =>
-          RGBColor.fromHexString(colorString)
-        )}
+        pinnedColors={pinnedColors}
       />
     );
   }
