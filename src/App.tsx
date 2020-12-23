@@ -15,7 +15,7 @@ import { ToolsBanner } from "./ToolsBanner";
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
 function App() {
-  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(8);
+  const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(16);
   const [color, setColor] = useState<RGBColor>(
     RGBColor.fromHexString(defaultColor)
   );
