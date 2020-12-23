@@ -1,10 +1,8 @@
-import { Box, Grid, grommet, Grommet, Stack } from "grommet";
+import { Box, Grid, grommet, Grommet } from "grommet";
 import React, { useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
-import { CanvasContainer } from "./components/CanvasContainer";
-import { ColorPickerSwatch } from "./components/ColorPickerSwatch";
+import { CanvasStack } from "./CanvasStack";
 import { ValidDimensions } from "./components/DimensionPicker";
-import { Grid as ComponentGrid } from "./components/Grid";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
 import { NoColor, RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
@@ -132,33 +130,15 @@ function App() {
         columns={["full"]}
         rows={["auto", "flex", "xxsmall"]}
       >
-        <Stack
-          gridArea="canvas"
-          interactiveChild={isPaletteMenuShown ? 1 : "first"}
-        >
-          <CanvasContainer
-            onCanvasCreated={onCanvasCreated}
-            pixelDimensions={pixelDimensions}
-            onTouchEvent={onCanvasTouch}
-          />
+        <CanvasStack
+          stackProps={{ gridArea: "canvas" }}
+          isGridShown={isGridShown}
+          isPaletteMenuShown={isPaletteMenuShown}
+          onCanvasCreated={onCanvasCreated}
+          onCanvasTouch={onCanvasTouch}
+          pixelDimensions={pixelDimensions}
+        />
 
-          {isPaletteMenuShown && (
-            <ColorPickerSwatch
-              selectedColor={color}
-              onColorPicked={(color) => {
-                setIsDropper(false);
-                setColorMode(color);
-              }}
-            />
-          )}
-
-          {canvas && isGridShown && (
-            <ComponentGrid
-              pixelDimensions={pixelDimensions}
-              rootCanvas={canvas}
-            />
-          )}
-        </Stack>
         <Box gridArea="body" pad="small">
           <ToolsBanner
             color={color}
