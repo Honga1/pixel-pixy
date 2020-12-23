@@ -39,6 +39,6 @@ export const CanvasContainer = ({
       height={pixelDimensions}
       onTouchEnd={onInnerTouchEvent}
       onTouchMove={onInnerTouchEvent}
-    ></canvas>
+    />
   );
 };
