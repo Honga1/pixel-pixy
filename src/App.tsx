@@ -1,4 +1,4 @@
-import { Grid, grommet, Grommet, Header, Box, Main } from "grommet";
+import { Grid, grommet, Grommet, Header, Main } from "grommet";
 import React, { useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
@@ -150,7 +150,7 @@ const App = () => {
           pixelDimensions={pixelDimensions}
         />
 
-        <Box gridArea="body" pad="small">
+        <Main gridArea="body" pad="small" elevation="xsmall">
           <ToolsBanner
             color={color}
             brush={brush}
@@ -172,7 +172,7 @@ const App = () => {
             pinnedColors={pinnedColors}
             setColorAndTurnOffPicker={setColorAndTurnOffPicker}
           />
-        </Box>
+        </Main>
         {canvas && (
           <Footer
             gridArea="footer"
