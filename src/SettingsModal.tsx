@@ -3,7 +3,9 @@ import { Layer, Box, CheckBox } from "grommet";
 export const SettingsModal = ({
   onClickOutside,
   resetMode,
+  isDarkMode,
 }: {
+  isDarkMode: boolean;
   onClickOutside: () => void;
   resetMode: (value: boolean) => void;
 }) => {
@@ -20,6 +22,7 @@ export const SettingsModal = ({
           toggle
           onChange={(event) => resetMode(event.target.checked)}
           label={"Dark Mode"}
+          checked={isDarkMode}
         />
       </Box>
     </Layer>

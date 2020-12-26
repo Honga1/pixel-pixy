@@ -219,6 +219,7 @@ const App = () => {
 
       {isSettingsMenuShown && (
         <SettingsModal
+          isDarkMode={darkMode}
           onClickOutside={() => setSettingsMenuShown(false)}
           resetMode={setDarkMode}
         />
