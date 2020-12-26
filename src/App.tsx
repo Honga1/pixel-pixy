@@ -190,7 +190,7 @@ const App = () => {
         <PaletteModal
           pinnedColors={pinnedColors}
           setPinnedColors={setPinnedColors}
-          onClickOutside={() => setPaletteMenuShown(false)}
+          onCancel={() => setPaletteMenuShown(false)}
           setColor={setColorAndTurnOffPicker}
           palette={palette}
           setPalette={setPalette}

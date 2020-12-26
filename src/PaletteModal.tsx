@@ -1,18 +1,18 @@
 import { Box, Button, Layer } from "grommet";
-import { Pin } from "grommet-icons";
+import { Pin, Close } from "grommet-icons";
 import { RGBColor } from "./drivers/Color";
 import { useLongPress } from "./drivers/useLongPress";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PalettePicker } from "./PalettePicker";
 export const PaletteModal = ({
-  onClickOutside,
+  onCancel,
   setColor,
   palette,
   pinnedColors,
   setPinnedColors,
   setPalette,
 }: {
-  onClickOutside: () => void;
+  onCancel: () => void;
   setColor: (color: RGBColor) => void;
   palette: AvailablePalettes;
   pinnedColors: RGBColor[];
@@ -53,7 +53,7 @@ export const PaletteModal = ({
 
       const color = selectedPalette[maybeIndex];
       setColor(color);
-      onClickOutside();
+      onCancel();
     }
   );
   return (
@@ -62,9 +62,12 @@ export const PaletteModal = ({
       position="top"
       responsive={false}
       full="horizontal"
-      onClickOutside={onClickOutside}
+      onClickOutside={onCancel}
     >
       <Box pad="small" fill>
+        <Box direction="row" justify="end">
+          <Button icon={<Close />} onClick={() => onCancel()}></Button>
+        </Box>
         <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
           <Box
             direction="row"
