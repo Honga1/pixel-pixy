@@ -212,6 +212,7 @@ const App = () => {
               paint.setPixelsFromImage(maybeLoadedImage);
             }
             paint.drawToCanvas();
+            setCreateMenuShown(false);
           }}
         />
       )}
