@@ -5,23 +5,12 @@ import { useRef } from "react";
 
 export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
   const anchorRef = useRef<HTMLAnchorElement>(null);
-  const onShareClick = async () => {
-    const fullScaleCanvas = document.createElement("canvas");
-    fullScaleCanvas.width = window.innerWidth;
-    fullScaleCanvas.height = window.innerWidth;
-    const context = fullScaleCanvas.getContext("2d")!;
-    context.imageSmoothingEnabled = false;
-    context.drawImage(
-      canvas,
-      0,
-      0,
-      fullScaleCanvas.width,
-      fullScaleCanvas.height
-    );
+  const onShareClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const fullScaleCanvas = drawToHigherResolutionCanvas(canvas);
 
     try {
       const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((maybeBlob) => {
+        fullScaleCanvas.toBlob((maybeBlob) => {
           if (maybeBlob) {
             resolve(maybeBlob);
           } else {
@@ -30,11 +19,26 @@ export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
         }, "image/png");
       });
 
-      navigator
+      if (document.location.protocol !== "https:") {
+        throw new Error("Could not share. Page is not HTTPS.");
+      }
+
+      if (navigator.share === undefined) {
+        throw new Error("Share unsupported in this browser");
+      }
+
+      const files = Object.freeze([
+        new File([blob], "my-pixel-art.png", { type: blob.type }),
+      ]);
+
+      if (!(navigator.canShare && navigator.canShare({ files }))) {
+        throw new Error("File sharing unsupported in this browser");
+      }
+
+      await navigator
         .share({
-          title: "My Pixel Art Drawing",
-          text: "Made with Pixel Pixy",
-          files: Object.freeze([new File([blob], "my-pixel-art.png")]),
+          title: "My pixel art",
+          files,
         })
         .catch((error: Error) => {
           if (error.name === "AbortError") {
@@ -65,3 +69,19 @@ export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
     </>
   );
 };
+
+function drawToHigherResolutionCanvas(canvas: HTMLCanvasElement) {
+  const fullScaleCanvas = document.createElement("canvas");
+  fullScaleCanvas.width = 1024;
+  fullScaleCanvas.height = 1024;
+  const context = fullScaleCanvas.getContext("2d")!;
+  context.imageSmoothingEnabled = false;
+  context.drawImage(
+    canvas,
+    0,
+    0,
+    fullScaleCanvas.width,
+    fullScaleCanvas.height
+  );
+  return fullScaleCanvas;
+}
