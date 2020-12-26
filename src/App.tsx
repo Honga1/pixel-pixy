@@ -201,16 +201,16 @@ const App = () => {
 
       {isNewPageModalShown && (
         <NewPageModal
-          onClickOutside={() => setCreateMenuShown(false)}
-          onDimensionChange={setPixelDimensions}
-          dimension={pixelDimensions}
-          setLoadedImage={(image) => {
-            paint.setPixelsFromImage(image);
-            paint.drawToCanvas();
-          }}
-          setCreateMenuShown={() => setCreateMenuShown(false)}
-          createNew={() => {
+          currentDimension={pixelDimensions}
+          onCancel={() => setCreateMenuShown(false)}
+          onCreateNew={(dimension, maybeLoadedImage) => {
             paint.clear();
+            if (dimension !== pixelDimensions) {
+              setPixelDimensions(dimension);
+            }
+            if (maybeLoadedImage !== undefined) {
+              paint.setPixelsFromImage(maybeLoadedImage);
+            }
             paint.drawToCanvas();
           }}
         />
