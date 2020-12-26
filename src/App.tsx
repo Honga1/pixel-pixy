@@ -1,4 +1,4 @@
-import { Box, Grid, grommet, Grommet } from "grommet";
+import { Grid, grommet, Grommet, Header, Box, Main } from "grommet";
 import React, { useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
@@ -130,13 +130,17 @@ const App = () => {
       <Grid
         fill
         areas={[
-          { name: "canvas", start: [0, 0], end: [0, 0] },
-          { name: "body", start: [0, 1], end: [0, 1] },
-          { name: "footer", start: [0, 2], end: [0, 2] },
+          { name: "header", start: [0, 0], end: [0, 0] },
+          { name: "canvas", start: [0, 1], end: [0, 1] },
+          { name: "body", start: [0, 2], end: [0, 2] },
+          { name: "footer", start: [0, 3], end: [0, 3] },
         ]}
         columns={["full"]}
-        rows={["auto", "flex", "xxsmall"]}
+        rows={["auto", "auto", "flex", "xxsmall"]}
       >
+        <Header gridArea="header" justify="center">
+          Pixel Pixy
+        </Header>
         <CanvasStack
           stackProps={{ gridArea: "canvas" }}
           isGridShown={isGridShown}
