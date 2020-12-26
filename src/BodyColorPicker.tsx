@@ -1,5 +1,6 @@
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { PinnedColors } from "./components/PinnedColors";
+import { useEffect } from "react";
 import { RGBColor } from "./drivers/Color";
 import { AvailablePalettes } from "./PaletteDictionary";
 
@@ -23,6 +24,25 @@ export const BodyColorPicker = ({
   pinnedColors: RGBColor[];
   colorHistory: RGBColor[];
 }) => {
+  useEffect(() => {
+    if (
+      colorHistory.filter((currentColor) => {
+        return RGBColor.Equals(currentColor, color);
+      }).length !== 0
+    ) {
+      return;
+    }
+
+    let newColorHistory = [...colorHistory];
+    newColorHistory.unshift(color);
+    if (newColorHistory.length > 8) {
+      newColorHistory = newColorHistory.slice(0, 8);
+    }
+
+    setColorHistory(newColorHistory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [color]);
+
   if (pickerMode === "history") {
     return (
       <ColorPickerHistory

@@ -1,5 +1,4 @@
 import { Box, Button } from "grommet";
-import { useEffect } from "react";
 import { RGBColor } from "../drivers/Color";
 
 export const ColorPickerHistory = ({
@@ -13,24 +12,6 @@ export const ColorPickerHistory = ({
   colorSelected: RGBColor;
   onColorPicked: (color: RGBColor) => void;
 }) => {
-  useEffect(() => {
-    if (
-      colorHistory.filter((color) => {
-        return RGBColor.Equals(color, colorSelected);
-      }).length !== 0
-    ) {
-      return;
-    }
-
-    let newColorHistory = [...colorHistory];
-    newColorHistory.unshift(colorSelected);
-    if (newColorHistory.length > 8) {
-      newColorHistory = newColorHistory.slice(0, 8);
-    }
-
-    setColorHistory(newColorHistory);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colorSelected]);
 
   return (
     <Box
