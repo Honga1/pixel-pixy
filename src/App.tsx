@@ -171,6 +171,7 @@ const App = () => {
         </Box>
         {canvas && (
           <Footer
+            gridArea="footer"
             canvas={canvas}
             onAddButtonClicked={() => setCreateMenuShown(true)}
             setSettingsMenuShown={setSettingsMenuShown}

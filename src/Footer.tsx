@@ -5,17 +5,14 @@ export const Footer = ({
   canvas,
   onAddButtonClicked,
   setSettingsMenuShown,
+  gridArea,
 }: {
   canvas: HTMLCanvasElement;
   onAddButtonClicked: () => void;
   setSettingsMenuShown: (value: boolean) => void;
-}) => {
+} & { gridArea: string }) => {
   return (
-    <Box
-      gridArea="footer"
-      direction="row"
-      pad={{ left: "small", right: "small" }}
-    >
+    <Box gridArea={gridArea} pad={{ left: "small", right: "small" }}>
       <Grid
         columns={{
           count: 3,
