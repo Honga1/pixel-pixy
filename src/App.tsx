@@ -39,6 +39,7 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
   const [pinnedColors, setPinnedColors] = useState<RGBColor[]>([]);
+  const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
 
   const paint = useMemo(() => {
     return new UndoablePaintCanvas(pixelDimensions);
@@ -166,6 +167,8 @@ const App = () => {
           />
 
           <BodyColorPicker
+            setColorHistory={setColorHistory}
+            colorHistory={colorHistory}
             pickerMode={pickerMode}
             color={color}
             palette={palette}

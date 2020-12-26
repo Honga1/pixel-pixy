@@ -1,16 +1,18 @@
 import { Box, Button } from "grommet";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { RGBColor } from "../drivers/Color";
 
 export const ColorPickerHistory = ({
   colorSelected,
   onColorPicked,
+  colorHistory,
+  setColorHistory,
 }: {
+  setColorHistory: (history: RGBColor[]) => void;
+  colorHistory: RGBColor[];
   colorSelected: RGBColor;
   onColorPicked: (color: RGBColor) => void;
 }) => {
-  const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
-
   useEffect(() => {
     if (
       colorHistory.filter((color) => {
