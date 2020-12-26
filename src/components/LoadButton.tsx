@@ -1,5 +1,5 @@
 import { Box, Button, Text } from "grommet";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export const LoadButton = ({
   setLoadedImage,
@@ -7,6 +7,7 @@ export const LoadButton = ({
   setLoadedImage: (image: HTMLImageElement) => void;
 }) => {
   const ref = useRef<HTMLInputElement>(null);
+  const [imageName, setImageName] = useState("No File Chosen");
   return (
     <Box direction="row" gap="small">
       <Button
@@ -25,7 +26,7 @@ export const LoadButton = ({
           input.click();
         }}
       >
-        No File Chosen
+        {imageName}
       </Text>
       <input
         ref={ref}
@@ -41,7 +42,7 @@ export const LoadButton = ({
             }
           );
           const image = await imagePromise;
-          event.target.value = "";
+          setImageName(event.target.files?.[0]?.name || "No File Chosen");
           setLoadedImage(image);
         }}
         type="file"
