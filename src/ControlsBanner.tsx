@@ -14,9 +14,9 @@ import { DropperIcon } from "./components/DropperIcon";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
 import { HighlightableButton } from "./HighlightableButton";
-import { Tools } from "./Tools";
+import { Controls, Tools } from "./Tools";
 
-export const ToolsBanner = ({
+export const ControlsBanner = ({
   onToolChange,
   onPickerModeClick,
   onUndoClick,
@@ -24,6 +24,7 @@ export const ToolsBanner = ({
   onPaletteButtonClick,
   onGridButtonClick,
   onTrashClick,
+  onControlsClick,
   isGridShown,
   color,
   pickerMode,
@@ -36,11 +37,26 @@ export const ToolsBanner = ({
   onGridButtonClick: () => void;
   onTrashClick: () => void;
   onToolChange: (tool: Tools) => void;
+  onControlsClick: (control: Controls) => void;
   pickerMode: "history" | "pinned";
   tool: Tools;
   isGridShown: boolean;
   color: RGBColor;
 }) => {
+  const callBefore = <T extends any>(
+    callback: (arg?: T) => void,
+    control: Controls
+  ) => {
+    return (arg?: T) => {
+      onControlsClick(control);
+      if (arg) {
+        callback(arg);
+      } else {
+        callback();
+      }
+    };
+  };
+
   return (
     <Box height="xsmall">
       <Grid
@@ -57,30 +73,30 @@ export const ToolsBanner = ({
         <Box gridArea="left-top" direction="row">
           <HighlightableButton
             primary
-            onClick={() => onToolChange("paint")}
+            onClick={callBefore(() => onToolChange("paint"), "paint")}
             isHighlighted={tool === "paint"}
             icon={<Brush />}
             color={color.toHex()}
           />
           <HighlightableButton
-            onClick={() => onToolChange("eraser")}
+            onClick={callBefore(() => onToolChange("eraser"), "eraser")}
             isHighlighted={tool === "eraser"}
             icon={<Erase />}
           />
           <HighlightableButton
             primary
-            onClick={() => onToolChange("fill")}
+            onClick={callBefore(() => onToolChange("fill"), "fill")}
             isHighlighted={tool === "fill"}
             icon={<Paint />}
             color={color.toHex()}
           />
           <Button
-            onClick={onPaletteButtonClick}
+            onClick={callBefore(onPaletteButtonClick, "palette")}
             icon={<PaletteIcon />}
             focusIndicator={false}
           />
           <HighlightableButton
-            onClick={() => onToolChange("dropper")}
+            onClick={callBefore(() => onToolChange("dropper"), "dropper")}
             isHighlighted={tool === "dropper"}
             icon={<DropperIcon />}
           />
@@ -88,35 +104,35 @@ export const ToolsBanner = ({
         <Box gridArea="left-bot" direction="row">
           <HighlightableButton
             icon={<History />}
-            onClick={() => onPickerModeClick("history")}
+            onClick={callBefore(() => onPickerModeClick("history"), "history")}
             isHighlighted={pickerMode === "history"}
           />
           <HighlightableButton
             icon={<Pin />}
-            onClick={() => onPickerModeClick("pinned")}
+            onClick={callBefore(() => onPickerModeClick("pinned"), "pinned")}
             isHighlighted={pickerMode === "pinned"}
           />
         </Box>
         <Box gridArea="right-top" direction="row" justify="end">
           <Button
             icon={<Undo />}
-            onClick={onUndoClick}
+            onClick={callBefore(onUndoClick, "undo")}
             focusIndicator={false}
           />
           <Button
             icon={<Redo />}
-            onClick={onRedoClick}
+            onClick={callBefore(onRedoClick, "redo")}
             focusIndicator={false}
           />
         </Box>
         <Box gridArea="right-bot" direction="row" justify="end">
           <Button
-            onClick={onTrashClick}
+            onClick={callBefore(onTrashClick, "trash")}
             icon={<Trash />}
             focusIndicator={false}
           />
           <HighlightableButton
-            onClick={onGridButtonClick}
+            onClick={callBefore(onGridButtonClick, "grid")}
             isHighlighted={isGridShown}
             icon={<GridIcon />}
           />

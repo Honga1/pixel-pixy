@@ -11,8 +11,9 @@ import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
-import { Brushes, Tools } from "./Tools";
-import { ToolsBanner } from "./ToolsBanner";
+import { Brushes, Controls, Tools } from "./Tools";
+import { ControlsBanner } from "./ControlsBanner";
+import { ControlsFeedback } from "./ControlsFeedback";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
@@ -29,9 +30,11 @@ const App = () => {
 
   const [tool, setTool] = useState<Tools>("paint");
   const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
+  const [control, setControl] = useState<Controls>("paint");
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
+  const [isControlsFeedbackShown, setControlsFeedbackShown] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
@@ -137,11 +140,17 @@ const App = () => {
           { name: "footer", start: [0, 3], end: [0, 3] },
         ]}
         columns={["full"]}
-        rows={["xxsmall", "auto", "flex", "xxsmall"]}
+        rows={["auto", "auto", "flex", "xxsmall"]}
       >
         <Header gridArea="header" justify="center">
           Pixel Pixy
         </Header>
+        {isControlsFeedbackShown && (
+          <ControlsFeedback
+            onClose={() => setControlsFeedbackShown(false)}
+            control={control}
+          />
+        )}
         <CanvasStack
           stackProps={{ gridArea: "canvas", interactiveChild: "first" }}
           isGridShown={isGridShown}
@@ -152,7 +161,7 @@ const App = () => {
         />
 
         <Main gridArea="body" pad="small" elevation="xsmall">
-          <ToolsBanner
+          <ControlsBanner
             color={color}
             tool={tool}
             isGridShown={isGridShown}
@@ -164,6 +173,10 @@ const App = () => {
             onUndoClick={onUndoClick}
             onTrashClick={onTrashClick}
             pickerMode={pickerMode}
+            onControlsClick={(control) => {
+              setControl(control);
+              setControlsFeedbackShown(true);
+            }}
           />
 
           <BodyColorPicker
