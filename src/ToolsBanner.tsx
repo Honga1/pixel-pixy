@@ -74,7 +74,11 @@ export const ToolsBanner = ({
             icon={<Paint />}
             color={color.toHex()}
           />
-          <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
+          <Button
+            onClick={onPaletteButtonClick}
+            icon={<PaletteIcon />}
+            focusIndicator={false}
+          />
           <HighlightableButton
             onClick={() => onToolChange("dropper")}
             isHighlighted={tool === "dropper"}
@@ -94,11 +98,23 @@ export const ToolsBanner = ({
           />
         </Box>
         <Box gridArea="right-top" direction="row" justify="end">
-          <Button icon={<Undo />} onClick={onUndoClick} />
-          <Button icon={<Redo />} onClick={onRedoClick} />
+          <Button
+            icon={<Undo />}
+            onClick={onUndoClick}
+            focusIndicator={false}
+          />
+          <Button
+            icon={<Redo />}
+            onClick={onRedoClick}
+            focusIndicator={false}
+          />
         </Box>
         <Box gridArea="right-bot" direction="row" justify="end">
-          <Button onClick={onTrashClick} icon={<Trash />} />
+          <Button
+            onClick={onTrashClick}
+            icon={<Trash />}
+            focusIndicator={false}
+          />
           <HighlightableButton
             onClick={onGridButtonClick}
             isHighlighted={isGridShown}

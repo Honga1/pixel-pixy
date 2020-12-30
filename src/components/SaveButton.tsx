@@ -59,7 +59,7 @@ export const SaveButton = ({ canvas }: { canvas: HTMLCanvasElement }) => {
   };
   return (
     <>
-      <Button icon={<Share />} onClick={onShareClick} />
+      <Button icon={<Share />} onClick={onShareClick} focusIndicator={false} />
       <a
         ref={anchorRef}
         href="/"

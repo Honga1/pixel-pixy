@@ -13,7 +13,7 @@ export const HighlightableButton = ({
       onClick={onClick}
       style={{
         borderRadius: "18px",
-        boxShadow: isHighlighted ? "0 0 2px 2px green" : "none",
+        boxShadow: isHighlighted ? "0 0 2px 2px lightgreen" : "none",
       }}
       {...props}
     />

@@ -25,10 +25,15 @@ export const Footer = ({
           <Button
             icon={<Actions />}
             onClick={() => setSettingsMenuShown(true)}
+            focusIndicator={false}
           />
         </Box>
         <Box align="center">
-          <Button icon={<Add />} onClick={onAddButtonClicked} />
+          <Button
+            icon={<Add />}
+            onClick={onAddButtonClicked}
+            focusIndicator={false}
+          />
         </Box>
         <Box align="end">{<SaveButton canvas={canvas} />}</Box>
       </Grid>
