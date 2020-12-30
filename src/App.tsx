@@ -112,6 +112,7 @@ const App = () => {
       onCancel: () => {
         createModal(undefined);
       },
+      onClose: () => createModal(undefined),
     });
   const setColorAndTurnOffPicker = (color: RGBColor): void => {
     setColor(color);
@@ -199,6 +200,7 @@ const App = () => {
 
       {isConfirmModalShown && (
         <ConfirmModal
+          onClose={confirmModalParameters!.onClose}
           onAccept={confirmModalParameters!.onAccept}
           onCancel={confirmModalParameters!.onCancel}
           cancelButtonText={confirmModalParameters!.cancelButtonText}
