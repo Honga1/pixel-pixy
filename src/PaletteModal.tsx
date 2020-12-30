@@ -2,6 +2,7 @@ import { Box, Button, Layer } from "grommet";
 import { Pin, Close } from "grommet-icons";
 import { RGBColor } from "./drivers/Color";
 import { useLongPress } from "./drivers/useLongPress";
+import { Modal } from "./Modal";
 import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
 import { PalettePicker } from "./PalettePicker";
 export const PaletteModal = ({
@@ -57,61 +58,50 @@ export const PaletteModal = ({
     }
   );
   return (
-    <Layer
-      modal
-      position="top"
-      responsive={false}
-      full="horizontal"
-      onClickOutside={onCancel}
-    >
-      <Box pad="small" fill>
-        <Box direction="row" justify="end">
-          <Button icon={<Close />} onClick={() => onCancel()}></Button>
-        </Box>
-        <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
-          <Box
-            direction="row"
-            wrap
-            justify="between"
-            alignSelf="center"
-            onTouchStart={onPressDown}
-            onTouchEnd={onPressUp}
-          >
-            {Object.values(selectedPalette).map((color, index) => {
-              const isPinned = !!pinnedColors.find((pinned) =>
-                RGBColor.Equals(pinned, color)
-              );
-              return (
-                <Box
+    <Modal onClose={onCancel}>
+      <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
+        <Box
+          direction="row"
+          wrap
+          justify="between"
+          alignSelf="center"
+          onTouchStart={onPressDown}
+          onTouchEnd={onPressUp}
+        >
+          {Object.values(selectedPalette).map((color, index) => {
+            const isPinned = !!pinnedColors.find((pinned) =>
+              RGBColor.Equals(pinned, color)
+            );
+            return (
+              <Box
+                key={index}
+                height="xsmall"
+                width="xsmall"
+                pad={{ bottom: "xsmall" }}
+              >
+                <Button
+                  primary
+                  fill="vertical"
+                  size="large"
+                  onClick={() => setColor(color)}
                   key={index}
-                  height="xsmall"
-                  width="xsmall"
-                  pad={{ bottom: "xsmall" }}
-                >
-                  <Button
-                    primary
-                    fill="vertical"
-                    size="large"
-                    onClick={() => setColor(color)}
-                    key={index}
-                    data-index={index}
-                    color={color.toHex()}
-                    icon={isPinned ? <Pin /> : undefined}
-                    style={{
-                      borderRadius: "0",
-                      border: "none",
-                    }}
-                  ></Button>
-                </Box>
-              );
-            })}
-          </Box>
-        </Box>
-        <Box pad={{ top: "small", bottom: "small" }} gap="small">
-          <PalettePicker palette={palette} onPaletteChange={setPalette} />
+                  data-index={index}
+                  color={color.toHex()}
+                  icon={isPinned ? <Pin /> : undefined}
+                  style={{
+                    borderRadius: "0",
+                    border: "none",
+                  }}
+                ></Button>
+              </Box>
+            );
+          })}
         </Box>
       </Box>
-    </Layer>
+      <Box pad={{ top: "small", bottom: "small" }} gap="small">
+        <PalettePicker palette={palette} onPaletteChange={setPalette} />
+      </Box>
+    </Modal>
   );
 };
 function getButtonIndex(event: React.TouchEvent): number | undefined {
