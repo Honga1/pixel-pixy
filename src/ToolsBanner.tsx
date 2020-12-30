@@ -14,9 +14,10 @@ import { DropperIcon } from "./components/DropperIcon";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
 import { HighlightableButton } from "./HighlightableButton";
+import { Tools } from "./Tools";
 
 export const ToolsBanner = ({
-  onBrushChange,
+  onToolChange,
   onPickerModeClick,
   onUndoClick,
   onRedoClick,
@@ -26,7 +27,7 @@ export const ToolsBanner = ({
   isGridShown,
   color,
   pickerMode,
-  brush,
+  tool,
 }: {
   onPickerModeClick: (pickerMode: "history" | "pinned") => void;
   onUndoClick: () => void;
@@ -34,9 +35,9 @@ export const ToolsBanner = ({
   onPaletteButtonClick: () => void;
   onGridButtonClick: () => void;
   onTrashClick: () => void;
-  onBrushChange: (brush: "eraser" | "paint" | "dropper" | "fill") => void;
+  onToolChange: (tool: Tools) => void;
   pickerMode: "history" | "pinned";
-  brush: "eraser" | "paint" | "dropper" | "fill";
+  tool: Tools;
   isGridShown: boolean;
   color: RGBColor;
 }) => {
@@ -56,27 +57,27 @@ export const ToolsBanner = ({
         <Box gridArea="left-top" direction="row">
           <HighlightableButton
             primary
-            onClick={() => onBrushChange("paint")}
-            isHighlighted={brush === "paint"}
+            onClick={() => onToolChange("paint")}
+            isHighlighted={tool === "paint"}
             icon={<Brush />}
             color={color.toHex()}
           />
           <HighlightableButton
-            onClick={() => onBrushChange("eraser")}
-            isHighlighted={brush === "eraser"}
+            onClick={() => onToolChange("eraser")}
+            isHighlighted={tool === "eraser"}
             icon={<Erase />}
           />
           <HighlightableButton
             primary
-            onClick={() => onBrushChange("fill")}
-            isHighlighted={brush === "fill"}
+            onClick={() => onToolChange("fill")}
+            isHighlighted={tool === "fill"}
             icon={<Paint />}
             color={color.toHex()}
           />
           <Button onClick={onPaletteButtonClick} icon={<PaletteIcon />} />
           <HighlightableButton
-            onClick={() => onBrushChange("dropper")}
-            isHighlighted={brush === "dropper"}
+            onClick={() => onToolChange("dropper")}
+            isHighlighted={tool === "dropper"}
             icon={<DropperIcon />}
           />
         </Box>

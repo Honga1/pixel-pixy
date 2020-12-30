@@ -11,12 +11,11 @@ import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
+import { Tools } from "./Tools";
 import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
-
-type Brushes = "paint" | "dropper" | "eraser" | "fill";
 
 const App = () => {
   const [pixelDimensions, setPixelDimensions] = useState<ValidDimensions>(16);
@@ -28,7 +27,7 @@ const App = () => {
     ConfirmModalProps | undefined
   >(undefined);
 
-  const [brush, setBrush] = useState<Brushes>("paint");
+  const [tool, setTool] = useState<Tools>("paint");
 
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
@@ -49,9 +48,9 @@ const App = () => {
     canvas: HTMLCanvasElement,
     event: React.TouchEvent<HTMLCanvasElement>
   ): void => {
-    switch (brush) {
+    switch (tool) {
       case "dropper": {
-        setBrush("paint");
+        setTool("paint");
         const coords = paint.touchToCoords(event);
         const selectedColor = paint.getColorAt(coords.quantX, coords.quantY);
         if (selectedColor === RGBColor.NO_COLOR) break;
@@ -116,7 +115,7 @@ const App = () => {
     });
   const setColorAndTurnOffPicker = (color: RGBColor): void => {
     setColor(color);
-    setBrush("paint");
+    setTool("paint");
   };
 
   const isConfirmModalShown = !!confirmModalParameters;
@@ -138,7 +137,7 @@ const App = () => {
           { name: "footer", start: [0, 3], end: [0, 3] },
         ]}
         columns={["full"]}
-        rows={["auto", "auto", "flex", "xxsmall"]}
+        rows={["xxsmall", "auto", "flex", "xxsmall"]}
       >
         <Header gridArea="header" justify="center">
           Pixel Pixy
@@ -155,10 +154,10 @@ const App = () => {
         <Main gridArea="body" pad="small" elevation="xsmall">
           <ToolsBanner
             color={color}
-            brush={brush}
+            tool={tool}
             isGridShown={isGridShown}
             onPickerModeClick={setPickerMode}
-            onBrushChange={setBrush}
+            onToolChange={setTool}
             onGridButtonClick={onGridButtonClick}
             onPaletteButtonClick={onPaletteButtonClick}
             onRedoClick={onRedoClick}
