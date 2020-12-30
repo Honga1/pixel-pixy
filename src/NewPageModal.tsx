@@ -2,6 +2,7 @@ import { Layer, Box, Button, Grid, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { LoadButton } from "./components/LoadButton";
+import { Modal } from "./Modal";
 
 export const NewPageModal = ({
   currentDimension,
@@ -23,40 +24,32 @@ export const NewPageModal = ({
   }, [currentDimension]);
 
   return (
-    <Layer
-      modal
-      position="bottom"
-      responsive={false}
-      full="horizontal"
-      onClickOutside={onCancel}
-    >
-      <Box pad="small" fill>
-        <Box pad={{ top: "small", bottom: "small" }} gap="small">
-          <Text>Canvas Dimensions</Text>
-          <DimensionPicker
-            onDimensionChange={setDimension}
-            dimension={dimension}
-          />
-        </Box>
-        <Box pad={{ top: "small", bottom: "small" }} gap="small">
-          <Text>Upload Image (optional)</Text>
-          <LoadButton setLoadedImage={setLoadedImage} />
-        </Box>
-
-        <Grid
-          columns={{ count: 2, size: ["auto", "auto"] }}
-          gap="small"
-          pad={{ top: "medium", bottom: "small" }}
-        >
-          <Button label="Cancel" onClick={onCancel} />
-
-          <Button
-            primary
-            label="Create New"
-            onClick={() => onCreateNew(dimension, loadedImage)}
-          />
-        </Grid>
+    <Modal onClose={onCancel}>
+      <Box pad={{ top: "small", bottom: "small" }} gap="small">
+        <Text>Canvas Dimensions</Text>
+        <DimensionPicker
+          onDimensionChange={setDimension}
+          dimension={dimension}
+        />
       </Box>
-    </Layer>
+      <Box pad={{ top: "small", bottom: "small" }} gap="small">
+        <Text>Upload Image (optional)</Text>
+        <LoadButton setLoadedImage={setLoadedImage} />
+      </Box>
+
+      <Grid
+        columns={{ count: 2, size: ["auto", "auto"] }}
+        gap="small"
+        pad={{ top: "medium", bottom: "small" }}
+      >
+        <Button label="Cancel" onClick={onCancel} />
+
+        <Button
+          primary
+          label="Create New"
+          onClick={() => onCreateNew(dimension, loadedImage)}
+        />
+      </Grid>
+    </Modal>
   );
 };
