@@ -1,4 +1,5 @@
-import { Layer, Box, CheckBox } from "grommet";
+import { CheckBox } from "grommet";
+import { Modal } from "./Modal";
 
 export const SettingsModal = ({
   onClickOutside,
@@ -10,21 +11,13 @@ export const SettingsModal = ({
   resetMode: (value: boolean) => void;
 }) => {
   return (
-    <Layer
-      modal
-      position="bottom"
-      responsive={false}
-      full="horizontal"
-      onClickOutside={onClickOutside}
-    >
-      <Box pad="small" fill>
-        <CheckBox
-          toggle
-          onChange={(event) => resetMode(event.target.checked)}
-          label={"Dark Mode"}
-          checked={isDarkMode}
-        />
-      </Box>
-    </Layer>
+    <Modal onClose={onClickOutside} heading={"Settings"}>
+      <CheckBox
+        toggle
+        onChange={(event) => resetMode(event.target.checked)}
+        label={"Dark Mode"}
+        checked={isDarkMode}
+      />
+    </Modal>
   );
 };

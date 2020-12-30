@@ -1,5 +1,5 @@
-import { Box, Button, Layer } from "grommet";
-import { Pin, Close } from "grommet-icons";
+import { Box, Button } from "grommet";
+import { Pin } from "grommet-icons";
 import { RGBColor } from "./drivers/Color";
 import { useLongPress } from "./drivers/useLongPress";
 import { Modal } from "./Modal";
@@ -58,7 +58,7 @@ export const PaletteModal = ({
     }
   );
   return (
-    <Modal onClose={onCancel}>
+    <Modal onClose={onCancel} heading={"Palette"}>
       <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
         <Box
           direction="row"

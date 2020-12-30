@@ -20,7 +20,7 @@ export const ConfirmModal = ({
   acceptButtonText = "Accept",
 }: ConfirmModalProps) => {
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} heading={"Confirm?"}>
       <Text alignSelf="center">{message}</Text>
       <Box direction="row" justify="between" gap="small">
         <Button label={cancelButtonText} onClick={onCancel} alignSelf="start" />

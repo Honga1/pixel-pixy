@@ -1,4 +1,4 @@
-import { Layer, Box, Button, Grid, Text } from "grommet";
+import { Box, Button, Grid, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { LoadButton } from "./components/LoadButton";
@@ -24,7 +24,7 @@ export const NewPageModal = ({
   }, [currentDimension]);
 
   return (
-    <Modal onClose={onCancel}>
+    <Modal onClose={onCancel} heading="New Drawing">
       <Box pad={{ top: "small", bottom: "small" }} gap="small">
         <Text>Canvas Dimensions</Text>
         <DimensionPicker
