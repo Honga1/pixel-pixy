@@ -1,5 +1,6 @@
 import { Box, Button } from "grommet";
 import { RGBColor } from "../drivers/Color";
+import { Blank } from "grommet-icons";
 
 export const ColorPickerHistory = ({
   colorSelected,
@@ -12,33 +13,23 @@ export const ColorPickerHistory = ({
   colorSelected: RGBColor;
   onColorPicked: (color: RGBColor) => void;
 }) => {
-
   return (
     <Box
       className="ColorPickerHistory"
       direction="row"
       justify="start"
       wrap
-      gap="xxsmall"
+      gap={"xxsmall"}
     >
       {colorHistory.map((color, index) => (
-        <Box
-          key={color.toHex()}
-          height="xxsmall"
-          width="xxsmall"
-          pad={{ bottom: "xsmall" }}
-        >
-          <Button
-            fill="vertical"
-            size="small"
-            onClick={() => onColorPicked(color)}
-            key={index}
-            style={{
-              backgroundColor: color.toHex(),
-              border: "none",
-            }}
-          ></Button>
-        </Box>
+        <Button
+          primary
+          icon={<Blank />}
+          onClick={() => onColorPicked(color)}
+          key={index}
+          color={color.toHex()}
+          style={{ borderRadius: 0 }}
+        ></Button>
       ))}
     </Box>
   );

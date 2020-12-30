@@ -37,6 +37,7 @@ export const ControlsFeedback = ({
       animation="none"
       className="ControlsFeedback"
       style={{ opacity, backgroundColor: "rgba(255, 255, 255, 0.6)" }}
+      
     >
       <Box pad={{ horizontal: "small", vertical: "xsmall" }}>
         <Text style={{ color: "black" }}>{controlToFeedback[control]}</Text>

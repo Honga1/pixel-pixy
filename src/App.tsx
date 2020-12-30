@@ -1,4 +1,4 @@
-import { Grid, grommet, Grommet, Header, Main } from "grommet";
+import { Grid, grommet, Grommet, Header, Main, ThemeType } from "grommet";
 import React, { useCallback, useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
@@ -14,6 +14,16 @@ import { SettingsModal } from "./SettingsModal";
 import { Brushes, Controls, Tools } from "./Tools";
 import { ControlsBanner } from "./ControlsBanner";
 import { ControlsFeedback } from "./ControlsFeedback";
+import { deepMerge } from "grommet/utils";
+
+const customTheme: ThemeType = {
+  icon: {
+    size: { medium: "20px" },
+  },
+  global: { edgeSize: { small: "8px" } },
+};
+
+const mergedTheme = deepMerge(grommet, customTheme);
 
 const defaultPalette = "cga";
 const defaultColor = "#5555ff";
@@ -127,7 +137,7 @@ const App = () => {
    */
   return (
     <Grommet
-      theme={grommet}
+      theme={mergedTheme}
       style={{ height: "100%" }}
       themeMode={darkMode ? "dark" : "light"}
     >
@@ -140,7 +150,7 @@ const App = () => {
           { name: "footer", start: [0, 3], end: [0, 3] },
         ]}
         columns={["full"]}
-        rows={["auto", "auto", "flex", "xxsmall"]}
+        rows={["auto", "auto", "flex", "36px"]}
       >
         <Header gridArea="header" justify="center">
           Pixel Pixy
