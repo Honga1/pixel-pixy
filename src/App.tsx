@@ -1,5 +1,5 @@
 import { Grid, grommet, Grommet, Header, Main } from "grommet";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
 import { ValidDimensions } from "./components/DimensionPicker";
@@ -28,22 +28,7 @@ const App = () => {
   >(undefined);
 
   const [tool, setTool] = useState<Tools>("paint");
-  const [brush, setBrush] = useState<Brushes>("paint");
-
-  const setToolAndBrush = (tool: Tools) => {
-    switch (tool) {
-      case "fill": {
-        setBrush("fill");
-        break;
-      }
-      case "paint": {
-        setBrush("paint");
-        break;
-      }
-    }
-
-    setTool(tool);
-  };
+  const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
@@ -250,6 +235,33 @@ const App = () => {
       )}
     </Grommet>
   );
+};
+
+const useStickyBrush = (
+  defaultBrush: Brushes,
+  setTool: (tool: Tools) => void
+) => {
+  const [brush, setBrush] = useState<Brushes>(defaultBrush);
+
+  const setToolAndBrush = useCallback(
+    (tool: Tools) => {
+      switch (tool) {
+        case "fill": {
+          setBrush("fill");
+          break;
+        }
+        case "paint": {
+          setBrush("paint");
+          break;
+        }
+      }
+
+      setTool(tool);
+    },
+    [setTool]
+  );
+
+  return [brush, setToolAndBrush] as const;
 };
 
 export default App;
