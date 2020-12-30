@@ -11,7 +11,7 @@ import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
-import { Tools } from "./Tools";
+import { Brushes, Tools } from "./Tools";
 import { ToolsBanner } from "./ToolsBanner";
 
 const defaultPalette = "cga";
@@ -28,7 +28,22 @@ const App = () => {
   >(undefined);
 
   const [tool, setTool] = useState<Tools>("paint");
+  const [brush, setBrush] = useState<Brushes>("paint");
 
+  const setToolAndBrush = (tool: Tools) => {
+    switch (tool) {
+      case "fill": {
+        setBrush("fill");
+        break;
+      }
+      case "paint": {
+        setBrush("paint");
+        break;
+      }
+    }
+
+    setTool(tool);
+  };
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
@@ -50,7 +65,7 @@ const App = () => {
   ): void => {
     switch (tool) {
       case "dropper": {
-        setTool("paint");
+        setTool(brush);
         const coords = paint.touchToCoords(event);
         const selectedColor = paint.getColorAt(coords.quantX, coords.quantY);
         if (selectedColor === RGBColor.NO_COLOR) break;
@@ -115,7 +130,7 @@ const App = () => {
     });
   const setColorAndTurnOffPicker = (color: RGBColor): void => {
     setColor(color);
-    setTool("paint");
+    setTool(brush);
   };
 
   const isConfirmModalShown = !!confirmModalParameters;
@@ -157,7 +172,7 @@ const App = () => {
             tool={tool}
             isGridShown={isGridShown}
             onPickerModeClick={setPickerMode}
-            onToolChange={setTool}
+            onToolChange={setToolAndBrush}
             onGridButtonClick={onGridButtonClick}
             onPaletteButtonClick={onPaletteButtonClick}
             onRedoClick={onRedoClick}
