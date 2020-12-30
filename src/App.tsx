@@ -144,7 +144,7 @@ const App = () => {
           Pixel Pixy
         </Header>
         <CanvasStack
-          stackProps={{ gridArea: "canvas" }}
+          stackProps={{ gridArea: "canvas", interactiveChild: "first" }}
           isGridShown={isGridShown}
           isPaletteMenuShown={isPaletteModalShown}
           onCanvasCreated={onCanvasCreated}
