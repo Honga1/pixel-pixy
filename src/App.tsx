@@ -186,7 +186,13 @@ const App = () => {
             pickerMode={pickerMode}
             onControlsClick={(control) => {
               setControl(control);
-              controlsFeedbackMode && setControlsFeedbackShown(true);
+              if (
+                control !== "palette" &&
+                control !== "trash" &&
+                controlsFeedbackMode
+              ) {
+                setControlsFeedbackShown(true);
+              }
             }}
           />
 
