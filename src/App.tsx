@@ -11,7 +11,7 @@ import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
-import { Brushes, Controls, Tools } from "./Tools";
+import { Backgrounds, Brushes, Controls, Tools } from "./Tools";
 import { ControlsBanner } from "./ControlsBanner";
 import { ControlsFeedback } from "./ControlsFeedback";
 import { deepMerge } from "grommet/utils";
@@ -39,17 +39,23 @@ const App = () => {
   >(undefined);
 
   const [tool, setTool] = useState<Tools>("paint");
+  const [background, setBackground] = useState<Backgrounds>({
+    type: "checkerboard",
+  });
   const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
   const [control, setControl] = useState<Controls>("paint");
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
   const [isGridShown, setGridShown] = useState(false);
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
-  const [isControlsFeedbackShown, setControlsFeedbackShown] = useState(false);
+  const [
+    isControlsFeedbackModalShown,
+    setControlsFeedbackModalShown,
+  ] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [controlsFeedbackMode, setControlsFeedback] = useState(true);
+  const [isFeedbackOn, setFeedbackOn] = useState(true);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
   const [pinnedColors, setPinnedColors] = useState<RGBColor[]>([]);
   const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
@@ -156,19 +162,19 @@ const App = () => {
         <Header gridArea="header" justify="center">
           Pixel Pixy
         </Header>
-        {controlsFeedbackMode && isControlsFeedbackShown && (
+        {isFeedbackOn && isControlsFeedbackModalShown && (
           <ControlsFeedback
-            onClose={() => setControlsFeedbackShown(false)}
+            onClose={() => setControlsFeedbackModalShown(false)}
             control={control}
           />
         )}
         <CanvasStack
           stackProps={{ gridArea: "canvas", interactiveChild: "first" }}
           isGridShown={isGridShown}
-          isPaletteMenuShown={isPaletteModalShown}
           onCanvasCreated={onCanvasCreated}
           onCanvasTouch={onCanvasTouch}
           pixelDimensions={pixelDimensions}
+          background={background}
         />
 
         <Main gridArea="body" pad="small" elevation="xsmall">
@@ -189,9 +195,9 @@ const App = () => {
               if (
                 control !== "palette" &&
                 control !== "trash" &&
-                controlsFeedbackMode
+                isFeedbackOn
               ) {
-                setControlsFeedbackShown(true);
+                setControlsFeedbackModalShown(true);
               }
             }}
           />
@@ -258,11 +264,18 @@ const App = () => {
 
       {isSettingsMenuShown && (
         <SettingsModal
+          background={background}
           isDarkMode={darkMode}
-          isFeedback={controlsFeedbackMode}
-          onClickOutside={() => setSettingsMenuShown(false)}
-          resetMode={setDarkMode}
-          resetFeedbackMode={setControlsFeedback}
+          isFeedbackOn={isFeedbackOn}
+          onCancel={() => setSettingsMenuShown(false)}
+          setDarkMode={setDarkMode}
+          onSave={(settingsData) => {
+            const { backgroundData, isDarkMode, isFeedbackOn } = settingsData;
+            setFeedbackOn(isFeedbackOn);
+            setDarkMode(isDarkMode);
+            setBackground(backgroundData);
+            setSettingsMenuShown(false);
+          }}
         />
       )}
     </Grommet>

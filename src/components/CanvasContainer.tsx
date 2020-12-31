@@ -1,10 +1,12 @@
-import { TouchEvent, useEffect, useRef } from "react";
+import { TouchEvent, useEffect, useMemo, useRef } from "react";
 import "../styles/CanvasContainer.css";
+import { Backgrounds } from "../Tools";
 
 export const CanvasContainer = ({
   onCanvasCreated,
   onTouchEvent,
   pixelDimensions,
+  background,
 }: {
   pixelDimensions: number;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
@@ -12,6 +14,7 @@ export const CanvasContainer = ({
     canvas: HTMLCanvasElement,
     touchEvent: TouchEvent<HTMLCanvasElement>
   ) => void;
+  background: Backgrounds;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -28,12 +31,18 @@ export const CanvasContainer = ({
     onTouchEvent(canvas, event);
   };
 
+  const backgroundStyle = useMemo(
+    () => getBackgroundStyle(background, pixelDimensions),
+    [background, pixelDimensions]
+  );
+  const backgroundClass = useMemo(() => getBackgroundClass(background), [
+    background,
+  ]);
+
   return (
     <canvas
-      className="CanvasContainer"
-      style={{
-        backgroundSize: `${100 / pixelDimensions / 2}%`,
-      }}
+      className={`CanvasContainer ${backgroundClass}`}
+      style={backgroundStyle}
       ref={canvasRef}
       width={pixelDimensions}
       height={pixelDimensions}
@@ -41,4 +50,37 @@ export const CanvasContainer = ({
       onTouchMove={onInnerTouchEvent}
     />
   );
+};
+
+const getBackgroundClass = (background: Backgrounds) => {
+  switch (background.type) {
+    case "checkerboard":
+      return "CheckerboardBackground";
+    case "color":
+      return "ColorBackground";
+    case "image":
+      return "ImageBackground";
+  }
+};
+
+const getBackgroundStyle = (
+  background: Backgrounds,
+  pixelDimensions: number
+) => {
+  switch (background.type) {
+    case "checkerboard":
+      return {
+        backgroundSize: `${100 / pixelDimensions / 2}%`,
+      };
+    case "color":
+      return {
+        backgroundColor: background.color.toHex(),
+      };
+    case "image":
+      return {
+        backgroundColor: background.color.toHex(),
+        backgroundImage: `url(${background.image.src})`,
+        backgroundSize: background.size,
+      };
+  }
 };

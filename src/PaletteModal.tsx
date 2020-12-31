@@ -1,5 +1,6 @@
 import { Box, Button } from "grommet";
 import { Pin } from "grommet-icons";
+import { useState } from "react";
 import { RGBColor } from "./drivers/Color";
 import { useLongPress } from "./drivers/useLongPress";
 import { Modal } from "./Modal";
@@ -8,23 +9,30 @@ import { PalettePicker } from "./PalettePicker";
 export const PaletteModal = ({
   onCancel,
   setColor,
-  palette,
-  pinnedColors,
+  palette = "cga",
+  pinnedColors = [],
   setPinnedColors,
   setPalette,
 }: {
   onCancel: () => void;
   setColor: (color: RGBColor) => void;
-  palette: AvailablePalettes;
-  pinnedColors: RGBColor[];
-  setPalette: (palette: AvailablePalettes) => void;
-  setPinnedColors: (colors: RGBColor[]) => void;
+  palette?: AvailablePalettes;
+  pinnedColors?: RGBColor[];
+  setPalette?: (palette: AvailablePalettes) => void;
+  setPinnedColors?: (colors: RGBColor[]) => void;
 }) => {
-  const paletteColors = paletteColorDictionary[palette];
+  const [innerPalette, setInnerPalette] = useState<AvailablePalettes>(palette);
+  const paletteColors = paletteColorDictionary[innerPalette];
   const selectedPalette = paletteColors.map(RGBColor.fromHexString);
+
+  const onPaletteChange = (palette: AvailablePalettes) => {
+    setInnerPalette(palette);
+    setPalette?.(palette);
+  };
 
   const { onPressDown, onPressUp } = useLongPress(
     (event) => {
+      if (!setPinnedColors) return;
       const index = getButtonIndex(event);
       if (index === undefined) return;
 
@@ -48,7 +56,7 @@ export const PaletteModal = ({
     500,
     (event) => {
       if (event === undefined) return;
-
+      event.preventDefault();
       const maybeIndex = getButtonIndex(event);
       if (maybeIndex === undefined) return;
 
@@ -83,7 +91,6 @@ export const PaletteModal = ({
                   primary
                   fill="vertical"
                   size="large"
-                  onClick={() => setColor(color)}
                   key={index}
                   data-index={index}
                   color={color.toHex()}
@@ -99,7 +106,7 @@ export const PaletteModal = ({
         </Box>
       </Box>
       <Box pad={{ top: "small", bottom: "small" }} gap="small">
-        <PalettePicker palette={palette} onPaletteChange={setPalette} />
+        <PalettePicker palette={palette} onPaletteChange={onPaletteChange} />
       </Box>
     </Modal>
   );

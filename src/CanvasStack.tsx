@@ -3,16 +3,18 @@ import { useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid } from "./components/Grid";
+import { Backgrounds } from "./Tools";
 export const CanvasStack = ({
   isGridShown,
   pixelDimensions,
+  background,
   onCanvasCreated,
   onCanvasTouch,
   stackProps,
 }: {
-  isPaletteMenuShown: boolean;
   isGridShown: boolean;
   pixelDimensions: ValidDimensions;
+  background: Backgrounds;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
   onCanvasTouch: (
     canvas: HTMLCanvasElement,
@@ -28,6 +30,7 @@ export const CanvasStack = ({
           setCanvas(canvas);
           onCanvasCreated(canvas);
         }}
+        background={background}
         pixelDimensions={pixelDimensions}
         onTouchEvent={onCanvasTouch}
       />

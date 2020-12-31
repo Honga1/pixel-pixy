@@ -1,10 +1,23 @@
 .CanvasContainer {
+  background-color: black;
   width: 100%;
   height: 100vw;
   image-rendering: pixelated;
-  background-color: black;
+  overscroll-behavior: none;
+}
+
+.CheckerboardBackground {
   background-image: url(../images/checker-board.png);
   background-repeat: repeat;
   background-size: 20%;
-  overscroll-behavior: none;
+}
+
+.ColorBackground {
+}
+
+.ImageBackground {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }

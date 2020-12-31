@@ -1,33 +1,136 @@
-import { CheckBox } from "grommet";
+import { Button, CheckBox, Grid, Select } from "grommet";
+import { useState } from "react";
+import { BackgroundColorForm } from "./BackgroundColorForm";
+import { BackgroundImageForm } from "./BackgroundImageForm";
 import { Modal } from "./Modal";
+import { BackgroundColorData, Backgrounds, backgroundTypes } from "./Tools";
+
+type SettingsData = {
+  backgroundData: Backgrounds;
+  isDarkMode: boolean;
+  isFeedbackOn: boolean;
+};
 
 export const SettingsModal = ({
-  onClickOutside,
-  resetMode,
+  onCancel,
+  onSave,
+  setDarkMode,
   isDarkMode,
-  resetFeedbackMode,
-  isFeedback,
+  isFeedbackOn,
+  background,
 }: {
   isDarkMode: boolean;
-  onClickOutside: () => void;
-  resetMode: (value: boolean) => void;
-  resetFeedbackMode: (value: boolean) => void;
-  isFeedback: boolean;
+  background: Backgrounds;
+  onCancel: () => void;
+  onSave: (settingsData: SettingsData) => void;
+  setDarkMode: (value: boolean) => void;
+  isFeedbackOn: boolean;
 }) => {
+  const [backgroundType, setBackgroundType] = useState<Backgrounds["type"]>(
+    background.type
+  );
+
+  const [backgroundData, setBackgroundData] = useState<Backgrounds | undefined>(
+    background
+  );
+
+  const [innerIsFeedbackOn, setFeedbackOn] = useState(isFeedbackOn);
+
   return (
-    <Modal onClose={onClickOutside} heading={"Settings"}>
+    <Modal onClose={onCancel} heading={"Settings"}>
       <CheckBox
         toggle
-        onChange={(event) => resetMode(event.target.checked)}
+        onChange={(event) => setDarkMode(event.target.checked)}
         label={"Dark Mode"}
         checked={isDarkMode}
       />
       <CheckBox
         toggle
-        onChange={(event) => resetFeedbackMode(event.target.checked)}
+        onChange={(event) => setFeedbackOn(event.target.checked)}
         label={"Show feedback"}
-        checked={isFeedback}
+        checked={innerIsFeedbackOn}
       />
+
+      <Select
+        value={backgroundType}
+        options={backgroundTypes}
+        onChange={({ option }: { option: Backgrounds["type"] }) => {
+          setBackgroundType(option);
+          switch (backgroundData?.type) {
+            case "checkerboard":
+              switch (option) {
+                case "color":
+                  setBackgroundData(undefined);
+                  break;
+                case "image":
+                  setBackgroundData(undefined);
+                  break;
+              }
+              break;
+            case "color":
+              switch (option) {
+                case "checkerboard":
+                  setBackgroundData({ type: "checkerboard" });
+                  break;
+                case "image":
+                  setBackgroundData(undefined);
+                  break;
+              }
+              break;
+            case "image":
+              switch (option) {
+                case "checkerboard":
+                  setBackgroundData({ type: "checkerboard" });
+                  break;
+                case "color":
+                  setBackgroundData({
+                    type: "color",
+                    color: backgroundData.color,
+                  });
+                  break;
+              }
+              break;
+          }
+        }}
+      />
+
+      {backgroundType === "image" && (
+        <BackgroundImageForm
+          background={(backgroundData || background) as Backgrounds}
+          onFormComplete={setBackgroundData}
+        />
+      )}
+
+      {backgroundType === "color" && (
+        <BackgroundColorForm
+          color={
+            (backgroundData as Partial<BackgroundColorData> | undefined)?.color
+          }
+          onFormComplete={(data) => {
+            setBackgroundData(data);
+          }}
+        />
+      )}
+      <Grid
+        columns={{ count: 2, size: ["auto", "auto"] }}
+        gap="small"
+        pad={{ top: "medium", bottom: "small" }}
+      >
+        <Button label="Cancel" onClick={onCancel} />
+
+        <Button
+          primary
+          label="Save"
+          disabled={backgroundData === undefined}
+          onClick={() => {
+            onSave({
+              backgroundData: backgroundData! as Backgrounds,
+              isDarkMode,
+              isFeedbackOn: innerIsFeedbackOn,
+            });
+          }}
+        />
+      </Grid>
     </Modal>
   );
 };
