@@ -49,6 +49,7 @@ const App = () => {
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [controlsFeedbackMode, setControlsFeedback] = useState(true);
   const [canvas, setCanvas] = useState<undefined | HTMLCanvasElement>();
   const [pinnedColors, setPinnedColors] = useState<RGBColor[]>([]);
   const [colorHistory, setColorHistory] = useState<RGBColor[]>([]);
@@ -155,7 +156,7 @@ const App = () => {
         <Header gridArea="header" justify="center">
           Pixel Pixy
         </Header>
-        {isControlsFeedbackShown && (
+        {controlsFeedbackMode && isControlsFeedbackShown && (
           <ControlsFeedback
             onClose={() => setControlsFeedbackShown(false)}
             control={control}
@@ -185,7 +186,7 @@ const App = () => {
             pickerMode={pickerMode}
             onControlsClick={(control) => {
               setControl(control);
-              setControlsFeedbackShown(true);
+              controlsFeedbackMode && setControlsFeedbackShown(true);
             }}
           />
 
@@ -252,8 +253,10 @@ const App = () => {
       {isSettingsMenuShown && (
         <SettingsModal
           isDarkMode={darkMode}
+          isFeedback={controlsFeedbackMode}
           onClickOutside={() => setSettingsMenuShown(false)}
           resetMode={setDarkMode}
+          resetFeedbackMode={setControlsFeedback}
         />
       )}
     </Grommet>
