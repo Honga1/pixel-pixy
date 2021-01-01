@@ -1,4 +1,4 @@
-import { Select, Image } from "grommet";
+import { Select, Image, Box, FormField } from "grommet";
 import { useEffect, useState } from "react";
 import { LoadButton } from "./components/LoadButton";
 import {
@@ -8,6 +8,7 @@ import {
   Backgrounds,
 } from "./Tools";
 import { BackgroundColorForm } from "./BackgroundColorForm";
+import defaultImageSrc from "./images/checker-board.png";
 
 export const BackgroundImageForm = ({
   onFormComplete,
@@ -33,28 +34,29 @@ export const BackgroundImageForm = ({
   }, [color, image, imageSize, onFormComplete]);
 
   return (
-    <>
-      <LoadButton setLoadedImage={setImage} />
-      {image && (
+    <Box gap="small">
+      <FormField label="Image fill mode" name="select">
+        <Select
+          value={imageSize}
+          options={backgroundBackgroundImageSizes}
+          onChange={({ option }: { option: BackgroundImageData["size"] }) =>
+            setImageSize(option)
+          }
+        />
+      </FormField>
+      <LoadButton setLoadedImage={setImage} image={image} />
+      <Box width="small" height="small" alignSelf="center">
         <Image
           style={{ backgroundColor: color?.toHex() }}
-          src={image.src}
+          src={image?.src || defaultImageSrc}
           fit={imageSize}
         />
-      )}
-
-      <Select
-        value={imageSize}
-        options={backgroundBackgroundImageSizes}
-        onChange={({ option }: { option: BackgroundImageData["size"] }) =>
-          setImageSize(option)
-        }
-      />
+      </Box>
 
       <BackgroundColorForm
         color={color}
         onFormComplete={({ color }) => setColor(color)}
       />
-    </>
+    </Box>
   );
 };

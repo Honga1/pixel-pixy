@@ -1,4 +1,4 @@
-import { Button, CheckBox, Grid, Select } from "grommet";
+import { Box, Button, CheckBox, FormField, Grid, Select } from "grommet";
 import { useState } from "react";
 import { BackgroundColorForm } from "./BackgroundColorForm";
 import { BackgroundImageForm } from "./BackgroundImageForm";
@@ -29,108 +29,116 @@ export const SettingsModal = ({
   const [backgroundType, setBackgroundType] = useState<Backgrounds["type"]>(
     background.type
   );
-
   const [backgroundData, setBackgroundData] = useState<Backgrounds | undefined>(
     background
   );
-
   const [innerIsFeedbackOn, setFeedbackOn] = useState(isFeedbackOn);
+
+  const onBackgroundTypeChange = ({
+    option,
+  }: {
+    option: Backgrounds["type"];
+  }) => {
+    setBackgroundType(option);
+    switch (backgroundData?.type) {
+      case "checkerboard":
+        switch (option) {
+          case "color":
+            setBackgroundData(undefined);
+            break;
+          case "image":
+            setBackgroundData(undefined);
+            break;
+        }
+        break;
+      case "color":
+        switch (option) {
+          case "checkerboard":
+            setBackgroundData({ type: "checkerboard" });
+            break;
+          case "image":
+            setBackgroundData(undefined);
+            break;
+        }
+        break;
+      case "image":
+        switch (option) {
+          case "checkerboard":
+            setBackgroundData({ type: "checkerboard" });
+            break;
+          case "color":
+            setBackgroundData({
+              type: "color",
+              color: backgroundData.color,
+            });
+            break;
+        }
+        break;
+    }
+  };
 
   return (
     <Modal onClose={onCancel} heading={"Settings"}>
-      <CheckBox
-        toggle
-        onChange={(event) => setDarkMode(event.target.checked)}
-        label={"Dark Mode"}
-        checked={isDarkMode}
-      />
-      <CheckBox
-        toggle
-        onChange={(event) => setFeedbackOn(event.target.checked)}
-        label={"Show feedback"}
-        checked={innerIsFeedbackOn}
-      />
-
-      <Select
-        value={backgroundType}
-        options={backgroundTypes}
-        onChange={({ option }: { option: Backgrounds["type"] }) => {
-          setBackgroundType(option);
-          switch (backgroundData?.type) {
-            case "checkerboard":
-              switch (option) {
-                case "color":
-                  setBackgroundData(undefined);
-                  break;
-                case "image":
-                  setBackgroundData(undefined);
-                  break;
-              }
-              break;
-            case "color":
-              switch (option) {
-                case "checkerboard":
-                  setBackgroundData({ type: "checkerboard" });
-                  break;
-                case "image":
-                  setBackgroundData(undefined);
-                  break;
-              }
-              break;
-            case "image":
-              switch (option) {
-                case "checkerboard":
-                  setBackgroundData({ type: "checkerboard" });
-                  break;
-                case "color":
-                  setBackgroundData({
-                    type: "color",
-                    color: backgroundData.color,
-                  });
-                  break;
-              }
-              break;
-          }
-        }}
-      />
-
-      {backgroundType === "image" && (
-        <BackgroundImageForm
-          background={(backgroundData || background) as Backgrounds}
-          onFormComplete={setBackgroundData}
+      <Box gap="small">
+        <CheckBox
+          toggle
+          onChange={(event) => setDarkMode(event.target.checked)}
+          label={"Dark mode"}
+          checked={isDarkMode}
         />
-      )}
-
-      {backgroundType === "color" && (
-        <BackgroundColorForm
-          color={
-            (backgroundData as Partial<BackgroundColorData> | undefined)?.color
-          }
-          onFormComplete={(data) => {
-            setBackgroundData(data);
-          }}
+        <CheckBox
+          toggle
+          onChange={(event) => setFeedbackOn(event.target.checked)}
+          label={"Show feedback"}
+          checked={innerIsFeedbackOn}
         />
-      )}
-      <Grid
-        columns={{ count: 2, size: ["auto", "auto"] }}
-        gap="small"
-        pad={{ top: "medium", bottom: "small" }}
-      >
-        <Button label="Cancel" onClick={onCancel} />
+        <FormField label="Background image mode">
+          <Select
+            value={backgroundType}
+            options={backgroundTypes}
+            onChange={onBackgroundTypeChange}
+          />
+        </FormField>
 
-        <Button
-          primary
-          label="Save"
-          disabled={backgroundData === undefined}
-          onClick={() => {
-            onSave({
-              backgroundData: backgroundData! as Backgrounds,
-              isDarkMode,
-              isFeedbackOn: innerIsFeedbackOn,
-            });
-          }}
-        />
-      </Grid>
+        {backgroundType === "image" && (
+          <BackgroundImageForm
+            background={(backgroundData || background) as Backgrounds}
+            onFormComplete={setBackgroundData}
+          />
+        )}
+
+        {backgroundType === "color" && (
+          <BackgroundColorForm
+            color={
+              (backgroundData as Partial<BackgroundColorData> | undefined)
+                ?.color
+            }
+            onFormComplete={(data) => {
+              setBackgroundData(data);
+            }}
+          />
+        )}
+        <Grid
+          columns={{ count: 2, size: ["auto", "auto"] }}
+          gap="small"
+          pad={{ top: "medium", bottom: "small" }}
+        >
+          <Button label="Cancel" onClick={onCancel} />
+
+          <Button
+            primary
+            label="Save"
+            disabled={backgroundData === undefined}
+            onClick={() => {
+              onSave({
+                backgroundData: backgroundData! as Backgrounds,
+                isDarkMode,
+                isFeedbackOn: innerIsFeedbackOn,
+              });
+            }}
+          />
+        </Grid>
+      </Box>
     </Modal>
   );
 };

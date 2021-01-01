@@ -3,31 +3,37 @@ import { useRef, useState } from "react";
 
 export const LoadButton = ({
   setLoadedImage,
+  image,
 }: {
+  image?: HTMLImageElement;
   setLoadedImage: (image: HTMLImageElement) => void;
 }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const [imageName, setImageName] = useState("No File Chosen");
+  const [imageName, setImageName] = useState(
+    !!image?.src ? "Previously loaded image" : "No File Chosen"
+  );
   return (
-    <Box direction="row" gap="small">
-      <Button
-        label="Choose File"
-        onClick={() => {
-          const input = ref.current;
-          if (!input) return;
-          input.click();
-        }}
-      />
-      <Text
-        alignSelf="center"
-        onClick={() => {
-          const input = ref.current;
-          if (!input) return;
-          input.click();
-        }}
-      >
-        {imageName}
-      </Text>
+    <>
+      <Box direction="row" gap="small" fill="horizontal" justify="around">
+        <Text
+          alignSelf="center"
+          onClick={() => {
+            const input = ref.current;
+            if (!input) return;
+            input.click();
+          }}
+        >
+          {imageName}
+        </Text>
+        <Button
+          label="Choose Image"
+          onClick={() => {
+            const input = ref.current;
+            if (!input) return;
+            input.click();
+          }}
+        />
+      </Box>
       <input
         ref={ref}
         style={{ display: "none" }}
@@ -48,6 +54,6 @@ export const LoadButton = ({
         type="file"
         accept="image/*"
       />
-    </Box>
+    </>
   );
 };
