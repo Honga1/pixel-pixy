@@ -9,8 +9,10 @@ import {
   Trash,
   Undo,
   Paint,
+  Apps,
 } from "grommet-icons";
 import { DropperIcon } from "./components/DropperIcon";
+import { GridMode } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
 import { HighlightableButton } from "./HighlightableButton";
@@ -25,7 +27,7 @@ export const ControlsBanner = ({
   onGridButtonClick,
   onTrashClick,
   onControlsClick,
-  isGridShown,
+  gridMode,
   color,
   pickerMode,
   tool,
@@ -40,7 +42,7 @@ export const ControlsBanner = ({
   onControlsClick: (control: Controls) => void;
   pickerMode: "history" | "pinned";
   tool: Tools;
-  isGridShown: boolean;
+  gridMode: GridMode;
   color: RGBColor;
 }) => {
   const callBefore = <T extends any>(
@@ -135,8 +137,8 @@ export const ControlsBanner = ({
         />
         <HighlightableButton
           onClick={callBefore(onGridButtonClick, "grid")}
-          isHighlighted={isGridShown}
-          icon={<GridIcon />}
+          isHighlighted={gridMode !== "off"}
+          icon={gridMode === "dots" ? <Apps /> : <GridIcon />}
         />
       </Box>
     </Grid>

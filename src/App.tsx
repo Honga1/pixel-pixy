@@ -15,6 +15,7 @@ import { Backgrounds, Brushes, Controls, Tools } from "./Tools";
 import { ControlsBanner } from "./ControlsBanner";
 import { ControlsFeedback } from "./ControlsFeedback";
 import { deepMerge } from "grommet/utils";
+import { GridMode } from "./components/Grid";
 
 const customTheme: ThemeType = {
   icon: {
@@ -45,7 +46,7 @@ const App = () => {
   const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
   const [control, setControl] = useState<Controls>("paint");
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
-  const [isGridShown, setGridShown] = useState(false);
+  const [gridMode, setGridShown] = useState<GridMode>("off");
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
   const [
     isControlsFeedbackModalShown,
@@ -116,7 +117,19 @@ const App = () => {
   };
 
   const onPaletteButtonClick = () => setPaletteMenuShown(!isPaletteModalShown);
-  const onGridButtonClick = () => setGridShown(!isGridShown);
+  const onGridButtonClick = () => {
+    switch (gridMode) {
+      case "off":
+        setGridShown("lines");
+        break;
+      case "lines":
+        setGridShown("dots");
+        break;
+      case "dots":
+        setGridShown("off");
+        break;
+    }
+  };
 
   const onTrashClick = () =>
     createModal({
@@ -170,7 +183,7 @@ const App = () => {
         )}
         <CanvasStack
           stackProps={{ gridArea: "canvas", interactiveChild: "first" }}
-          isGridShown={isGridShown}
+          gridMode={gridMode}
           onCanvasCreated={onCanvasCreated}
           onCanvasTouch={onCanvasTouch}
           pixelDimensions={pixelDimensions}
@@ -181,7 +194,7 @@ const App = () => {
           <ControlsBanner
             color={color}
             tool={tool}
-            isGridShown={isGridShown}
+            gridMode={gridMode}
             onPickerModeClick={setPickerMode}
             onToolChange={setToolAndBrush}
             onGridButtonClick={onGridButtonClick}

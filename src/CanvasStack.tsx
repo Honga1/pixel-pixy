@@ -2,17 +2,17 @@ import { Stack, StackProps } from "grommet";
 import { useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ValidDimensions } from "./components/DimensionPicker";
-import { Grid } from "./components/Grid";
+import { Grid, GridMode } from "./components/Grid";
 import { Backgrounds } from "./Tools";
 export const CanvasStack = ({
-  isGridShown,
+  gridMode,
   pixelDimensions,
   background,
   onCanvasCreated,
   onCanvasTouch,
   stackProps,
 }: {
-  isGridShown: boolean;
+  gridMode: GridMode;
   pixelDimensions: ValidDimensions;
   background: Backgrounds;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
@@ -35,8 +35,12 @@ export const CanvasStack = ({
         onTouchEvent={onCanvasTouch}
       />
 
-      {canvas && isGridShown && (
-        <Grid pixelDimensions={pixelDimensions} rootCanvas={canvas} />
+      {canvas && (
+        <Grid
+          pixelDimensions={pixelDimensions}
+          rootCanvas={canvas}
+          mode={gridMode}
+        />
       )}
     </Stack>
   );
