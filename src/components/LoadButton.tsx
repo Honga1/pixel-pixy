@@ -1,5 +1,5 @@
-import { Box, Button, Text } from "grommet";
-import { useRef, useState } from "react";
+import { Button } from "grommet";
+import { useRef } from "react";
 
 export const LoadButton = ({
   setLoadedImage,
