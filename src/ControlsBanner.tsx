@@ -104,7 +104,7 @@ export const ControlsBanner = ({
           icon={<DropperIcon />}
         />
       </Box>
-      <Box gridArea="left-bot" direction="row">
+      <Box gridArea="left-bot" direction="row" gap="xsmall">
         <HighlightableButton
           icon={<History />}
           onClick={callBefore(() => onPickerModeClick("history"), "history")}
@@ -116,7 +116,7 @@ export const ControlsBanner = ({
           isHighlighted={pickerMode === "pinned"}
         />
       </Box>
-      <Box gridArea="right-top" direction="row" justify="end">
+      <Box gridArea="right-top" direction="row" justify="end" gap="xsmall">
         <Button
           size="small"
           icon={<Undo />}
@@ -129,7 +129,7 @@ export const ControlsBanner = ({
           focusIndicator={false}
         />
       </Box>
-      <Box gridArea="right-bot" direction="row" justify="end">
+      <Box gridArea="right-bot" direction="row" justify="end" gap="xsmall">
         <Button
           onClick={callBefore(onTrashClick, "trash")}
           icon={<Trash />}
