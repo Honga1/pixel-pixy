@@ -18,7 +18,7 @@ export const Modal = ({
             <Button icon={<Close />} onClick={() => onClose()}></Button>
           </Box>
         </Box>
-        <Box>{children}</Box>
+        <Box gap="small">{children}</Box>
       </Box>
     </Layer>
   );

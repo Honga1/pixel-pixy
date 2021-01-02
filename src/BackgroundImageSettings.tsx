@@ -39,81 +39,72 @@ export const BackgroundImageSettings = ({
   return (
     <>
       <Modal onClose={onCancel} heading={"Background Image Settings"}>
-        <Box gap="small">
-          <FormField label="Mode">
-            <Select
-              value={background.type}
-              options={backgroundTypes}
-              onChange={onBackgroundTypeChange}
-            />
-          </FormField>
+        <FormField label="Mode">
+          <Select
+            value={background.type}
+            options={backgroundTypes}
+            onChange={onBackgroundTypeChange}
+          />
+        </FormField>
 
-          {background.type === "image" && (
-            <Box gap="small">
-              <FormField label="Image fill mode" name="select">
-                <Select
-                  value={outerBackgroundData.size}
-                  options={["cover", "contain"]}
-                  onChange={({
-                    option: size,
-                  }: {
-                    option: Background["size"];
-                  }) => setBackground({ ...background, size })}
-                />
-              </FormField>
+        {background.type === "image" && (
+          <Box gap="small">
+            <FormField label="Image fill mode" name="select">
+              <Select
+                value={outerBackgroundData.size}
+                options={["cover", "contain"]}
+                onChange={({ option: size }: { option: Background["size"] }) =>
+                  setBackground({ ...background, size })
+                }
+              />
+            </FormField>
 
-              <Box
-                direction="row"
-                gap="small"
-                fill="horizontal"
-                justify="around"
-              >
-                <Text alignSelf="center">Background Image</Text>
-                <LoadButton
-                  setLoadedImage={(image) =>
-                    setBackground({ ...background, image })
-                  }
-                />
-              </Box>
-
-              <Box width="small" height="small" pad="small">
-                <Image
-                  style={{ backgroundColor: background.color.toHex() }}
-                  src={background.image?.src || defaultImageSrc}
-                  fit={background.size}
-                />
-              </Box>
-            </Box>
-          )}
-
-          {background.type !== "checkerboard" && (
             <Box direction="row" gap="small" fill="horizontal" justify="around">
-              <Text alignSelf="center">Background color</Text>
-              <Button
-                primary
-                color={(background.color as RGBColor).toHex()}
-                label={"Select color"}
-                onClick={() => setPaletteMenuShown(true)}
+              <Text alignSelf="center">Background Image</Text>
+              <LoadButton
+                setLoadedImage={(image) =>
+                  setBackground({ ...background, image })
+                }
               />
             </Box>
-          )}
 
-          <Grid
-            columns={{ count: 2, size: ["auto", "auto"] }}
-            gap="small"
-            pad={{ top: "medium", bottom: "small" }}
-          >
-            <Button label="Cancel" onClick={onCancel} />
+            <Box width="small" height="small" pad="small">
+              <Image
+                style={{ backgroundColor: background.color.toHex() }}
+                src={background.image?.src || defaultImageSrc}
+                fit={background.size}
+              />
+            </Box>
+          </Box>
+        )}
 
+        {background.type !== "checkerboard" && (
+          <Box direction="row" gap="small" fill="horizontal" justify="around">
+            <Text alignSelf="center">Background color</Text>
             <Button
               primary
-              label="Save"
-              onClick={() => {
-                onSave(background);
-              }}
+              color={(background.color as RGBColor).toHex()}
+              label={"Select color"}
+              onClick={() => setPaletteMenuShown(true)}
             />
-          </Grid>
-        </Box>
+          </Box>
+        )}
+
+        <Grid
+          columns={{ count: 2, size: ["auto", "auto"] }}
+          gap="small"
+          pad={{ top: "medium", bottom: "small" }}
+        >
+          <Button label="Cancel" onClick={onCancel} />
+
+          <Button
+            primary
+            label="Save"
+            onClick={() => {
+              onSave(background);
+            }}
+          />
+        </Grid>
       </Modal>
       {isPaletteModalShown && (
         <PaletteModal
