@@ -1,4 +1,4 @@
-import { Box, Button, CheckBox, Grid } from "grommet";
+import { Box, Button, CheckBox, Grid, Text } from "grommet";
 import { useState } from "react";
 import { BackgroundImageSettings } from "./BackgroundImageSettings";
 import { Modal } from "./Modal";
@@ -37,25 +37,49 @@ export const SettingsModal = ({
     <>
       <Modal onClose={onCancel} heading={"Settings"}>
         <Box gap="small">
-          <CheckBox
-            toggle
-            onChange={(event) => setDarkMode(event.target.checked)}
-            label={"Dark mode"}
-            checked={isDarkMode}
-          />
+          <Box
+            direction="row"
+            gap="small"
+            fill="horizontal"
+            justify="between"
+            pad={{ left: "8px" }}
+          >
+            <Text alignSelf="center">Dark mode</Text>
+            <CheckBox
+              toggle
+              onChange={(event) => setDarkMode(event.target.checked)}
+              checked={isDarkMode}
+            />
+          </Box>{" "}
+          <Box
+            direction="row"
+            gap="small"
+            fill="horizontal"
+            justify="between"
+            pad={{ left: "8px" }}
+          >
+            <Text alignSelf="center">Show feedback</Text>
+            <CheckBox
+              toggle
+              onChange={(event) => setFeedbackOn(event.target.checked)}
+              checked={innerIsFeedbackOn}
+            />
+          </Box>
+          <Box
+            direction="row"
+            gap="small"
+            fill="horizontal"
+            justify="between"
+            pad={{ left: "8px" }}
+          >
+            <Text alignSelf="center">Background Image</Text>
 
-          <CheckBox
-            toggle
-            onChange={(event) => setFeedbackOn(event.target.checked)}
-            label={"Show feedback"}
-            checked={innerIsFeedbackOn}
-          />
-
-          <Button
-            label="Background Image Settings"
-            onClick={() => setBackgroundImageSettingsShown(true)}
-          />
-
+            <Button
+              size="small"
+              label="Settings"
+              onClick={() => setBackgroundImageSettingsShown(true)}
+            />
+          </Box>
           <Grid
             columns={{ count: 2, size: ["auto", "auto"] }}
             gap="small"

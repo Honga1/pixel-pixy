@@ -1,4 +1,4 @@
-import { Select } from "grommet";
+import { FormField, Select, SelectProps } from "grommet";
 import { ReactElement } from "react";
 
 const validDimensions = [
@@ -58,19 +58,23 @@ export type ValidDimensions = typeof validDimensions[number]["value"];
 export const DimensionPicker = ({
   dimension,
   onDimensionChange,
+  ...props
 }: {
   dimension: ValidDimensions;
   onDimensionChange: (dimension: ValidDimensions) => void;
-}): ReactElement => {
+} & Omit<SelectProps, "options">): ReactElement => {
   return (
-    <Select
-      name="Select Dimensions"
-      placeholder="8x8"
-      value={valueToLabel[dimension]}
-      options={options}
-      onChange={({ option }: { option: keyof typeof labelToValue }) =>
-        onDimensionChange(labelToValue[option])
-      }
-    />
+    <FormField label="Canvas Pixel Dimensions">
+      <Select
+        name="Select Dimensions"
+        placeholder="8x8"
+        value={valueToLabel[dimension]}
+        options={options}
+        onChange={({ option }: { option: keyof typeof labelToValue }) =>
+          onDimensionChange(labelToValue[option])
+        }
+        {...props}
+      />
+    </FormField>
   );
 };

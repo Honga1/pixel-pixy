@@ -50,7 +50,13 @@ export const BackgroundImageSettings = ({
               />
             </FormField>
 
-            <Box direction="row" gap="small" fill="horizontal" justify="around">
+            <Box
+              direction="row"
+              gap="small"
+              fill="horizontal"
+              justify="between"
+              pad={{ left: "8px" }}
+            >
               <Text alignSelf="center">Background Image</Text>
               <LoadButton
                 setLoadedImage={(image) =>
@@ -70,9 +76,16 @@ export const BackgroundImageSettings = ({
         )}
 
         {background.type !== "checkerboard" && (
-          <Box direction="row" gap="small" fill="horizontal" justify="around">
+          <Box
+            direction="row"
+            gap="small"
+            fill="horizontal"
+            justify="between"
+            pad={{ left: "8px" }}
+          >
             <Text alignSelf="center">Background color</Text>
             <Button
+              size="small"
               primary
               color={(background.color as RGBColor).toHex()}
               label={"Select color"}

@@ -10,6 +10,7 @@ export const LoadButton = ({
   return (
     <>
       <Button
+        size="small"
         label="Choose Image"
         onClick={() => {
           const input = ref.current;
