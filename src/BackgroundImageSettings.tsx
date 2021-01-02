@@ -1,4 +1,13 @@
-import { Box, Button, FormField, Grid, Image, Select } from "grommet";
+import {
+  Box,
+  Button,
+  Form,
+  FormField,
+  Grid,
+  Image,
+  Select,
+  Text,
+} from "grommet";
 import { useState } from "react";
 import { LoadButton } from "./components/LoadButton";
 import { RGBColor } from "./drivers/Color";
@@ -52,14 +61,22 @@ export const BackgroundImageSettings = ({
                   }) => setBackground({ ...background, size })}
                 />
               </FormField>
-              <LoadButton
-                setLoadedImage={(image) =>
-                  setBackground({ ...background, image })
-                }
-                image={background.image}
-              />
 
-              <Box width="small" height="small" alignSelf="center">
+              <Box
+                direction="row"
+                gap="small"
+                fill="horizontal"
+                justify="around"
+              >
+                <Text alignSelf="center">Background Image</Text>
+                <LoadButton
+                  setLoadedImage={(image) =>
+                    setBackground({ ...background, image })
+                  }
+                />
+              </Box>
+
+              <Box width="small" height="small" pad="small">
                 <Image
                   style={{ backgroundColor: background.color.toHex() }}
                   src={background.image?.src || defaultImageSrc}
@@ -70,12 +87,15 @@ export const BackgroundImageSettings = ({
           )}
 
           {background.type !== "checkerboard" && (
-            <Button
-              primary
-              color={(background.color as RGBColor).toHex()}
-              label={"Select color"}
-              onClick={() => setPaletteMenuShown(true)}
-            />
+            <Box direction="row" gap="small" fill="horizontal" justify="around">
+              <Text alignSelf="center">Background color</Text>
+              <Button
+                primary
+                color={(background.color as RGBColor).toHex()}
+                label={"Select color"}
+                onClick={() => setPaletteMenuShown(true)}
+              />
+            </Box>
           )}
 
           <Grid
