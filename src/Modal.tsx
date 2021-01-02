@@ -1,4 +1,4 @@
-import { Box, Button, Layer, Text } from "grommet";
+import { Box, Button, Heading, Layer } from "grommet";
 import { Close } from "grommet-icons";
 import { PropsWithChildren } from "react";
 
@@ -9,16 +9,20 @@ export const Modal = ({
 }: PropsWithChildren<{ onClose: () => void; heading: string }>) => {
   return (
     <Layer modal full="horizontal" onClickOutside={onClose}>
-      <Box pad="small" fill>
-        <Box direction="row" fill={"horizontal"} justify="between">
-          <Box justify="center">
-            <Text>{heading}</Text>
-          </Box>
-          <Box direction="row" justify="end">
-            <Button icon={<Close />} onClick={() => onClose()}></Button>
-          </Box>
+      <Box direction="row" fill={"horizontal"} justify="between" pad="small">
+        <Heading
+          alignSelf="center"
+          level="2"
+          margin={{ top: "0", bottom: "0" }}
+        >
+          {heading}
+        </Heading>
+        <Box direction="row" justify="end">
+          <Button icon={<Close />} onClick={() => onClose()} />
         </Box>
-        <Box>{children}</Box>
+      </Box>
+      <Box fill pad="small">
+        <Box gap="small">{children}</Box>
       </Box>
     </Layer>
   );

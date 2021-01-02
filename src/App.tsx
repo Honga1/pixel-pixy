@@ -11,7 +11,7 @@ import { NewPageModal } from "./NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
-import { Backgrounds, Brushes, Controls, Tools } from "./Tools";
+import { Background, Brushes, Controls, Tools } from "./Tools";
 import { ControlsBanner } from "./ControlsBanner";
 import { ControlsFeedback } from "./ControlsFeedback";
 import { deepMerge } from "grommet/utils";
@@ -40,9 +40,14 @@ const App = () => {
   >(undefined);
 
   const [tool, setTool] = useState<Tools>("paint");
-  const [background, setBackground] = useState<Backgrounds>({
+
+  const [background, setBackground] = useState<Background>({
     type: "checkerboard",
+    image: undefined,
+    color: new RGBColor(0, 0, 0),
+    size: "cover",
   });
+
   const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
   const [control, setControl] = useState<Controls>("paint");
   const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");

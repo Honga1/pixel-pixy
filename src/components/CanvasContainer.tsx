@@ -1,6 +1,6 @@
 import { TouchEvent, useEffect, useMemo, useRef } from "react";
 import "../styles/CanvasContainer.css";
-import { Backgrounds } from "../Tools";
+import { Background } from "../Tools";
 
 export const CanvasContainer = ({
   onCanvasCreated,
@@ -14,7 +14,7 @@ export const CanvasContainer = ({
     canvas: HTMLCanvasElement,
     touchEvent: TouchEvent<HTMLCanvasElement>
   ) => void;
-  background: Backgrounds;
+  background: Background;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -52,7 +52,7 @@ export const CanvasContainer = ({
   );
 };
 
-const getBackgroundClass = (background: Backgrounds) => {
+const getBackgroundClass = (background: Background) => {
   switch (background.type) {
     case "checkerboard":
       return "CheckerboardBackground";
@@ -64,7 +64,7 @@ const getBackgroundClass = (background: Backgrounds) => {
 };
 
 const getBackgroundStyle = (
-  background: Backgrounds,
+  background: Background,
   pixelDimensions: number
 ) => {
   switch (background.type) {
@@ -79,7 +79,7 @@ const getBackgroundStyle = (
     case "image":
       return {
         backgroundColor: background.color.toHex(),
-        backgroundImage: `url(${background.image.src})`,
+        backgroundImage: `url(${background.image?.src})`,
         backgroundSize: background.size,
       };
   }

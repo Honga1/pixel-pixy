@@ -1,39 +1,24 @@
-import { Box, Button, Text } from "grommet";
-import { useRef, useState } from "react";
+import { Button } from "grommet";
+import { useRef } from "react";
 
 export const LoadButton = ({
   setLoadedImage,
-  image,
 }: {
-  image?: HTMLImageElement;
   setLoadedImage: (image: HTMLImageElement) => void;
 }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const [imageName, setImageName] = useState(
-    !!image?.src ? "Previously loaded image" : "No File Chosen"
-  );
   return (
     <>
-      <Box direction="row" gap="small" fill="horizontal" justify="around">
-        <Text
-          alignSelf="center"
-          onClick={() => {
-            const input = ref.current;
-            if (!input) return;
-            input.click();
-          }}
-        >
-          {imageName}
-        </Text>
-        <Button
-          label="Choose Image"
-          onClick={() => {
-            const input = ref.current;
-            if (!input) return;
-            input.click();
-          }}
-        />
-      </Box>
+      <Button
+        size="small"
+        label="Choose Image"
+        onClick={() => {
+          const input = ref.current;
+          if (!input) return;
+          input.click();
+        }}
+      />
+
       <input
         ref={ref}
         style={{ display: "none" }}
@@ -48,7 +33,6 @@ export const LoadButton = ({
             }
           );
           const image = await imagePromise;
-          setImageName(event.target.files?.[0]?.name || "No File Chosen");
           setLoadedImage(image);
         }}
         type="file"

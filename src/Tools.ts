@@ -16,29 +16,15 @@ export type Controls =
   | "palette"
   | "pinned";
 
-export const backgroundTypes: Backgrounds["type"][] = [
+export const backgroundTypes: Background["type"][] = [
   "checkerboard",
   "color",
   "image",
 ];
-export interface BackgroundImageData {
-  type: "image";
-  image: HTMLImageElement;
-  size: "contain" | "cover";
-  color: RGBColor;
-}
 
-export const backgroundBackgroundImageSizes: BackgroundImageData["size"][] = [
-  "contain",
-  "cover",
-];
-
-export type BackgroundColorData = {
-  type: "color";
+export type Background = {
+  type: "checkerboard" | "image" | "color";
+  image: HTMLImageElement | undefined;
   color: RGBColor;
+  size: "cover" | "contain";
 };
-
-export type Backgrounds =
-  | { type: "checkerboard" }
-  | BackgroundColorData
-  | BackgroundImageData;

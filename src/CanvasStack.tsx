@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid, GridMode } from "./components/Grid";
-import { Backgrounds } from "./Tools";
+import { Background } from "./Tools";
 export const CanvasStack = ({
   gridMode,
   pixelDimensions,
@@ -14,7 +14,7 @@ export const CanvasStack = ({
 }: {
   gridMode: GridMode;
   pixelDimensions: ValidDimensions;
-  background: Backgrounds;
+  background: Background;
   onCanvasCreated: (canvas: HTMLCanvasElement) => void;
   onCanvasTouch: (
     canvas: HTMLCanvasElement,
