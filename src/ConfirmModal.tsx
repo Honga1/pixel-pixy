@@ -1,4 +1,4 @@
-import { Box, Button, Text } from "grommet";
+import { Box, Button, Grid, Text } from "grommet";
 import React from "react";
 import { Modal } from "./Modal";
 
@@ -22,15 +22,19 @@ export const ConfirmModal = ({
   return (
     <Modal onClose={onClose} heading={"Confirm?"}>
       <Text alignSelf="center">{message}</Text>
-      <Box direction="row" justify="between" gap="small">
-        <Button label={cancelButtonText} onClick={onCancel} alignSelf="start" />
+      <Grid
+        columns={{ count: 2, size: ["auto", "auto"] }}
+        gap="small"
+        pad={{ top: "medium", bottom: "small" }}
+      >
+        <Button label={cancelButtonText} onClick={onCancel} />
         <Button
           primary
           label={acceptButtonText}
           onClick={onAccept}
           alignSelf="end"
         />
-      </Box>
+      </Grid>
     </Modal>
   );
 };
