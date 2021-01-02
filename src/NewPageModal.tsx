@@ -1,4 +1,4 @@
-import { Box, Button, FormField, Grid, Text } from "grommet";
+import { Box, Button, Grid, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
 import { LoadButton } from "./components/LoadButton";

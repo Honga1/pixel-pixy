@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Layer, Text } from "grommet";
+import { Box, Button, Heading, Layer } from "grommet";
 import { Close } from "grommet-icons";
 import { PropsWithChildren } from "react";
 
