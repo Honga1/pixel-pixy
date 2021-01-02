@@ -35,7 +35,7 @@ export const ColorPickerSwatch = ({
         },
       ]}
       columns={["full"]}
-      rows={["auto", "xxsmall"]}
+      rows={["medium", "xxsmall"]}
     >
       <Stack fill gridArea="saturation-lightness" interactiveChild={1}>
         <Box

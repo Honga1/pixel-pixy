@@ -3,6 +3,7 @@ import { Pin } from "grommet-icons";
 import { useState } from "react";
 import { RGBColor } from "../drivers/color/src/RGBColor";
 import { useLongPress } from "../hooks/useLongPress";
+import { ColorPickerSwatch } from "../components/ColorPickerSwatch";
 import { Modal } from "./Modal";
 import {
   AvailablePalettes,
@@ -19,16 +20,18 @@ export const PaletteModal = ({
 }: {
   onCancel: () => void;
   setColor: (color: RGBColor) => void;
-  palette?: AvailablePalettes;
+  palette?: AvailablePalettes | "Picker";
   pinnedColors?: RGBColor[];
-  setPalette?: (palette: AvailablePalettes) => void;
+  setPalette?: (palette: AvailablePalettes | "Picker") => void;
   setPinnedColors?: (colors: RGBColor[]) => void;
 }) => {
-  const [innerPalette, setInnerPalette] = useState<AvailablePalettes>(palette);
+  const [innerPalette, setInnerPalette] = useState<
+    AvailablePalettes | "Picker"
+  >(palette);
   const paletteColors = paletteColorDictionary[innerPalette];
   const selectedPalette = paletteColors.map(RGBColor.fromHexString);
 
-  const onPaletteChange = (palette: AvailablePalettes) => {
+  const onPaletteChange = (palette: AvailablePalettes | "Picker") => {
     setInnerPalette(palette);
     setPalette?.(palette);
   };
@@ -68,6 +71,19 @@ export const PaletteModal = ({
       onCancel();
     }
   );
+  if (palette === "Picker") {
+    return (
+      <Modal onClose={onCancel} heading={"Palette"}>
+        <ColorPickerSwatch
+          selectedColor={new RGBColor(255, 0, 0)}
+          onColorPicked={setColor}
+        />
+        <Box pad={{ top: "small", bottom: "small" }} gap="small">
+          <PalettePicker palette={palette} onPaletteChange={onPaletteChange} />
+        </Box>
+      </Modal>
+    );
+  }
   return (
     <Modal onClose={onCancel} heading={"Palette"}>
       <Box fill pad={{ top: "small", bottom: "small" }} gap="small">

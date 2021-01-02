@@ -59,8 +59,10 @@ const App = () => {
     isControlsFeedbackModalShown,
     setControlsFeedbackModalShown,
   ] = useState(false);
-  const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
   const [drawImage, setDrawImage] = useState<HTMLImageElement>();
+  const [palette, setPalette] = useState<AvailablePalettes | "Picker">(
+    defaultPalette
+  );
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
   const [darkMode, setDarkMode] = useState(false);

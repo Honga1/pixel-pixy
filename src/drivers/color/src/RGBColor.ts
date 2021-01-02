@@ -77,6 +77,7 @@ export class RGBColor {
     return RGBColor.fromHexString("#" + hexString);
   }
 
+  // TO DO: didn't work with strings: "(0, 235, 0" or "rgb(0, 235, 0)"
   static fromRGBString(rgbString: string) {
     let sep = rgbString.indexOf(",") > -1 ? "," : " ";
     const rgbChunks = rgbString.substr(4).split(")")[0].split(sep);

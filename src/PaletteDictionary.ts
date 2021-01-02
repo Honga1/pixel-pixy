@@ -47,6 +47,7 @@ export const paletteColorDictionary: {
     "#ff00ff",
     "#ffffff",
   ],
+  Picker: ["#ff00ff"],
 };
 
 export const paletteNameDictionary = {
