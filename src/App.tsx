@@ -1,9 +1,13 @@
 import { Grid, grommet, Grommet, Header, Main, ThemeType } from "grommet";
+import { deepMerge } from "grommet/utils";
 import React, { useCallback, useMemo, useState } from "react";
 import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
 import { ValidDimensions } from "./components/DimensionPicker";
+import { GridMode } from "./components/Grid";
 import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
+import { ControlsBanner } from "./ControlsBanner";
+import { ControlsFeedback } from "./ControlsFeedback";
 import { RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { Footer } from "./Footer";
@@ -12,10 +16,6 @@ import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./PaletteModal";
 import { SettingsModal } from "./SettingsModal";
 import { Background, Brushes, Controls, Tools } from "./Tools";
-import { ControlsBanner } from "./ControlsBanner";
-import { ControlsFeedback } from "./ControlsFeedback";
-import { deepMerge } from "grommet/utils";
-import { GridMode } from "./components/Grid";
 
 const customTheme: ThemeType = {
   icon: {

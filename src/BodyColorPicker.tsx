@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { ColorPickerHistory } from "./components/ColorPickerHistory";
 import { PinnedColors } from "./components/PinnedColors";
-import { useEffect } from "react";
 import { RGBColor } from "./drivers/Color";
 import { AvailablePalettes } from "./PaletteDictionary";
 

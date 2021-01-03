@@ -1,9 +1,8 @@
-import { Layer, Text, Box } from "grommet";
+import { Box, Layer, Text } from "grommet";
+import { useState } from "react";
+import "./styles/ControlsFeedback.css";
 import { Controls } from "./Tools";
 import { useTimeout } from "./useTimeout";
-
-import "./styles/ControlsFeedback.css";
-import { useState } from "react";
 
 const controlToFeedback: Record<Controls, string> = {
   dropper: "Dropper",
@@ -37,7 +36,6 @@ export const ControlsFeedback = ({
       animation="none"
       className="ControlsFeedback"
       style={{ opacity, backgroundColor: "rgba(255, 255, 255, 0.6)" }}
-      
     >
       <Box pad={{ horizontal: "small", vertical: "xsmall" }}>
         <Text style={{ color: "black" }}>{controlToFeedback[control]}</Text>

@@ -1,5 +1,4 @@
 import { Button, Grid, Text } from "grommet";
-import React from "react";
 import { Modal } from "./Modal";
 
 export type ConfirmModalProps = {

@@ -1,6 +1,6 @@
 import { Box, Button } from "grommet";
-import { RGBColor } from "../drivers/Color";
 import { Blank } from "grommet-icons";
+import { RGBColor } from "../drivers/Color";
 
 export const ColorPickerHistory = ({
   colorSelected,

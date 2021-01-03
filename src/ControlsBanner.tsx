@@ -1,15 +1,15 @@
 import { Box, Button, Grid } from "grommet";
 import {
+  Apps,
   Brush,
   Erase,
   Grid as GridIcon,
   History,
+  Paint,
   Pin,
   Redo,
   Trash,
   Undo,
-  Paint,
-  Apps,
 } from "grommet-icons";
 import { DropperIcon } from "./components/DropperIcon";
 import { GridMode } from "./components/Grid";
