@@ -1,16 +1,12 @@
+import { Box, Button } from "grommet";
+import { Blank } from "grommet-icons";
 import { useEffect } from "react";
-import { ColorPickerHistory } from "./ColorPickerHistory";
-import { PinnedColors } from "./PinnedColors";
 import { RGBColor } from "../drivers/Color";
 import { AvailablePalettes } from "../PaletteDictionary";
 
-/** TODO: Make a component that displays a list of colors.
- * Use logic here to decide which colors to show.
- * Probably remove ColorPickerHistory and PinnedColors and combine into here */
 export const BodyColorPicker = ({
   setColorAndTurnOffPicker,
   color,
-  palette,
   pickerMode,
   pinnedColors,
   colorHistory,
@@ -24,6 +20,34 @@ export const BodyColorPicker = ({
   pinnedColors: RGBColor[];
   colorHistory: RGBColor[];
 }) => {
+  useAddToColorHistory(colorHistory, color, setColorHistory);
+
+  const colors =
+    pickerMode === "history"
+      ? colorHistory.slice(0, 8)
+      : pinnedColors.slice(0, 8);
+
+  return (
+    <Box direction="row" justify="start" wrap gap={"xxsmall"}>
+      {colors.map((color, index) => (
+        <Button
+          primary
+          icon={<Blank />}
+          onClick={() => setColorAndTurnOffPicker(color)}
+          key={index}
+          color={color.toHex()}
+          style={{ borderRadius: 0 }}
+        />
+      ))}
+    </Box>
+  );
+};
+
+function useAddToColorHistory(
+  colorHistory: RGBColor[],
+  color: RGBColor,
+  setColorHistory: (history: RGBColor[]) => void
+) {
   useEffect(() => {
     if (
       colorHistory.filter((currentColor) => {
@@ -35,29 +59,8 @@ export const BodyColorPicker = ({
 
     let newColorHistory = [...colorHistory];
     newColorHistory.unshift(color);
-    if (newColorHistory.length > 8) {
-      newColorHistory = newColorHistory.slice(0, 8);
-    }
 
     setColorHistory(newColorHistory);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color]);
-
-  if (pickerMode === "history") {
-    return (
-      <ColorPickerHistory
-        setColorHistory={setColorHistory}
-        colorHistory={colorHistory}
-        onColorPicked={setColorAndTurnOffPicker}
-        colorSelected={color}
-      />
-    );
-  } else {
-    return (
-      <PinnedColors
-        onColorPicked={setColorAndTurnOffPicker}
-        pinnedColors={pinnedColors}
-      />
-    );
-  }
-};
+}
