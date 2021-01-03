@@ -75,37 +75,70 @@ export class UndoablePaintCanvas extends PaintCanvas {
         visited.set([x, y], false);
       });
 
-    this.floodFill(x, y, fillColor, startColor, visited);
-    this.undoBuffer.addCurrent(this.getPixelMap().clone());
-  }
+    const didPixelsChange = this.floodFill(
+      x,
+      y,
+      fillColor,
+      startColor,
+      visited
+    );
 
+    if (didPixelsChange) {
+      this.undoBuffer.addCurrent(this.getPixelMap().clone());
+    }
+  }
+  /**
+   *
+   * @param x
+   * @param y
+   * @param fillColor The requested color to fill with
+   * @param startColor The current color of the cell requested to be filled from
+   * @param visited A map of the board indicating if that cell has been checked already
+   */
   private floodFill(
     x: number,
     y: number,
     fillColor: RGBColor | NoColor,
     startColor: RGBColor | NoColor,
     visited: KeyPairMap<number, number, boolean>
-  ) {
-    if (!this.cellExists(x, y)) return;
-    if (visited.get([x, y]) === true) return;
+  ): boolean {
+    const isCellOnBoard = !this.cellExists(x, y);
+    if (isCellOnBoard) return false;
+
+    const hasCellAlreadyBeenVisited = visited.get([x, y]) === true;
+    if (hasCellAlreadyBeenVisited) return false;
 
     const cellColor = this.getColorAt(x, y);
-    if (!UndoablePaintCanvas.AreColorsEqual(cellColor, startColor)) return;
+    const doesCellMatchStartColor = UndoablePaintCanvas.AreColorsEqual(
+      cellColor,
+      startColor
+    );
+    if (!doesCellMatchStartColor) return false;
+
+    const doesCellMatchFillColor = UndoablePaintCanvas.AreColorsEqual(
+      cellColor,
+      fillColor
+    );
+
+    visited.set([x, y], true);
+    if (doesCellMatchFillColor) {
+      return false;
+    }
 
     super.setColorAt(x, y, fillColor);
-    visited.set([x, y], true);
 
-    if (visited.get([x, y + 1]) === false)
-      this.floodFill(x, y + 1, fillColor, startColor, visited);
+    const edges = [
+      [x, y + 1],
+      [x, y - 1],
+      [x + 1, y],
+      [x - 1, y],
+    ];
 
-    if (visited.get([x, y - 1]) === false)
-      this.floodFill(x, y - 1, fillColor, startColor, visited);
+    edges.forEach(([x, y]) =>
+      this.floodFill(x, y, fillColor, startColor, visited)
+    );
 
-    if (visited.get([x + 1, y]) === false)
-      this.floodFill(x + 1, y, fillColor, startColor, visited);
-
-    if (visited.get([x - 1, y]) === false)
-      this.floodFill(x - 1, y, fillColor, startColor, visited);
+    return true;
   }
 
   private cellExists = (x: number, y: number) => this.getPixelMap().has([x, y]);

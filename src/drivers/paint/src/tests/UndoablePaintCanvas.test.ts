@@ -184,3 +184,35 @@ it("Can fill around center", () => {
     }
   });
 });
+
+it("Can undo fill center", () => {
+  const paint = new UndoablePaintCanvas(3);
+  paint.fillWithColor(0, 0, new RGBColor(0, 255, 0));
+  paint.undo();
+
+  paint.map(([x, y], color) => {
+    expect(paint.getColorAt(x, y)).toStrictEqual(RGBColor.NO_COLOR);
+  });
+});
+
+it("Can redo fill center", () => {
+  const paint = new UndoablePaintCanvas(3);
+  paint.fillWithColor(0, 0, new RGBColor(0, 255, 0));
+  paint.fillWithColor(0, 0, new RGBColor(0, 0, 0));
+  paint.undo();
+  paint.redo();
+
+  paint.map(([x, y], color) => {
+    expect((paint.getColorAt(x, y) as RGBColor).rgb).toStrictEqual([0, 0, 0]);
+  });
+});
+
+it("Filling twice in the same spot doesn't add undo stacks", () => {
+  const paint = new UndoablePaintCanvas(3);
+  paint.fillWithColor(0, 0, new RGBColor(0, 255, 0));
+  let startSize = paint.undoBuffer.getUndoSize();
+  paint.fillWithColor(0, 0, new RGBColor(0, 255, 0));
+  let endSize = paint.undoBuffer.getUndoSize();
+
+  expect(endSize).toEqual(startSize);
+});
