@@ -15,7 +15,7 @@ import { NewPageModal } from "./modals/NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./modals/PaletteModal";
 import { SettingsModal } from "./modals/SettingsModal";
-import { Background, Brushes, Controls, Tools } from "./Tools";
+import { Background, Brushes, Controls, Tools } from "./Types";
 
 const customTheme: ThemeType = {
   icon: {

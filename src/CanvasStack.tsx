@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CanvasContainer } from "./components/CanvasContainer";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Grid, GridMode } from "./components/Grid";
-import { Background } from "./Tools";
+import { Background } from "./Types";
 export const CanvasStack = ({
   gridMode,
   pixelDimensions,

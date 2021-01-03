@@ -5,8 +5,13 @@ import { RGBColor } from "../drivers/Color";
 import defaultImageSrc from "../images/checker-board.png";
 import { Modal } from "./Modal";
 import { PaletteModal } from "./PaletteModal";
-import { Background, backgroundTypes } from "../Tools";
+import { Background } from "../Types";
 
+const backgroundTypes: Background["type"][] = [
+  "checkerboard",
+  "color",
+  "image",
+];
 export const BackgroundImageSettings = ({
   onCancel,
   onSave,

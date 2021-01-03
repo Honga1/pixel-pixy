@@ -16,7 +16,7 @@ import { GridMode } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
 import { HighlightableButton } from "./HighlightableButton";
-import { Controls, Tools } from "./Tools";
+import { Controls, Tools } from "./Types";
 
 export const ControlsBanner = ({
   onToolChange,

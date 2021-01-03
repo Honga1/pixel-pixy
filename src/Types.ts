@@ -16,12 +16,6 @@ export type Controls =
   | "palette"
   | "pinned";
 
-export const backgroundTypes: Background["type"][] = [
-  "checkerboard",
-  "color",
-  "image",
-];
-
 export type Background = {
   type: "checkerboard" | "image" | "color";
   image: HTMLImageElement | undefined;
