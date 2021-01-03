@@ -50,7 +50,9 @@ const App = () => {
 
   const [brush, setToolAndBrush] = useStickyBrush("paint", setTool);
   const [control, setControl] = useState<Controls>("paint");
-  const [pickerMode, setPickerMode] = useState<"history" | "pinned">("pinned");
+  const [pickerMode, setPickerMode] = useState<
+    "history" | "pinned" | "palette"
+  >("pinned");
   const [gridMode, setGridShown] = useState<GridMode>("off");
   const [isPaletteModalShown, setPaletteMenuShown] = useState(false);
   const [

@@ -11,6 +11,7 @@ const controlToFeedback: Record<Controls, string> = {
   grid: "Grid",
   history: "Recent colors",
   paint: "Pixel brush",
+  paletteColor: "Palette colors",
   palette: "Palette",
   pinned: "Pinned colors",
   redo: "Redo",

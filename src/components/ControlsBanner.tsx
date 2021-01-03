@@ -10,6 +10,7 @@ import {
   Redo,
   Trash,
   Undo,
+  Gallery,
 } from "grommet-icons";
 import { DropperIcon } from "./DropperIcon";
 import { GridMode } from "./Grid";
@@ -32,7 +33,7 @@ export const ControlsBanner = ({
   pickerMode,
   tool,
 }: {
-  onPickerModeClick: (pickerMode: "history" | "pinned") => void;
+  onPickerModeClick: (pickerMode: "history" | "pinned" | "palette") => void;
   onUndoClick: () => void;
   onRedoClick: () => void;
   onPaletteButtonClick: () => void;
@@ -40,7 +41,7 @@ export const ControlsBanner = ({
   onTrashClick: () => void;
   onToolChange: (tool: Tools) => void;
   onControlsClick: (control: Controls) => void;
-  pickerMode: "history" | "pinned";
+  pickerMode: "history" | "pinned" | "palette";
   tool: Tools;
   gridMode: GridMode;
   color: RGBColor;
@@ -114,6 +115,15 @@ export const ControlsBanner = ({
           icon={<Pin />}
           onClick={callBefore(() => onPickerModeClick("pinned"), "pinned")}
           isHighlighted={pickerMode === "pinned"}
+        />
+
+        <HighlightableButton
+          icon={<Gallery />}
+          onClick={callBefore(
+            () => onPickerModeClick("palette"),
+            "paletteColor"
+          )}
+          isHighlighted={pickerMode === "palette"}
         />
       </Box>
       <Box gridArea="right-top" direction="row" justify="end" gap="xsmall">

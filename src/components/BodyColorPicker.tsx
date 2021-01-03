@@ -1,8 +1,11 @@
 import { Box, Button } from "grommet";
 import { Blank } from "grommet-icons";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { RGBColor } from "../drivers/color/src/RGBColor";
-import { AvailablePalettes } from "../PaletteDictionary";
+import {
+  AvailablePalettes,
+  paletteColorDictionary,
+} from "../PaletteDictionary";
 
 export const BodyColorPicker = ({
   setColorAndTurnOffPicker,
@@ -11,8 +14,9 @@ export const BodyColorPicker = ({
   pinnedColors,
   colorHistory,
   setColorHistory,
+  palette,
 }: {
-  pickerMode: "history" | "pinned";
+  pickerMode: "history" | "pinned" | "palette";
   setColorHistory: (history: RGBColor[]) => void;
   setColorAndTurnOffPicker: (color: RGBColor) => void;
   color: RGBColor;
@@ -22,22 +26,34 @@ export const BodyColorPicker = ({
 }) => {
   useAddToColorHistory(colorHistory, color, setColorHistory);
 
-  const colors =
-    pickerMode === "history"
-      ? colorHistory.slice(0, 8)
-      : pinnedColors.slice(0, 8);
+  const boxRef = useRef<HTMLDivElement>(null);
+  let colors: RGBColor[] = [];
+
+  switch (pickerMode) {
+    case "history":
+      colors = colorHistory.slice(0, 16);
+      break;
+    case "pinned":
+      colors = pinnedColors;
+      break;
+    case "palette":
+      colors = paletteColorDictionary[palette].map((color) =>
+        RGBColor.fromHexString(color)
+      );
+  }
 
   return (
-    <Box direction="row" justify="start" wrap gap={"xxsmall"}>
+    <Box ref={boxRef} direction="row" justify="stretch" wrap overflow="auto">
       {colors.map((color, index) => (
-        <Button
-          primary
-          icon={<Blank />}
-          onClick={() => setColorAndTurnOffPicker(color)}
-          key={index}
-          color={color.toHex()}
-          style={{ borderRadius: 0 }}
-        />
+        <Box pad={{ right: "xxsmall", top: "xxsmall" }} key={index}>
+          <Button
+            primary
+            icon={<Blank />}
+            onClick={() => setColorAndTurnOffPicker(color)}
+            color={color.toHex()}
+            style={{ borderRadius: 0 }}
+          />
+        </Box>
       ))}
     </Box>
   );

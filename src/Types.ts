@@ -13,8 +13,9 @@ export type Controls =
   | "grid"
   | "trash"
   | "history"
-  | "palette"
-  | "pinned";
+  | "pinned"
+  | "paletteColor"
+  | "palette";
 
 export type Background = {
   type: "checkerboard" | "image" | "color";
