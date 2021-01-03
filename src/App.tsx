@@ -161,9 +161,7 @@ const App = () => {
   };
 
   const isConfirmModalShown = !!confirmModalParameters;
-  /**
-   * TODO: Add dark mode and settings modal
-   */
+
   return (
     <Grommet
       theme={mergedTheme}
