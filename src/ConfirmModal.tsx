@@ -1,5 +1,5 @@
 import { Button, Grid, Text } from "grommet";
-import { Modal } from "./Modal";
+import { Modal } from "./modals/Modal";
 
 export type ConfirmModalProps = {
   onAccept: () => void;
