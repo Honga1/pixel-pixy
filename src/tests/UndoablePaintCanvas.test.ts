@@ -1,4 +1,4 @@
-import { RGBColor } from "./../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import { createCanvas, loadImage } from "canvas";
 import { UndoablePaintCanvas } from "../drivers/UndoablePaintCanvas";
 it("Can be created", () => {

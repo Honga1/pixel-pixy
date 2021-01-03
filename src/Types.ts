@@ -1,4 +1,4 @@
-import { RGBColor } from "./drivers/Color";
+import { RGBColor } from "./drivers/color/src/RGBColor";
 
 export type Tools = "paint" | "dropper" | "eraser" | "fill";
 export type Brushes = "fill" | "paint";

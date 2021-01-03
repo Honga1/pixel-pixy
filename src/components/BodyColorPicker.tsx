@@ -1,7 +1,7 @@
 import { Box, Button } from "grommet";
 import { Blank } from "grommet-icons";
 import { useEffect } from "react";
-import { RGBColor } from "../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import { AvailablePalettes } from "../PaletteDictionary";
 
 export const BodyColorPicker = ({

@@ -1,4 +1,5 @@
-import { NoColor, RGBColor } from "./Color";
+import { NoColor } from "./color";
+import { RGBColor } from "./color/src/RGBColor";
 import { getRelativeClickPosition } from "./getRelativeClickPosition";
 
 export class KeyPairMap<KeyA, KeyB, Value> implements Map<[KeyA, KeyB], Value> {

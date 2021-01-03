@@ -1,7 +1,7 @@
 import { Box, Button } from "grommet";
 import { Pin } from "grommet-icons";
 import { useState } from "react";
-import { RGBColor } from "../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import { useLongPress } from "../hooks/useLongPress";
 import { Modal } from "./Modal";
 import {

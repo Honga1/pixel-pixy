@@ -1,6 +1,6 @@
 import { Button } from "grommet";
 import { Box } from "grommet/components/Box";
-import { RGBColor } from "../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import {
   AvailablePalettes,
   paletteColorDictionary,

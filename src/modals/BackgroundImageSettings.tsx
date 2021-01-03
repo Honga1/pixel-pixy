@@ -1,7 +1,7 @@
 import { Box, Button, FormField, Grid, Image, Select, Text } from "grommet";
 import { useState } from "react";
 import { LoadButton } from "../components/LoadButton";
-import { RGBColor } from "../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import defaultImageSrc from "../images/checker-board.png";
 import { Modal } from "./Modal";
 import { PaletteModal } from "./PaletteModal";

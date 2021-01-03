@@ -14,7 +14,7 @@ import {
 import { DropperIcon } from "./DropperIcon";
 import { GridMode } from "./Grid";
 import { PaletteIcon } from "./PaletteIcon";
-import { RGBColor } from "../drivers/Color";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import { HighlightableButton } from "./HighlightableButton";
 import { Controls, Tools } from "../Types";
 

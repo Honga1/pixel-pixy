@@ -8,7 +8,7 @@ import { ControlsFeedback } from "./components/ControlsFeedback";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { Footer } from "./components/Footer";
 import { GridMode } from "./components/Grid";
-import { RGBColor } from "./drivers/Color";
+import { RGBColor } from "./drivers/color/src/RGBColor";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
 import { NewPageModal } from "./modals/NewPageModal";
