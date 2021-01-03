@@ -3,8 +3,10 @@ import { useRef } from "react";
 
 export const LoadButton = ({
   setLoadedImage,
+  onLoadStart,
 }: {
   setLoadedImage: (image: HTMLImageElement) => void;
+  onLoadStart?: (image: Promise<HTMLImageElement>) => void;
 }) => {
   const ref = useRef<HTMLInputElement>(null);
   return (
@@ -32,6 +34,7 @@ export const LoadButton = ({
               image.onload = () => resolve(image);
             }
           );
+          onLoadStart?.(imagePromise);
           const image = await imagePromise;
           setLoadedImage(image);
         }}

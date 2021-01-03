@@ -20,6 +20,7 @@ export const NewPageModal = ({
   ) => void;
 }) => {
   const [loadedImage, setLoadedImage] = useState<HTMLImageElement>();
+  const [loading, setLoading] = useState(false);
   const [dimension, setDimension] = useState<ValidDimensions>(currentDimension);
 
   useEffect(() => {
@@ -37,7 +38,14 @@ export const NewPageModal = ({
         pad={{ left: "8px" }}
       >
         <Text alignSelf="center">Upload Image (optional)</Text>
-        <LoadButton setLoadedImage={setLoadedImage} />
+        <LoadButton
+          setLoadedImage={setLoadedImage}
+          onLoadStart={async (promise) => {
+            setLoading(true);
+            await promise;
+            setLoading(false);
+          }}
+        />
       </Box>
 
       <Grid
@@ -49,7 +57,8 @@ export const NewPageModal = ({
 
         <Button
           primary
-          label="Create New"
+          disabled={loading}
+          label={loading ? "Loading Image" : "Create New"}
           onClick={() => onCreateNew(dimension, loadedImage)}
         />
       </Grid>

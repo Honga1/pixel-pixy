@@ -1,6 +1,6 @@
 import { Grid, grommet, Grommet, Header, Main, ThemeType } from "grommet";
 import { deepMerge } from "grommet/utils";
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BodyColorPicker } from "./components/BodyColorPicker";
 import { CanvasStack } from "./components/CanvasStack";
 import { ControlsBanner } from "./components/ControlsBanner";
@@ -58,6 +58,7 @@ const App = () => {
     setControlsFeedbackModalShown,
   ] = useState(false);
   const [palette, setPalette] = useState<AvailablePalettes>(defaultPalette);
+  const [drawImage, setDrawImage] = useState<HTMLImageElement>();
   const [isNewPageModalShown, setCreateMenuShown] = useState(false);
   const [isSettingsMenuShown, setSettingsMenuShown] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -69,6 +70,16 @@ const App = () => {
   const paint = useMemo(() => {
     return new UndoablePaintCanvas(pixelDimensions);
   }, [pixelDimensions]);
+
+  useEffect(() => {
+    if (drawImage) {
+      paint.setPixelsFromImage(drawImage);
+    } else {
+      paint.clear();
+    }
+
+    paint.drawToCanvas();
+  }, [drawImage, pixelDimensions, canvas, paint]);
 
   const onCanvasTouch = (
     canvas: HTMLCanvasElement,
@@ -269,14 +280,8 @@ const App = () => {
           currentDimension={pixelDimensions}
           onCancel={() => setCreateMenuShown(false)}
           onCreateNew={(dimension, maybeLoadedImage) => {
-            paint.clear();
-            if (dimension !== pixelDimensions) {
-              setPixelDimensions(dimension);
-            }
-            if (maybeLoadedImage !== undefined) {
-              paint.setPixelsFromImage(maybeLoadedImage);
-            }
-            paint.drawToCanvas();
+            setDrawImage(maybeLoadedImage);
+            setPixelDimensions(dimension);
             setCreateMenuShown(false);
           }}
         />
