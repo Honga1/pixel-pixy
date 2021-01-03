@@ -1,4 +1,4 @@
-import { KeyPairMap } from "../drivers/UndoablePaintCanvas";
+import { KeyPairMap } from "../..";
 it("Map can create", () => {
   expect(() => new KeyPairMap()).not.toThrow();
 });

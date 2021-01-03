@@ -9,7 +9,7 @@ import { ValidDimensions } from "./components/DimensionPicker";
 import { Footer } from "./components/Footer";
 import { GridMode } from "./components/Grid";
 import { RGBColor } from "./drivers/color/src/RGBColor";
-import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
+import { UndoablePaintCanvas } from "./drivers/paint/src/UndoablePaintCanvas";
 import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
 import { NewPageModal } from "./modals/NewPageModal";
 import { PaletteModal } from "./modals/PaletteModal";
@@ -74,10 +74,15 @@ const App = () => {
     canvas: HTMLCanvasElement,
     event: React.TouchEvent<HTMLCanvasElement>
   ): void => {
+    const touch = event.changedTouches[0];
+    const target = event.target as HTMLElement;
+    if (touch === undefined) {
+      throw new Error("Could not get touch on canvas");
+    }
+    const coords = paint.touchToCoords(touch, target);
     switch (tool) {
       case "dropper": {
         setTool(brush);
-        const coords = paint.touchToCoords(event);
         const selectedColor = paint.getColorAt(coords.quantX, coords.quantY);
         if (selectedColor === RGBColor.NO_COLOR) break;
         setColor(selectedColor);
@@ -85,19 +90,18 @@ const App = () => {
       }
       case "paint": {
         paint.setCanvas(canvas);
-        paint.touchEvent(event, color);
+        paint.touchEvent(touch, target, color);
         paint.drawToCanvas();
         break;
       }
       case "eraser": {
         paint.setCanvas(canvas);
-        paint.touchEvent(event, RGBColor.NO_COLOR);
+        paint.touchEvent(touch, target, RGBColor.NO_COLOR);
         paint.drawToCanvas();
         break;
       }
       case "fill": {
         paint.setCanvas(canvas);
-        const coords = paint.touchToCoords(event);
         paint.fillWithColor(coords.quantX, coords.quantY, color);
         paint.drawToCanvas();
 

@@ -1,6 +1,7 @@
-import { RGBColor } from "../drivers/color/src/RGBColor";
+import { RGBColor } from "../../../color";
 import { createCanvas, loadImage } from "canvas";
-import { UndoablePaintCanvas } from "../drivers/UndoablePaintCanvas";
+import { UndoablePaintCanvas } from "../UndoablePaintCanvas";
+
 it("Can be created", () => {
   expect(() => new UndoablePaintCanvas(5)).not.toThrow();
 });

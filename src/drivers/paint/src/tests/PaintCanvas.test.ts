@@ -1,6 +1,6 @@
 import { createCanvas, loadImage } from "canvas";
-import { PaintCanvas } from "../drivers/UndoablePaintCanvas";
-import { RGBColor } from "../drivers/color/src/RGBColor";
+import { PaintCanvas } from "../..";
+import { RGBColor } from "../../../color/src/RGBColor";
 
 it("Paint can create", () => {
   expect(() => new PaintCanvas(5)).not.toThrow();
@@ -132,33 +132,25 @@ it("Can handle touch event", () => {
       width: 100,
     } as unknown) as DOMRect;
   };
-  const htmlCanvas = {
+  const htmlCanvas = ({
     ...createCanvas(10, 10),
     clientWidth: 100,
     clientHeight: 100,
     getBoundingClientRect,
-  };
+  } as unknown) as HTMLElement;
   const paint = new PaintCanvas(10);
 
-  let touch = {
-    target: htmlCanvas,
-    changedTouches: [{ clientX: 0, clientY: 0, target: htmlCanvas }],
-  };
-
   paint.touchEvent(
-    (touch as unknown) as React.TouchEvent<HTMLElement>,
+    { clientX: 0, clientY: 0 },
+    htmlCanvas,
     new RGBColor(255, 0, 0)
   );
 
   expect((paint.getColorAt(0, 0) as RGBColor).rgb).toStrictEqual([255, 0, 0]);
 
-  touch = {
-    target: htmlCanvas,
-    changedTouches: [{ clientX: 100, clientY: 0, target: htmlCanvas }],
-  };
-
   paint.touchEvent(
-    (touch as unknown) as React.TouchEvent<HTMLElement>,
+    { clientX: 100, clientY: 0 },
+    htmlCanvas,
     new RGBColor(0, 255, 0)
   );
 
