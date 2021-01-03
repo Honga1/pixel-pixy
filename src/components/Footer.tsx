@@ -1,6 +1,6 @@
 import { Box, Button, Grid } from "grommet";
 import { Actions, Add } from "grommet-icons";
-import { SaveButton } from "./components/SaveButton";
+import { SaveButton } from "./SaveButton";
 export const Footer = ({
   canvas,
   onAddButtonClicked,

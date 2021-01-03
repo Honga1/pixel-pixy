@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { ColorPickerHistory } from "./components/ColorPickerHistory";
-import { PinnedColors } from "./components/PinnedColors";
-import { RGBColor } from "./drivers/Color";
-import { AvailablePalettes } from "./PaletteDictionary";
+import { ColorPickerHistory } from "./ColorPickerHistory";
+import { PinnedColors } from "./PinnedColors";
+import { RGBColor } from "../drivers/Color";
+import { AvailablePalettes } from "../PaletteDictionary";
 
 /** TODO: Make a component that displays a list of colors.
  * Use logic here to decide which colors to show.

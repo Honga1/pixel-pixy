@@ -1,7 +1,10 @@
 import { Button } from "grommet";
 import { Box } from "grommet/components/Box";
-import { RGBColor } from "./drivers/Color";
-import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
+import { RGBColor } from "../drivers/Color";
+import {
+  AvailablePalettes,
+  paletteColorDictionary,
+} from "../PaletteDictionary";
 
 export const PaletteColourSwatch = ({
   palette,

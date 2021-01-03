@@ -1,20 +1,20 @@
 import { Grid, grommet, Grommet, Header, Main, ThemeType } from "grommet";
 import { deepMerge } from "grommet/utils";
 import React, { useCallback, useMemo, useState } from "react";
-import { BodyColorPicker } from "./BodyColorPicker";
-import { CanvasStack } from "./CanvasStack";
+import { BodyColorPicker } from "./components/BodyColorPicker";
+import { CanvasStack } from "./components/CanvasStack";
+import { ControlsBanner } from "./components/ControlsBanner";
+import { ControlsFeedback } from "./components/ControlsFeedback";
 import { ValidDimensions } from "./components/DimensionPicker";
+import { Footer } from "./components/Footer";
 import { GridMode } from "./components/Grid";
-import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
-import { ControlsBanner } from "./ControlsBanner";
-import { ControlsFeedback } from "./ControlsFeedback";
 import { RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
-import { Footer } from "./Footer";
+import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
 import { NewPageModal } from "./modals/NewPageModal";
-import { AvailablePalettes } from "./PaletteDictionary";
 import { PaletteModal } from "./modals/PaletteModal";
 import { SettingsModal } from "./modals/SettingsModal";
+import { AvailablePalettes } from "./PaletteDictionary";
 import { Background, Brushes, Controls, Tools } from "./Types";
 
 const customTheme: ThemeType = {

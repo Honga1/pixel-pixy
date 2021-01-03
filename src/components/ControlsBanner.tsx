@@ -11,12 +11,12 @@ import {
   Trash,
   Undo,
 } from "grommet-icons";
-import { DropperIcon } from "./components/DropperIcon";
-import { GridMode } from "./components/Grid";
-import { PaletteIcon } from "./components/PaletteIcon";
-import { RGBColor } from "./drivers/Color";
-import { HighlightableButton } from "./components/HighlightableButton";
-import { Controls, Tools } from "./Types";
+import { DropperIcon } from "./DropperIcon";
+import { GridMode } from "./Grid";
+import { PaletteIcon } from "./PaletteIcon";
+import { RGBColor } from "../drivers/Color";
+import { HighlightableButton } from "./HighlightableButton";
+import { Controls, Tools } from "../Types";
 
 export const ControlsBanner = ({
   onToolChange,

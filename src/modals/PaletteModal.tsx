@@ -8,7 +8,7 @@ import {
   AvailablePalettes,
   paletteColorDictionary,
 } from "../PaletteDictionary";
-import { PalettePicker } from "../PalettePicker";
+import { PalettePicker } from "../components/PalettePicker";
 export const PaletteModal = ({
   onCancel,
   setColor,

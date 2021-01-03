@@ -1,8 +1,8 @@
 import { Box, Layer, Text } from "grommet";
 import { useState } from "react";
-import "./styles/ControlsFeedback.css";
-import { Controls } from "./Types";
-import { useTimeout } from "./hooks/useTimeout";
+import "../styles/ControlsFeedback.css";
+import { Controls } from "../Types";
+import { useTimeout } from "../hooks/useTimeout";
 
 const controlToFeedback: Record<Controls, string> = {
   dropper: "Dropper",
