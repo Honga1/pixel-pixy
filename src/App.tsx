@@ -158,7 +158,7 @@ const App = () => {
 
   const isConfirmModalShown = !!confirmModalParameters;
   /**
-   * TODO: Add darkmode and settings modal
+   * TODO: Add dark mode and settings modal
    */
   return (
     <Grommet
