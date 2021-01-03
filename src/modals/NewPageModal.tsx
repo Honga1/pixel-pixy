@@ -1,8 +1,11 @@
 import { Box, Button, Grid, Text } from "grommet";
-import React, { useEffect, useState } from "react";
-import { DimensionPicker, ValidDimensions } from "./components/DimensionPicker";
-import { LoadButton } from "./components/LoadButton";
-import { Modal } from "./modals/Modal";
+import { useEffect, useState } from "react";
+import {
+  DimensionPicker,
+  ValidDimensions,
+} from "../components/DimensionPicker";
+import { LoadButton } from "../components/LoadButton";
+import { Modal } from "../modals/Modal";
 
 export const NewPageModal = ({
   currentDimension,

@@ -1,8 +1,8 @@
 import { Box, Button, CheckBox, Grid, Text } from "grommet";
 import { useState } from "react";
 import { BackgroundImageSettings } from "./BackgroundImageSettings";
-import { Modal } from "./modals/Modal";
-import { Background } from "./Tools";
+import { Modal } from "./Modal";
+import { Background } from "../Tools";
 
 type SettingsData = {
   backgroundData: Background;

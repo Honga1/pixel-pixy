@@ -5,16 +5,16 @@ import { BodyColorPicker } from "./BodyColorPicker";
 import { CanvasStack } from "./CanvasStack";
 import { ValidDimensions } from "./components/DimensionPicker";
 import { GridMode } from "./components/Grid";
-import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
+import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
 import { ControlsBanner } from "./ControlsBanner";
 import { ControlsFeedback } from "./ControlsFeedback";
 import { RGBColor } from "./drivers/Color";
 import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
 import { Footer } from "./Footer";
-import { NewPageModal } from "./NewPageModal";
+import { NewPageModal } from "./modals/NewPageModal";
 import { AvailablePalettes } from "./PaletteDictionary";
-import { PaletteModal } from "./PaletteModal";
-import { SettingsModal } from "./SettingsModal";
+import { PaletteModal } from "./modals/PaletteModal";
+import { SettingsModal } from "./modals/SettingsModal";
 import { Background, Brushes, Controls, Tools } from "./Tools";
 
 const customTheme: ThemeType = {
