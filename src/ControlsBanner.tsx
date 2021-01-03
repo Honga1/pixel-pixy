@@ -15,7 +15,7 @@ import { DropperIcon } from "./components/DropperIcon";
 import { GridMode } from "./components/Grid";
 import { PaletteIcon } from "./components/PaletteIcon";
 import { RGBColor } from "./drivers/Color";
-import { HighlightableButton } from "./HighlightableButton";
+import { HighlightableButton } from "./components/HighlightableButton";
 import { Controls, Tools } from "./Types";
 
 export const ControlsBanner = ({
