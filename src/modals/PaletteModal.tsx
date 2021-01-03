@@ -1,11 +1,14 @@
 import { Box, Button } from "grommet";
 import { Pin } from "grommet-icons";
 import { useState } from "react";
-import { RGBColor } from "./drivers/Color";
-import { useLongPress } from "./drivers/useLongPress";
+import { RGBColor } from "../drivers/color/src/RGBColor";
+import { useLongPress } from "../hooks/useLongPress";
 import { Modal } from "./Modal";
-import { AvailablePalettes, paletteColorDictionary } from "./PaletteDictionary";
-import { PalettePicker } from "./PalettePicker";
+import {
+  AvailablePalettes,
+  paletteColorDictionary,
+} from "../PaletteDictionary";
+import { PalettePicker } from "../components/PalettePicker";
 export const PaletteModal = ({
   onCancel,
   setColor,

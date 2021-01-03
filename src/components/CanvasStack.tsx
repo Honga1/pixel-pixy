@@ -1,9 +1,9 @@
 import { Stack, StackProps } from "grommet";
 import { useState } from "react";
-import { CanvasContainer } from "./components/CanvasContainer";
-import { ValidDimensions } from "./components/DimensionPicker";
-import { Grid, GridMode } from "./components/Grid";
-import { Background } from "./Tools";
+import { CanvasContainer } from "./CanvasContainer";
+import { ValidDimensions } from "./DimensionPicker";
+import { Grid, GridMode } from "./Grid";
+import { Background } from "../Types";
 export const CanvasStack = ({
   gridMode,
   pixelDimensions,

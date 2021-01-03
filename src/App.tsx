@@ -1,21 +1,21 @@
 import { Grid, grommet, Grommet, Header, Main, ThemeType } from "grommet";
-import React, { useCallback, useMemo, useState } from "react";
-import { BodyColorPicker } from "./BodyColorPicker";
-import { CanvasStack } from "./CanvasStack";
-import { ValidDimensions } from "./components/DimensionPicker";
-import { ConfirmModal, ConfirmModalProps } from "./ConfirmModal";
-import { RGBColor } from "./drivers/Color";
-import { UndoablePaintCanvas } from "./drivers/UndoablePaintCanvas";
-import { Footer } from "./Footer";
-import { NewPageModal } from "./NewPageModal";
-import { AvailablePalettes } from "./PaletteDictionary";
-import { PaletteModal } from "./PaletteModal";
-import { SettingsModal } from "./SettingsModal";
-import { Background, Brushes, Controls, Tools } from "./Tools";
-import { ControlsBanner } from "./ControlsBanner";
-import { ControlsFeedback } from "./ControlsFeedback";
 import { deepMerge } from "grommet/utils";
+import React, { useCallback, useMemo, useState } from "react";
+import { BodyColorPicker } from "./components/BodyColorPicker";
+import { CanvasStack } from "./components/CanvasStack";
+import { ControlsBanner } from "./components/ControlsBanner";
+import { ControlsFeedback } from "./components/ControlsFeedback";
+import { ValidDimensions } from "./components/DimensionPicker";
+import { Footer } from "./components/Footer";
 import { GridMode } from "./components/Grid";
+import { RGBColor } from "./drivers/color/src/RGBColor";
+import { UndoablePaintCanvas } from "./drivers/paint/src/UndoablePaintCanvas";
+import { ConfirmModal, ConfirmModalProps } from "./modals/ConfirmModal";
+import { NewPageModal } from "./modals/NewPageModal";
+import { PaletteModal } from "./modals/PaletteModal";
+import { SettingsModal } from "./modals/SettingsModal";
+import { AvailablePalettes } from "./PaletteDictionary";
+import { Background, Brushes, Controls, Tools } from "./Types";
 
 const customTheme: ThemeType = {
   icon: {
@@ -74,10 +74,15 @@ const App = () => {
     canvas: HTMLCanvasElement,
     event: React.TouchEvent<HTMLCanvasElement>
   ): void => {
+    const touch = event.changedTouches[0];
+    const target = event.target as HTMLElement;
+    if (touch === undefined) {
+      throw new Error("Could not get touch on canvas");
+    }
+    const coords = paint.touchToCoords(touch, target);
     switch (tool) {
       case "dropper": {
         setTool(brush);
-        const coords = paint.touchToCoords(event);
         const selectedColor = paint.getColorAt(coords.quantX, coords.quantY);
         if (selectedColor === RGBColor.NO_COLOR) break;
         setColor(selectedColor);
@@ -85,19 +90,18 @@ const App = () => {
       }
       case "paint": {
         paint.setCanvas(canvas);
-        paint.touchEvent(event, color);
+        paint.touchEvent(touch, target, color);
         paint.drawToCanvas();
         break;
       }
       case "eraser": {
         paint.setCanvas(canvas);
-        paint.touchEvent(event, RGBColor.NO_COLOR);
+        paint.touchEvent(touch, target, RGBColor.NO_COLOR);
         paint.drawToCanvas();
         break;
       }
       case "fill": {
         paint.setCanvas(canvas);
-        const coords = paint.touchToCoords(event);
         paint.fillWithColor(coords.quantX, coords.quantY, color);
         paint.drawToCanvas();
 
@@ -158,7 +162,7 @@ const App = () => {
 
   const isConfirmModalShown = !!confirmModalParameters;
   /**
-   * TODO: Add darkmode and settings modal
+   * TODO: Add dark mode and settings modal
    */
   return (
     <Grommet

@@ -1,4 +1,4 @@
-import { UndoBuffer } from "../drivers/UndoablePaintCanvas";
+import { UndoBuffer } from "../..";
 
 it("Can create", () => {
   expect(() => new UndoBuffer(0)).not.toThrow();

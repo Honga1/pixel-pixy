@@ -1,6 +1,6 @@
 import { Select } from "grommet";
 import { ReactElement } from "react";
-import { AvailablePalettes, paletteNameDictionary } from "./PaletteDictionary";
+import { AvailablePalettes, paletteNameDictionary } from "../PaletteDictionary";
 
 const options = ["Commodore 64", "DOS CGA/ EGA", "Teletext"];
 

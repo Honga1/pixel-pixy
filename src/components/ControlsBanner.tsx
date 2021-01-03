@@ -1,22 +1,22 @@
 import { Box, Button, Grid } from "grommet";
 import {
+  Apps,
   Brush,
   Erase,
   Grid as GridIcon,
   History,
+  Paint,
   Pin,
   Redo,
   Trash,
   Undo,
-  Paint,
-  Apps,
 } from "grommet-icons";
-import { DropperIcon } from "./components/DropperIcon";
-import { GridMode } from "./components/Grid";
-import { PaletteIcon } from "./components/PaletteIcon";
-import { RGBColor } from "./drivers/Color";
+import { DropperIcon } from "./DropperIcon";
+import { GridMode } from "./Grid";
+import { PaletteIcon } from "./PaletteIcon";
+import { RGBColor } from "../drivers/color/src/RGBColor";
 import { HighlightableButton } from "./HighlightableButton";
-import { Controls, Tools } from "./Tools";
+import { Controls, Tools } from "../Types";
 
 export const ControlsBanner = ({
   onToolChange,

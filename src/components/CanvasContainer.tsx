@@ -1,6 +1,6 @@
 import { TouchEvent, useEffect, useMemo, useRef } from "react";
 import "../styles/CanvasContainer.css";
-import { Background } from "../Tools";
+import { Background } from "../Types";
 
 export const CanvasContainer = ({
   onCanvasCreated,
