@@ -20,7 +20,7 @@ export const BodyColorPicker = ({
   setColorHistory: (history: RGBColor[]) => void;
   setColorAndTurnOffPicker: (color: RGBColor) => void;
   color: RGBColor;
-  palette: AvailablePalettes;
+  palette: AvailablePalettes | "Picker";
   pinnedColors: RGBColor[];
   colorHistory: RGBColor[];
 }) => {
@@ -37,6 +37,7 @@ export const BodyColorPicker = ({
       colors = pinnedColors;
       break;
     case "palette":
+      if(palette==="Picker") break;
       colors = paletteColorDictionary[palette].map((color) =>
         RGBColor.fromHexString(color)
       );
