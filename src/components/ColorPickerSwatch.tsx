@@ -94,104 +94,18 @@ export const ColorPickerSwatch = ({
   );
 };
 
-const StyledInput = styled.input<{ color: string }>`
-  &[type="range"] {
-    -webkit-appearance: none;
-    margin: 18px 0;
-    width: 100%;
-  }
-  &[type="range"]:focus {
-    outline: none;
-  }
-  &[type="range"]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 20px;
-    cursor: pointer;
-    background: linear-gradient(
-      to right,
-      rgb(255, 0, 0) 0%,
-      rgb(255, 255, 0) 17%,
-      rgb(0, 255, 0) 33%,
-      rgb(0, 255, 255) 50%,
-      rgb(0, 0, 255) 67%,
-      rgb(255, 0, 255) 83%,
-      rgb(255, 0, 0) 100%
-    );
-    border-radius: 2px;
-    border: none;
-  }
+interface StyledInputProps {
+  color: string;
+}
+
+const StyledInput = styled.input.attrs<StyledInputProps>({})`
   &[type="range"]::-webkit-slider-thumb {
-    height: 30px;
-    width: 30px;
-    border-radius: 26px;
-    box-shadow: 0 0 2px 2px lightgreen;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -5px;
-  }
-  &[type="range"]::-webkit-slider-thumb {
-    ${(props) => `background:${props.color};`}
-  }
-  &[type="range"]:focus::-webkit-slider-runnable-track {
-    background: linear-gradient(
-      to right,
-      rgb(255, 0, 0) 0%,
-      rgb(255, 255, 0) 17%,
-      rgb(0, 255, 0) 33%,
-      rgb(0, 255, 255) 50%,
-      rgb(0, 0, 255) 67%,
-      rgb(255, 0, 255) 83%,
-      rgb(255, 0, 0) 100%
-    );
-  }
-  &[type="range"]::-moz-range-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    background: linear-gradient(
-      to right,
-      rgb(255, 0, 0) 0%,
-      rgb(255, 255, 0) 17%,
-      rgb(0, 255, 0) 33%,
-      rgb(0, 255, 255) 50%,
-      rgb(0, 0, 255) 67%,
-      rgb(255, 0, 255) 83%,
-      rgb(255, 0, 0) 100%
-    );
-    border-radius: 2px;
-    border: none;
+    background: ${(props) => props.color};
   }
   &[type="range"]::-moz-range-thumb {
-    height: 30px;
-    width: 30px;
-    border-radius: 26px;
-    box-shadow: 0 0 2px 2px lightgreen;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -5px;
-  }
-  &[type="range"]::-moz-range-thumb {
-    ${(props) => `background:${props.color};`}
-  }
-  &[type="range"]::-ms-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    background: transparent;
-    border-color: transparent;
-    border-width: 16px 0;
-    color: transparent;
+    background: ${(props) => props.color};
   }
   &[type="range"]::-ms-thumb {
-    height: 30px;
-    width: 30px;
-    border-radius: 26px;
-    box-shadow: 0 0 2px 2px lightgreen;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -5px;
-  }
-  &[type="range"]::-ms-thumb {
-    ${(props) => `background:${props.color};`}
+    background: ${(props) => props.color};
   }
 `;
