@@ -22,6 +22,7 @@ const customTheme: ThemeType = {
     size: { medium: "20px" },
   },
   global: { edgeSize: { small: "8px" } },
+  rangeInput: { track: { height: "10px" }, thumb: { color: "#00ff00" } },
 };
 
 const mergedTheme = deepMerge(grommet, customTheme);
