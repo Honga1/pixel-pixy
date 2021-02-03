@@ -263,6 +263,7 @@ const App = () => {
           pinnedColors={pinnedColors}
           setPinnedColors={setPinnedColors}
           onCancel={() => setPaletteMenuShown(false)}
+          currentColor={color}
           setColor={setColorAndTurnOffPicker}
           palette={palette}
           setPalette={setPalette}

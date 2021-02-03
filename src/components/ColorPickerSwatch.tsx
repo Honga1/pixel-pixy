@@ -25,6 +25,8 @@ export const ColorPickerSwatch = ({
     }
   }, [selectedColor]);
 
+  console.log("anything");
+
   return (
     <Grid
       fill
@@ -69,25 +71,13 @@ export const ColorPickerSwatch = ({
         />
         <Box fill className="Lightness" />
       </Stack>
-      {/* <Box
-        fill
-        className="Hue"
-        gridArea="hue"
-        onTouchEnd={(event) => {
-          const { relativeX: scaledX } = getRelativeClickPosition(event);
-          currentHSL.h = scaledX * 360;
-          setCurrentHSL(currentHSL.clone());
-        }}
-        onTouchMove={(event) => {
-          const { relativeX: scaledX } = getRelativeClickPosition(event);
-          currentHSL.h = scaledX * 360;
-          setCurrentHSL(currentHSL.clone());
-        }}
-      > */}
       <Box fill>
         <StyledInput
           type="range"
-          color={selectedColor.toHex()}
+          min="0"
+          max="360"
+          color={`hsl(${currentHSL.h}, 100%, 50%)`}
+          value={currentHSL.h}
           onTouchEnd={(event) => {
             const { relativeX: scaledX } = getRelativeClickPosition(event);
             currentHSL.h = scaledX * 360;
@@ -100,7 +90,6 @@ export const ColorPickerSwatch = ({
           }}
         />
       </Box>
-      {/* </Box> */}
     </Grid>
   );
 };

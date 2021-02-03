@@ -12,6 +12,7 @@ import {
 import { PalettePicker } from "../components/PalettePicker";
 export const PaletteModal = ({
   onCancel,
+  currentColor,
   setColor,
   palette = "cga",
   pinnedColors = [],
@@ -19,6 +20,7 @@ export const PaletteModal = ({
   setPalette,
 }: {
   onCancel: () => void;
+  currentColor: RGBColor;
   setColor: (color: RGBColor) => void;
   palette?: AvailablePalettes | "Picker";
   pinnedColors?: RGBColor[];
@@ -75,7 +77,7 @@ export const PaletteModal = ({
     return (
       <Modal onClose={onCancel} heading={"Palette"}>
         <ColorPickerSwatch
-          selectedColor={new RGBColor(255, 0, 0)}
+          selectedColor={currentColor}
           onColorPicked={setColor}
         />
         <Box pad={{ top: "small", bottom: "small" }} gap="small">

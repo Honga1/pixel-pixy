@@ -118,6 +118,7 @@ export const BackgroundImageSettings = ({
       {isPaletteModalShown && (
         <PaletteModal
           onCancel={() => setPaletteMenuShown(false)}
+          currentColor={background.color}
           setColor={(color) => setBackground({ ...background, color })}
         />
       )}
