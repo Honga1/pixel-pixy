@@ -1,5 +1,5 @@
-import { Box, Grid, RangeInput, Stack } from "grommet";
-import { useEffect, useState, useRef } from "react";
+import { Box, Grid, Stack } from "grommet";
+import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/color/src/RGBColor";
 import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
 import "../styles/ColorPickerSwatch.css";
