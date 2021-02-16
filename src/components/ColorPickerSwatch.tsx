@@ -1,6 +1,7 @@
 import { Box, Grid, Stack } from "grommet";
 import { useEffect, useState } from "react";
 import { RGBColor } from "../drivers/color/src/RGBColor";
+import { HSLColor } from "../drivers/color/src/HSLColor";
 import { getRelativeClickPosition } from "../drivers/getRelativeClickPosition";
 import "../styles/ColorPickerSwatch.css";
 import styled from "styled-components";
@@ -17,14 +18,14 @@ export const ColorPickerSwatch = ({
 
     return hsl;
   });
-
+// console.log("L", currentHSL.l);
+// console.log("S", currentHSL.s);
   useEffect(() => {
     const hsl = selectedColor.toHSL();
     if (hsl) {
       setCurrentHSL(hsl);
     }
   }, [selectedColor]);
-
   return (
     <Grid
       fill="horizontal"
@@ -68,6 +69,16 @@ export const ColorPickerSwatch = ({
           }}
         />
         <Box fill className="Lightness" />
+        <Box
+          height="xxsmall"
+          width="xxsmall"
+          style={{
+            backgroundColor: `${currentHSL.toHSLString()}`,
+            position: "absolute",
+            bottom: `${currentHSL.l*100}%`,
+            left:`${currentHSL.s*100}%`,
+          }}
+        />
       </Stack>
       <Box fill>
         <StyledInput
