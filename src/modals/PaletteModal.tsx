@@ -10,6 +10,7 @@ import {
   paletteColorDictionary,
 } from "../PaletteDictionary";
 import { PalettePicker } from "../components/PalettePicker";
+import { CurrentColorBox } from "../components/CurrentColorBox";
 export const PaletteModal = ({
   onCancel,
   currentColor,
@@ -83,12 +84,13 @@ export const PaletteModal = ({
         <Box pad={{ top: "small", bottom: "small" }} gap="small">
           <PalettePicker palette={palette} onPaletteChange={onPaletteChange} />
         </Box>
+        <CurrentColorBox currentColor={currentColor} />
       </Modal>
     );
   }
   return (
     <Modal onClose={onCancel} heading={"Palette"}>
-      <Box fill pad={{ top: "small", bottom: "small" }} gap="small">
+      <Box fill="horizontal" pad={{ top: "small", bottom: "small" }} gap="small">
         <Box
           direction="row"
           wrap
@@ -129,6 +131,7 @@ export const PaletteModal = ({
       <Box pad={{ top: "small", bottom: "small" }} gap="small">
         <PalettePicker palette={palette} onPaletteChange={onPaletteChange} />
       </Box>
+      <CurrentColorBox currentColor={currentColor} />
     </Modal>
   );
 };

@@ -25,11 +25,9 @@ export const ColorPickerSwatch = ({
     }
   }, [selectedColor]);
 
-  console.log("anything");
-
   return (
     <Grid
-      fill
+      fill="horizontal"
       areas={[
         { name: "saturation-lightness", start: [0, 0], end: [0, 0] },
         {
